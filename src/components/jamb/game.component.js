@@ -222,7 +222,7 @@ export default class Game extends Component {
                 if (http.readyState === 4 && http.status === 200) {
                     var box = JSON.parse(http.responseText);
                     // console.log(box);
-                    this.setState({announcement: box});
+                    this.setState({announcement: index});
                 }
             });
             http.send(index%13);
