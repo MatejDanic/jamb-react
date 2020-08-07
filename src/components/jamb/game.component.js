@@ -222,10 +222,10 @@ export default class Game extends Component {
                 if (http.readyState === 4 && http.status === 200) {
                     var box = JSON.parse(http.responseText);
                     // console.log(box);
-                    this.setState({announcement: index});
+                    this.setState({ announcement: index });
                 }
             });
-            http.send(index%13);
+            http.send(index % 13);
         } else {
             this.setState({ boxesDisabled: true, announcement: index, rollDisabled: false });
         }
@@ -234,7 +234,7 @@ export default class Game extends Component {
     fillBox(index) {
         if (this.props.user) {
             var user = this.props.user;
-            var url = this.state.apiURL + 'forms/' + this.state.formId + "/columns/" + parseInt(index/13, 10) + "/boxes/" + index%13 + "/fill";
+            var url = this.state.apiURL + 'forms/' + this.state.formId + "/columns/" + parseInt(index / 13, 10) + "/boxes/" + index % 13 + "/fill";
             var http = new XMLHttpRequest();
             http.open('PUT', url, true);
             http.setRequestHeader('Content-type', 'application/json');
@@ -279,9 +279,9 @@ export default class Game extends Component {
             if (this.state.boxesLeft === 0) {
                 setTimeout(
                     () => {
-                      this.endGame();
+                        this.endGame();
                     }, 1000
-                  );
+                );
             }
         });
         this.updateSums(index);
@@ -321,6 +321,25 @@ export default class Game extends Component {
             }
             state.sums[15] = state.sums[4] + state.sums[9] + state.sums[14];
         })
+    }
+
+    restart() {
+        if (this.props.user) {
+            var user = this.props.user;
+            var url = this.state.apiURL + 'forms/' + formId;
+            var http = new XMLHttpRequest();
+            http.open('DELETE', url, true);
+            http.setRequestHeader('Content-type', 'application/json');
+            http.setRequestHeader('Authorization', user.tokenType + " " + user.accessToken);
+            http.addEventListener('load', () => {
+                if (http.readyState === 4 && http.status === 200) {
+                    window.location.reload();
+                }
+            });
+            http.send();
+        } else {
+            window.location.reload();
+        }
     }
 
     render() {
@@ -388,13 +407,13 @@ export default class Game extends Component {
                     <Box gameInfo={gameInfo} variables={boxes[19]} onBoxClick={this.boxClick} />
                     <Box gameInfo={gameInfo} variables={boxes[32]} onBoxClick={this.boxClick} />
                     <Box gameInfo={gameInfo} variables={boxes[45]} onBoxClick={this.boxClick} />
-                    <div />
+                    <button className={"show-button restart"} onClick={this.restart()}>Restart</button>
                     <Label labelClass={"label"} value={"MIN"} />
                     <Box gameInfo={gameInfo} variables={boxes[7]} onBoxClick={this.boxClick} />
                     <Box gameInfo={gameInfo} variables={boxes[20]} onBoxClick={this.boxClick} />
                     <Box gameInfo={gameInfo} variables={boxes[33]} onBoxClick={this.boxClick} />
                     <Box gameInfo={gameInfo} variables={boxes[46]} onBoxClick={this.boxClick} />
-                    <div />
+                    {/* <div /> */}
                     <Label labelClass={"label label-sum"} value={"(max-min) x jedinice"} />
                     <Label labelClass={"label label-sum-number"} number={sums[5]} id="DOWNWARDS-diffSum" />
                     <Label labelClass={"label label-sum-number"} number={sums[6]} id="UPWARDS-diffSum" />
@@ -452,7 +471,7 @@ export default class Game extends Component {
     endGame() {
         alert("Čestitamo, vaš ukupni rezultat je " + this.state.sums[15]);
     }
-    
+
     showRules() {
         alert("Bacanjem kockica postižu se odredeni rezultati koji se upisuju u obrazac. Na kraju igre postignuti se rezultati zbrajaju.\n" +
             "Nakon prvog bacanja, igrac gleda u obrazac i odlucuje hoce li nešto odmah upisati ili ce igrati dalje.\n" +
@@ -462,16 +481,16 @@ export default class Game extends Component {
             "Igrac je obavezan u to polje upisati ostvareni rezultat bez obzira da li mu to nakon tri bacanja odgovara ili ne.\n" +
             "Rezultat se može, ali ne mora upisati u cetvrti stupac nakon prvog bacanja.");
     }
-    
+
     showLeaderboard() {
         var http = new XMLHttpRequest();
         //	var url = 'https://jamb-remote.herokuapp.com/scores';
         var url = this.state.apiURL + 'scores';
         http.open('GET', url, true);
-    
+
         http.addEventListener('load', () => {
             if (http.readyState === 4 && http.status === 200) {
-    
+
                 var response = JSON.parse(http.responseText);
                 var text = '';
                 for (var i = 0; i < response.length; i++) {
@@ -482,6 +501,6 @@ export default class Game extends Component {
             }
         });
         http.send();
-    }    
+    }
 }
 

@@ -98,6 +98,13 @@
   font-size: 18px;
 }
 
+.restart {
+  grid-column-start: 6;
+  grid-row-start: 10;
+  grid-row-end: 11;
+  font-size: 14px;
+}
+
 
 @media screen and ( max-width : 512px) {
 	.show-button {
