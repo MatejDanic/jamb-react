@@ -9,7 +9,7 @@ import Login from "./components/login.component";
 import Register from "./components/register.component";
 import Profile from "./components/profile.component";
 import BoardAdmin from "./components/board-admin.component";
-import Game from "./components/game.component";
+import Game from "./components/jamb/game.component";
 
 
 class App extends Component {
@@ -29,6 +29,7 @@ class App extends Component {
 
     if (user) {
       this.setState({
+        version: "Online",
         currentUser: user,
         showAdminBoard: user.roles.includes("ADMIN")
       });
