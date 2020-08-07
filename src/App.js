@@ -29,7 +29,6 @@ class App extends Component {
 
     if (user) {
       this.setState({
-        version: "Online",
         currentUser: user,
         showAdminBoard: user.roles.includes("ADMIN")
       });
