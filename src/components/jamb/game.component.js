@@ -446,7 +446,7 @@ export default class Game extends Component {
     }
 
     endGame() {
-        // console.log("END");
+        alert("Čestitamo, vaš ukupni rezultat je " + this.state.sums[15]);
     }
     
     showRules() {
