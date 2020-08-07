@@ -20,7 +20,6 @@
   "engines": {
     "node": "6.11.1",
     "npm": "3.x"
-  }
   },
   "scripts": {
     "start": "react-scripts start",
