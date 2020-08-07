@@ -277,7 +277,11 @@ export default class Game extends Component {
         });
         this.setState({ rollsLeft: 3, rollDisabled: false, diceDisabled: true, boxesDisabled: true, boxesLeft: this.state.boxesLeft - 1, announcement: null }, () => {
             if (this.state.boxesLeft === 0) {
-                this.endGame();
+                setTimeout(
+                    () => {
+                      this.endGame();
+                    }, 1000
+                  );
             }
         });
         this.updateSums(index);
