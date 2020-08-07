@@ -351,7 +351,7 @@ export default class Game extends Component {
                 {/* <DiceRack  rollDisabled={this.state.rollDisabled} rollsLeft={this.state.rollsLeft} diceDisabled={this.state.diceDisabled} dice={this.state.dice} 
                 onToggleDice={this.toggleDice} /> */}
                 <div className="form">
-                    <a href="https://github.com/MatejDanic/jamb">
+                    <a href="https://github.com/MatejDanic">
                         <Label labelClass={"label info"} value="matej" />
                     </a>
                     <Label labelClass={"label label-image"} imgUrl={"../images/field/downwards.bmp"} />
