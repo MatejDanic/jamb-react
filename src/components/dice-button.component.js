@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import "./button.css"
+import "../css/button.css"
 
 export default class DiceButton extends PureComponent {
 

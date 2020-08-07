@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import "./label.css"
+import "../css/label.css"
 
 export default class Label extends PureComponent {
 

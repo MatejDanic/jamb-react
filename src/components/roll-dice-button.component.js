@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./button.css"
+import "../css/button.css"
 
 export default class RollDiceButton extends Component {
 

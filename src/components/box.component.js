@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import "./box.css"
+import "../css/box.css"
 
 export default class Box extends PureComponent {
     

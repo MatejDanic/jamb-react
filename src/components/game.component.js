@@ -3,10 +3,10 @@ import React, { Component } from "react";
 import Box from "./box.component";
 import Label from "./label.component";
 import DiceRack from "./dice-rack.component";
-import ScoreUtil from "../../utils/score.util";
+import ScoreUtil from "../utils/score.util";
 import RollDiceButton from "./roll-dice-button.component";
-import "./game.css";
-import "./button.css";
+import "../css/game.css";
+import "../css/button.css";
 
 export default class Game extends Component {
 

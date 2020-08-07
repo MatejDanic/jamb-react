@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import DiceButton from "./dice-button.component";
 // import RollDiceButton from "./roll-dice-button.component";
-import "./game.css"
+import "../css/game.css"
 
 export default class DiceRack extends Component {
 
