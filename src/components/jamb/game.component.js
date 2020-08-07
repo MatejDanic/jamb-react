@@ -326,7 +326,7 @@ export default class Game extends Component {
     restart() {
         if (this.props.user) {
             var user = this.props.user;
-            var url = this.state.apiURL + 'forms/' + formId;
+            var url = this.state.apiURL + 'forms/' + this.state.formId;
             var http = new XMLHttpRequest();
             http.open('DELETE', url, true);
             http.setRequestHeader('Content-type', 'application/json');
