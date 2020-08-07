@@ -408,6 +408,7 @@ export default class Game extends Component {
                     <Box gameInfo={gameInfo} variables={boxes[32]} onBoxClick={this.boxClick} />
                     <Box gameInfo={gameInfo} variables={boxes[45]} onBoxClick={this.boxClick} />
                     <button className={"show-button restart"} onClick={() => this.restart()}>Restart</button>
+                    {/* <div /> */}
                     <Label labelClass={"label"} value={"MIN"} />
                     <Box gameInfo={gameInfo} variables={boxes[7]} onBoxClick={this.boxClick} />
                     <Box gameInfo={gameInfo} variables={boxes[20]} onBoxClick={this.boxClick} />
