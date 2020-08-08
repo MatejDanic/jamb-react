@@ -253,9 +253,13 @@ export default class Game extends Component {
                             state.boxes[index - 1].available = true;
                         }
                     });
-                    this.setState({}, () => {
-                        this.updateSums(index);
-                    });
+                    this.setState({});
+                    setTimeout(
+                        () => {
+
+                            this.updateSums(index);
+                        }, 250
+                    );
                 }
             });
             http.send();
@@ -272,7 +276,7 @@ export default class Game extends Component {
                 }
                 this.updateSums(index);
             });
-            
+
         }
         this.setState(state => {
             console.log("reset dice");
