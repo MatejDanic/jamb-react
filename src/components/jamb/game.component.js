@@ -139,26 +139,6 @@ export default class Game extends Component {
             diceDisabled: form.rollCount === 0 || form.rollCount === 3,
             boxesDisabled: form.rollCount === 0
         })
-        this.getSums(this.props.user, form.id);
-    }
-
-    getSums(user, formId) {
-        var url = this.state.apiURL + '/forms/' + formId + "/sums";
-        var http = new XMLHttpRequest();
-        http.open('GET', url, true);
-        http.setRequestHeader('Content-type', 'application/json');
-        http.setRequestHeader('Authorization', user.tokenType + " " + user.accessToken);
-        http.addEventListener('load', () => {
-            if (http.readyState === 4 && http.status === 200) {
-                var sums = JSON.parse(http.responseText);
-                setTimeout(
-                    () => {
-                        this.updateSums(sums);
-                    }, 250
-                );
-            }
-        });
-        http.send();
     }
 
     rollDice() {
@@ -263,6 +243,7 @@ export default class Game extends Component {
             http.addEventListener('load', () => {
                 if (http.readyState === 4 && http.status === 200) {
                     var sums = JSON.parse(http.responseText);
+                    console.log(sums);
                     this.setState(state => {
                         state.boxes[index].value = sums.boxValue;
                         state.boxes[index].available = false;
@@ -274,8 +255,7 @@ export default class Game extends Component {
                         }
                     });
                     this.setState({});
-                    setTimeout(
-                        () => {
+                    setTimeout(() => {
                             this.updateSums(sums);
                         }, 250
                     );
