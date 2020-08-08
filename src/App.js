@@ -26,7 +26,7 @@ class App extends Component {
 
   componentDidMount() {
     const user = AuthService.getCurrentUser();
-
+    this.wakeSpringUp();
     if (user) {
       this.setState({
         version: "Online",
@@ -35,6 +35,20 @@ class App extends Component {
       });
     }
   }
+
+  wakeJambSpring() {
+    var url = "https://jamb-spring.herokuapp.com/wake";
+        var http = new XMLHttpRequest();
+        http.open('GET', url, true);
+        http.setRequestHeader('Content-type', 'application/json');
+        http.addEventListener('load', () => {
+            if (http.readyState === 4 && http.status === 200) {
+                var response = JSON.parse(http.responseText);
+                console.log(response);
+            }
+        });
+        http.send();
+}
 
   logout() {
     AuthService.logout();

@@ -95,22 +95,7 @@ export default class Game extends Component {
         this.initializeForm = this.initializeForm.bind(this);
     }
 
-    wakeJambSpring() {
-        var url = this.state.apiURL + "/forms";
-            var http = new XMLHttpRequest();
-            http.open('GET', url, true);
-            http.setRequestHeader('Content-type', 'application/json');
-            http.addEventListener('load', () => {
-                if (http.readyState === 4 && http.status === 200) {
-                    var forms = JSON.parse(http.responseText);
-                    console.log(forms);
-                }
-            });
-            http.send();
-    }
-
     componentDidMount() {
-        this.wakeJambSpring();
         if (this.props.user) {
             var user = this.props.user;
             var url = this.state.apiURL + '/forms';
