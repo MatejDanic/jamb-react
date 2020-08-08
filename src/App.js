@@ -43,8 +43,7 @@ class App extends Component {
         http.setRequestHeader('Content-type', 'application/json');
         http.addEventListener('load', () => {
             if (http.readyState === 4 && http.status === 200) {
-                var response = JSON.parse(http.responseText);
-                console.log(response);
+                console.log(http.responseText);
             }
         });
         http.send();
