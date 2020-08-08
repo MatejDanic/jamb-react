@@ -1,9 +1,9 @@
 import axios from 'axios';
 import authHeader from './auth-header';
 
-// const API_URL = "http://localhost:8080/";
+const API_URL = "http://localhost:8080/";
 // const API_URL = 'http://www.jamb.com.hr/';
-const API_URL = 'http://jamb-spring.herokuapp.com';
+// const API_URL = 'http://jamb-spring.herokuapp.com';
 
 class UserService {
   getPublicContent() {

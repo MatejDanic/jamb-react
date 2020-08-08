@@ -102,7 +102,9 @@
   grid-column-start: 6;
   grid-row-start: 9;
   grid-row-end: 11;
-  font-size: 14px;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
 

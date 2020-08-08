@@ -14,9 +14,9 @@ export default class Game extends Component {
         super();
 
         this.state = {
-            // apiURL: "http://localhost:8080/",
+            apiURL: "http://localhost:8080/",
             // apiURL: "http://www.jamb.com.hr/",
-            apiURL: "https://jamb-spring.herokuapp.com/",
+            // apiURL: "https://jamb-spring.herokuapp.com/",
             formId: null,
             boxesLeft: 52,
             annoucement: null,
@@ -98,7 +98,6 @@ export default class Game extends Component {
     componentDidMount() {
         if (this.props.user) {
             var user = this.props.user;
-            //	var url = 'https://jamb-remote.herokuapp.com/forms';
             var url = this.state.apiURL + 'forms';
             var http = new XMLHttpRequest();
             http.open('PUT', url, true);
@@ -107,7 +106,6 @@ export default class Game extends Component {
             http.addEventListener('load', () => {
                 if (http.readyState === 4 && http.status === 200) {
                     var form = JSON.parse(http.responseText);
-                    // console.log(form);
                     this.initializeForm(form);
                 }
             });
@@ -159,7 +157,6 @@ export default class Game extends Component {
             http.addEventListener('load', () => {
                 if (http.readyState === 4 && http.status === 200) {
                     var dice = JSON.parse(http.responseText);
-                    // console.log(dice);
                     this.setState(state => {
                         for (var i = 0; i < dice.length; i++) {
                             state.dice[i].value = dice[i].value;
@@ -179,9 +176,10 @@ export default class Game extends Component {
         var announcementRequired = this.state.announcement == null;
         for (var column = 0; column < 3; column++) {
             for (var box = 0; box < 13; box++) {
-                if (!this.state.boxes[column * 13 + box].filled)
+                if (!this.state.boxes[column * 13 + box].filled) {
                     announcementRequired = false;
-                break;
+                    break;
+                }
             }
         }
         this.setState({ rollsLeft: this.state.rollsLeft - 1, rollDisabled: (this.state.rollsLeft === 1 || announcementRequired), diceDisabled: (this.state.rollsLeft === 1), boxesDisabled: false });
@@ -190,14 +188,11 @@ export default class Game extends Component {
     toggleDice(label) {
         this.setState(state => {
             state.dice[label].hold = !state.dice[label].hold;
-            // console.log("Hold: dice " + label + " -> " + state.dice[label].hold);
         });
         this.setState({});
     }
 
     boxClick(label) {
-        // console.log(label);
-        // console.log("Clicked: (col " + parseInt(label / 13, 10) + ", box " + (label % 13) + ")\nLabel: " + label);
         var announced = false;
         if (label >= 39) {
             if (this.state.announcement == null) {
@@ -220,8 +215,7 @@ export default class Game extends Component {
             http.setRequestHeader('Authorization', user.tokenType + " " + user.accessToken);
             http.addEventListener('load', () => {
                 if (http.readyState === 4 && http.status === 200) {
-                    var box = JSON.parse(http.responseText);
-                    // console.log(box);
+                    // var box = JSON.parse(http.responseText);
                     this.setState({ announcement: index });
                 }
             });
@@ -242,7 +236,6 @@ export default class Game extends Component {
             http.addEventListener('load', () => {
                 if (http.readyState === 4 && http.status === 200) {
                     var value = JSON.parse(http.responseText);
-                    // console.log(value);
                     this.setState(state => {
                         state.boxes[index].value = value
                         state.boxes[index].available = false;
@@ -333,6 +326,7 @@ export default class Game extends Component {
             http.setRequestHeader('Authorization', user.tokenType + " " + user.accessToken);
             http.addEventListener('load', () => {
                 if (http.readyState === 4 && http.status === 200) {
+                    console.log(http.responseText);
                     window.location.reload();
                 }
             });
@@ -407,7 +401,7 @@ export default class Game extends Component {
                     <Box gameInfo={gameInfo} variables={boxes[19]} onBoxClick={this.boxClick} />
                     <Box gameInfo={gameInfo} variables={boxes[32]} onBoxClick={this.boxClick} />
                     <Box gameInfo={gameInfo} variables={boxes[45]} onBoxClick={this.boxClick} />
-                    <button className={"show-button restart"} onClick={() => this.restart()}>Restart</button>
+                    <button className={"show-button restart"} style={{ backgroundImage: 'url(../images/reset.png)' }} onClick={() => this.restart()} />
                     {/* <div /> */}
                     <Label labelClass={"label"} value={"MIN"} />
                     <Box gameInfo={gameInfo} variables={boxes[7]} onBoxClick={this.boxClick} />
