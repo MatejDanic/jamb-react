@@ -14,9 +14,9 @@ export default class Game extends Component {
         super();
 
         this.state = {
-            apiURL: "http://localhost:8080/",
+            // apiURL: "http://localhost:8080/",
             // apiURL: "http://www.jamb.com.hr/",
-            // apiURL: "https://jamb-spring.herokuapp.com/",
+            apiURL: "https://jamb-spring.herokuapp.com/",
             formId: null,
             boxesLeft: 52,
             annoucement: null,
