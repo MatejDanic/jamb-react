@@ -106,6 +106,7 @@ export default class Game extends Component {
             http.addEventListener('load', () => {
                 if (http.readyState === 4 && http.status === 200) {
                     var form = JSON.parse(http.responseText);
+                    console.log(form);
                     this.initializeForm(form);
                 }
             });
@@ -114,6 +115,7 @@ export default class Game extends Component {
     }
 
     initializeForm(form) {
+        console.log("initialization");
         this.setState(state => {
             state.boxesLeft = 52;
             for (var column = 0; column < 4; column++) {
@@ -157,16 +159,19 @@ export default class Game extends Component {
             http.addEventListener('load', () => {
                 if (http.readyState === 4 && http.status === 200) {
                     var dice = JSON.parse(http.responseText);
+                    console.log(dice);
                     this.setState(state => {
                         for (var i = 0; i < dice.length; i++) {
-                            state.dice[i].value = dice[i].value;
+                            state.dice[i].value = dice[state.dice[i].label].value;
                         }
                     });
                     this.setState({});
                 }
             });
+            console.log(JSON.parse(text));
             http.send(text);
         } else {
+            console.log("randomizing");
             this.setState(state => {
                 for (var i = 0; i < state.dice.length; i++) {
                     if (!state.dice[i].hold) state.dice[i].value = Math.round(1 + Math.random() * 5);
@@ -182,11 +187,13 @@ export default class Game extends Component {
                 }
             }
         }
+        console.log(this.state.dice);
         this.setState({ rollsLeft: this.state.rollsLeft - 1, rollDisabled: (this.state.rollsLeft === 1 || announcementRequired), diceDisabled: (this.state.rollsLeft === 1), boxesDisabled: false });
     }
 
     toggleDice(label) {
         this.setState(state => {
+            console.log("toggle dice", label);
             state.dice[label].hold = !state.dice[label].hold;
         });
         this.setState({});
@@ -264,6 +271,7 @@ export default class Game extends Component {
             });
         }
         this.setState(state => {
+            console.log("reset dice");
             for (var i = 0; i < state.dice.length; i++) {
                 state.dice[i].hold = false;
             }
