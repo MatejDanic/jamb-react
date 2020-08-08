@@ -36,7 +36,7 @@ class App extends Component {
     }
   }
 
-  wakeJambSpring() {
+  wakeSpringUp() {
     var url = "https://jamb-spring.herokuapp.com/wake";
         var http = new XMLHttpRequest();
         http.open('GET', url, true);
