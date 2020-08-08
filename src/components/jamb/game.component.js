@@ -116,7 +116,7 @@ export default class Game extends Component {
 
     initializeForm(form) {
         console.log("initialization");
-        this.getSums();
+        this.getSums(this.props.user);
         this.setState(state => {
             state.boxesLeft = 52;
             for (var column = 0; column < 4; column++) {
@@ -142,9 +142,8 @@ export default class Game extends Component {
         })
     }
 
-    getSums() {
+    getSums(user) {
         var url = this.state.apiURL + '/forms/' + this.state.formId + "/sums";
-           
         var http = new XMLHttpRequest();
         http.open('GET', url, true);
         http.setRequestHeader('Content-type', 'application/json');
