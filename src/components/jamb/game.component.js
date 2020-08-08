@@ -242,9 +242,9 @@ export default class Game extends Component {
             http.setRequestHeader('Authorization', user.tokenType + " " + user.accessToken);
             http.addEventListener('load', () => {
                 if (http.readyState === 4 && http.status === 200) {
-                    var sums = JSON.parse(http.responseText);
+                    var value = JSON.parse(http.responseText);
                     this.setState(state => {
-                        state.boxes[index].value = sums.boxValue
+                        state.boxes[index].value = value;
                         state.boxes[index].available = false;
                         state.boxes[index].filled = true;
                         if (index <= 11) {
