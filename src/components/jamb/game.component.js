@@ -116,7 +116,6 @@ export default class Game extends Component {
 
     initializeForm(form) {
         console.log("initialization");
-        this.getSums(this.props.user);
         this.setState(state => {
             state.boxesLeft = 52;
             for (var column = 0; column < 4; column++) {
@@ -140,10 +139,11 @@ export default class Game extends Component {
             diceDisabled: form.rollCount === 0 || form.rollCount === 3,
             boxesDisabled: form.rollCount === 0
         })
+        this.getSums(this.props.user, form.id);
     }
 
-    getSums(user) {
-        var url = this.state.apiURL + '/forms/' + this.state.formId + "/sums";
+    getSums(user, formId) {
+        var url = this.state.apiURL + '/forms/' + formId + "/sums";
         var http = new XMLHttpRequest();
         http.open('GET', url, true);
         http.setRequestHeader('Content-type', 'application/json');
