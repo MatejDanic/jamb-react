@@ -14,9 +14,9 @@ export default class Game extends Component {
         super();
 
         this.state = {
-            // apiURL: "http://localhost:8080/",
-            // apiURL: "http://www.jamb.com.hr/",
-            apiURL: "https://jamb-spring.herokuapp.com/",
+            // apiURL: "http://localhost:8080",
+            // apiURL: "http://www.jamb.com.hr",
+            apiURL: "https://jamb-spring.herokuapp.com",
             formId: null,
             boxesLeft: 52,
             annoucement: null,
@@ -98,7 +98,7 @@ export default class Game extends Component {
     componentDidMount() {
         if (this.props.user) {
             var user = this.props.user;
-            var url = this.state.apiURL + 'forms';
+            var url = this.state.apiURL + '/forms';
             var http = new XMLHttpRequest();
             http.open('PUT', url, true);
             http.setRequestHeader('Content-type', 'application/json');
@@ -144,7 +144,7 @@ export default class Game extends Component {
     rollDice() {
         if (this.props.user) {
             var user = this.props.user;
-            var url = this.state.apiURL + 'forms/' + this.state.formId + "/roll";
+            var url = this.state.apiURL + '/forms/' + this.state.formId + "/roll";
             var text = '{';
             for (var i = 0; i < this.state.dice.length; i++) {
                 text += '"' + this.state.dice[i].label + '" : "';
@@ -215,7 +215,7 @@ export default class Game extends Component {
     announce(index) {
         if (this.props.user) {
             var user = this.props.user;
-            var url = this.state.apiURL + 'forms/' + this.state.formId + "/announce";
+            var url = this.state.apiURL + '/forms/' + this.state.formId + "/announce";
             var http = new XMLHttpRequest();
             http.open('PUT', url, true);
             http.setRequestHeader('Content-type', 'application/json');
@@ -235,7 +235,7 @@ export default class Game extends Component {
     fillBox(index) {
         if (this.props.user) {
             var user = this.props.user;
-            var url = this.state.apiURL + 'forms/' + this.state.formId + "/columns/" + parseInt(index / 13, 10) + "/boxes/" + index % 13 + "/fill";
+            var url = this.state.apiURL + '/forms/' + this.state.formId + "/columns/" + parseInt(index / 13, 10) + "/boxes/" + index % 13 + "/fill";
             var http = new XMLHttpRequest();
             http.open('PUT', url, true);
             http.setRequestHeader('Content-type', 'application/json');
@@ -327,7 +327,7 @@ export default class Game extends Component {
     restart() {
         if (this.props.user) {
             var user = this.props.user;
-            var url = this.state.apiURL + 'forms/' + this.state.formId;
+            var url = this.state.apiURL + '/forms/' + this.state.formId;
             var http = new XMLHttpRequest();
             http.open('DELETE', url, true);
             http.setRequestHeader('Content-type', 'application/json');
@@ -488,7 +488,7 @@ export default class Game extends Component {
     showLeaderboard() {
         var http = new XMLHttpRequest();
         //	var url = 'https://jamb-remote.herokuapp.com/scores';
-        var url = this.state.apiURL + 'scores';
+        var url = this.state.apiURL + '/scores';
         http.open('GET', url, true);
 
         http.addEventListener('load', () => {
