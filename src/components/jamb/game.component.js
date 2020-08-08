@@ -151,7 +151,11 @@ export default class Game extends Component {
         http.addEventListener('load', () => {
             if (http.readyState === 4 && http.status === 200) {
                 var sums = JSON.parse(http.responseText);
-                this.updateSums(sums);
+                setTimeout(
+                    () => {
+                        this.updateSums(sums);
+                    }, 250
+                );
             }
         });
         http.send();
