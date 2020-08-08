@@ -242,9 +242,9 @@ export default class Game extends Component {
             http.setRequestHeader('Authorization', user.tokenType + " " + user.accessToken);
             http.addEventListener('load', () => {
                 if (http.readyState === 4 && http.status === 200) {
-                    var value = JSON.parse(http.responseText);
+                    var sums = JSON.parse(http.responseText);
                     this.setState(state => {
-                        state.boxes[index].value = value
+                        state.boxes[index].value = sums.boxValue
                         state.boxes[index].available = false;
                         state.boxes[index].filled = true;
                         if (index <= 11) {
@@ -253,7 +253,9 @@ export default class Game extends Component {
                             state.boxes[index - 1].available = true;
                         }
                     });
-                    this.setState({});
+                    this.setState({}, () => {
+                        this.updateSums(index);
+                    });
                 }
             });
             http.send();
@@ -268,7 +270,9 @@ export default class Game extends Component {
                 } else if (index >= 14 && index <= 25) {
                     state.boxes[index - 1].available = true;
                 }
+                this.updateSums(index);
             });
+            
         }
         this.setState(state => {
             console.log("reset dice");
@@ -285,7 +289,6 @@ export default class Game extends Component {
                 );
             }
         });
-        this.updateSums(index);
     }
 
     updateSums(label) {
@@ -321,7 +324,7 @@ export default class Game extends Component {
                 }
             }
             state.sums[15] = state.sums[4] + state.sums[9] + state.sums[14];
-        })
+        });
     }
 
     restart() {
@@ -498,7 +501,7 @@ export default class Game extends Component {
                 var text = '';
                 for (var i = 0; i < response.length; i++) {
                     var obj = response[i];
-                    text += (i + 1) + '. ' + obj.value + ' - ' + obj.value + '\n';
+                    text += (i + 1) + '. ' + obj.user + ' - ' + obj.value + '\n';
                 }
                 alert('Najbolji rezultati ovaj tjedan:\n' + text);
             }
