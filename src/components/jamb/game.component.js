@@ -116,6 +116,7 @@ export default class Game extends Component {
 
     initializeForm(form) {
         console.log("initialization");
+        this.getSums();
         this.setState(state => {
             state.boxesLeft = 52;
             for (var column = 0; column < 4; column++) {
@@ -139,6 +140,22 @@ export default class Game extends Component {
             diceDisabled: form.rollCount === 0 || form.rollCount === 3,
             boxesDisabled: form.rollCount === 0
         })
+    }
+
+    getSums() {
+        var url = this.state.apiURL + '/forms/' + this.state.formId + "/sums";
+           
+        var http = new XMLHttpRequest();
+        http.open('GET', url, true);
+        http.setRequestHeader('Content-type', 'application/json');
+        http.setRequestHeader('Authorization', user.tokenType + " " + user.accessToken);
+        http.addEventListener('load', () => {
+            if (http.readyState === 4 && http.status === 200) {
+                var sums = JSON.parse(http.responseText);
+                this.updateSums(sums);
+            }
+        });
+        http.send();
     }
 
     rollDice() {
@@ -242,9 +259,9 @@ export default class Game extends Component {
             http.setRequestHeader('Authorization', user.tokenType + " " + user.accessToken);
             http.addEventListener('load', () => {
                 if (http.readyState === 4 && http.status === 200) {
-                    var value = JSON.parse(http.responseText);
+                    var sums = JSON.parse(http.responseText);
                     this.setState(state => {
-                        state.boxes[index].value = value;
+                        state.boxes[index].value = sums.boxValue;
                         state.boxes[index].available = false;
                         state.boxes[index].filled = true;
                         if (index <= 11) {
@@ -256,8 +273,7 @@ export default class Game extends Component {
                     this.setState({});
                     setTimeout(
                         () => {
-
-                            this.updateSums(index);
+                            this.updateSums(sums);
                         }, 250
                     );
                 }
@@ -295,40 +311,62 @@ export default class Game extends Component {
         });
     }
 
-    updateSums(label) {
-        var column = parseInt(label / 13, 10);
-        var box = label % 13;
-        var i;
-        this.setState(state => {
-            if (box <= 5) {
-                state.sums[column] = 0;
-                for (i = 0; i < 6; i++) {
-                    state.sums[column] += state.boxes[column * 13 + i].value;
+    updateSums(index) {
+        if (this.props.user) {
+            var column = parseInt(index / 13, 10);
+            var box = index % 13;
+            var i;
+            this.setState(state => {
+                if (box <= 5) {
+                    state.sums[column] = 0;
+                    for (i = 0; i < 6; i++) {
+                        state.sums[column] += state.boxes[column * 13 + i].value;
+                    }
+                    if (state.sums[column] >= 60) state.sums[column] += 30;
+                    state.sums[4] = 0;
+                    for (i = 0; i < 4; i++) {
+                        state.sums[4] += state.sums[i]
+                    }
+                } else if (box >= 8) {
+                    state.sums[column + 10] = 0;
+                    for (i = 8; i < 13; i++) {
+                        state.sums[column + 10] += state.boxes[column * 13 + i].value;
+                    }
+                    state.sums[14] = 0;
+                    for (i = 0; i < 4; i++) {
+                        state.sums[14] += state.sums[10 + i]
+                    }
                 }
-                if (state.sums[column] >= 60) state.sums[column] += 30;
-                state.sums[4] = 0;
-                for (i = 0; i < 4; i++) {
-                    state.sums[4] += state.sums[i]
+                if (state.boxes[column * 13].filled && state.boxes[column * 13 + 6].filled && state.boxes[column * 13 + 7].filled) {
+                    state.sums[column + 5] = state.boxes[column * 13].value * (state.boxes[column * 13 + 6].value - state.boxes[column * 13 + 7].value);
+                    state.sums[9] = 0;
+                    for (i = 0; i < 4; i++) {
+                        state.sums[9] += state.sums[5 + i]
+                    }
                 }
-            } else if (box >= 8) {
-                state.sums[column + 10] = 0;
-                for (i = 8; i < 13; i++) {
-                    state.sums[column + 10] += state.boxes[column * 13 + i].value;
-                }
-                state.sums[14] = 0;
-                for (i = 0; i < 4; i++) {
-                    state.sums[14] += state.sums[10 + i]
-                }
-            }
-            if (state.boxes[column * 13].filled && state.boxes[column * 13 + 6].filled && state.boxes[column * 13 + 7].filled) {
-                state.sums[column + 5] = state.boxes[column * 13].value * (state.boxes[column * 13 + 6].value - state.boxes[column * 13 + 7].value);
-                state.sums[9] = 0;
-                for (i = 0; i < 4; i++) {
-                    state.sums[9] += state.sums[5 + i]
-                }
-            }
-            state.sums[15] = state.sums[4] + state.sums[9] + state.sums[14];
-        });
+                state.sums[15] = state.sums[4] + state.sums[9] + state.sums[14];
+            });
+        } else {
+            this.setState(state => {
+                state.sums[0].value = index['DOWNWARDS-numberSum'];
+                state.sums[1].value = index['DOWNWARDS-diffSum'];
+                state.sums[2].value = index['DOWNWARDS-labelSum'];
+                state.sums[3].value = index['UPWARDS-numberSum'];
+                state.sums[4].value = index['UPWARDS-diffSum'];
+                state.sums[5].value = index['UPWARDS-labelSum'];
+                state.sums[6].value = index['ANY_DIRECTION-numberSum'];
+                state.sums[7].value = index['ANY_DIRECTION-diffSum'];
+                state.sums[8].value = index['ANY_DIRECTION-labelSum'];
+                state.sums[9].value = index['ANNOUNCEMENT-numberSum'];
+                state.sums[10].value = index['ANNOUNCEMENT-diffSum'];
+                state.sums[11].value = index['ANNOUNCEMENT-labelSum'];
+                state.sums[12].value = index['numberSum'];
+                state.sums[13].value = index['diffSum'];
+                state.sums[14].value = index['labelSum'];
+                state.sums[15].value = index['finalSum'];
+            });
+            this.setState({});
+        }
     }
 
     restart() {
