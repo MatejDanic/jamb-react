@@ -132,7 +132,7 @@ export default class Game extends Component {
         });
         this.setState({
             formId: form.id,
-            announcement: 39 + form.announcement,
+            announcement: form.announcement == null ? 39 + form.announcement : null,
             announcementRequired: form.announcementRequired,
             rollsLeft: 3 - form.rollCount,
             rollDisabled: form.rollCount === 3 || form.announcementRequired && form.announcement == null,
@@ -383,10 +383,7 @@ export default class Game extends Component {
             http.setRequestHeader('Content-type', 'application/json');
             http.setRequestHeader('Authorization', user.tokenType + " " + user.accessToken);
             http.addEventListener('load', () => {
-                if (http.readyState === 4 && http.status === 200) {
-                    // console.log(http.responseText);
-                    window.location.reload();
-                }
+                window.location.reload();
             });
             http.send();
         } else {
@@ -550,6 +547,7 @@ export default class Game extends Component {
                     var obj = response[i];
                     text += (i + 1) + '. ' + obj.user + ' - ' + obj.value + '\n';
                 }
+                console.log(text);
                 alert('Najbolji rezultati ovaj tjedan:\n' + text);
             }
         });
