@@ -541,13 +541,13 @@ export default class Game extends Component {
             if (http.readyState === 4 && http.status === 200) {
 
                 var response = JSON.parse(http.responseText);
-                console.log(response);
+                // console.log(response);
                 var text = '';
                 for (var i = 0; i < response.length; i++) {
                     var obj = response[i];
                     text += (i + 1) + '. ' + obj.username + ' - ' + obj.value + '\n';
                 }
-                console.log(text);
+                // console.log(text);
                 alert('Najbolji rezultati ovaj tjedan:\n' + text);
             }
         });
