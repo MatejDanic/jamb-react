@@ -135,7 +135,7 @@ export default class Game extends Component {
             announcement: 39 + form.announcement,
             announcementRequired: form.announcementRequired,
             rollsLeft: 3 - form.rollCount,
-            rollDisabled: form.rollCount === 3 || form.announcementRequired,
+            rollDisabled: form.rollCount === 3 || form.announcementRequired && form.announcement == null,
             diceDisabled: form.rollCount === 0 || form.rollCount === 3,
             boxesDisabled: form.rollCount === 0
         })
