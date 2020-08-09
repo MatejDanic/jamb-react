@@ -244,7 +244,7 @@ export default class Game extends Component {
             http.addEventListener('load', () => {
                 if (http.readyState === 4 && http.status === 200) {
                     // var box = JSON.parse(http.responseText);
-                    this.setState({ announcement: index });
+                    this.setState({ boxesDisabled: true, announcement: index, rollDisabled: false });
                 }
             });
             http.send(index % 13);
@@ -373,6 +373,7 @@ export default class Game extends Component {
             });
         }
     }
+
     restart() {
         if (this.props.user) {
             var user = this.props.user;
