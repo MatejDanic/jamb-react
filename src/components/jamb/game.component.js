@@ -115,7 +115,7 @@ export default class Game extends Component {
     }
 
     initializeForm(form) {
-        console.log("initialization");
+        // console.log("initialization");
         this.setState(state => {
             state.boxesLeft = 52;
             for (var column = 0; column < 4; column++) {
@@ -151,7 +151,7 @@ export default class Game extends Component {
         http.addEventListener('load', () => {
             if (http.readyState === 4 && http.status === 200) {
                 var sums = JSON.parse(http.responseText);
-                console.log(sums);
+                // console.log(sums);
                 setTimeout(
                     () => {
                         this.updateSums(sums);
@@ -534,7 +534,6 @@ export default class Game extends Component {
 
     showLeaderboard() {
         var http = new XMLHttpRequest();
-        //	var url = 'https://jamb-remote.herokuapp.com/scores';
         var url = this.state.apiURL + '/scores';
         http.open('GET', url, true);
 
@@ -542,6 +541,7 @@ export default class Game extends Component {
             if (http.readyState === 4 && http.status === 200) {
 
                 var response = JSON.parse(http.responseText);
+                console.log(response);
                 var text = '';
                 for (var i = 0; i < response.length; i++) {
                     var obj = response[i];
