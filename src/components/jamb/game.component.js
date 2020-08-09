@@ -132,7 +132,7 @@ export default class Game extends Component {
         });
         this.setState({
             formId: form.id,
-            announcement: form.announcement,
+            announcement: 39 + form.announcement,
             announcementRequired: form.announcementRequired,
             rollsLeft: 3 - form.rollCount,
             rollDisabled: form.rollCount === 3 || form.announcementRequired,
