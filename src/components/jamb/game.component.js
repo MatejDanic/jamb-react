@@ -320,19 +320,19 @@ export default class Game extends Component {
             // console.log(index);
             this.setState(state => {
                 state.sums[0] = index['DOWNWARDS-numberSum'];
-                state.sums[1] = index['DOWNWARDS-diffSum'];
-                state.sums[2] = index['DOWNWARDS-labelSum'];
-                state.sums[3] = index['UPWARDS-numberSum'];
-                state.sums[4] = index['UPWARDS-diffSum'];
-                state.sums[5] = index['UPWARDS-labelSum'];
-                state.sums[6] = index['ANY_DIRECTION-numberSum'];
+                state.sums[5] = index['DOWNWARDS-diffSum'];
+                state.sums[10] = index['DOWNWARDS-labelSum'];
+                state.sums[1] = index['UPWARDS-numberSum'];
+                state.sums[6] = index['UPWARDS-diffSum'];
+                state.sums[11] = index['UPWARDS-labelSum'];
+                state.sums[2] = index['ANY_DIRECTION-numberSum'];
                 state.sums[7] = index['ANY_DIRECTION-diffSum'];
-                state.sums[8] = index['ANY_DIRECTION-labelSum'];
-                state.sums[9] = index['ANNOUNCEMENT-numberSum'];
-                state.sums[10] = index['ANNOUNCEMENT-diffSum'];
-                state.sums[11] = index['ANNOUNCEMENT-labelSum'];
-                state.sums[12] = index['numberSum'];
-                state.sums[13] = index['diffSum'];
+                state.sums[12] = index['ANY_DIRECTION-labelSum'];
+                state.sums[3] = index['ANNOUNCEMENT-numberSum'];
+                state.sums[8] = index['ANNOUNCEMENT-diffSum'];
+                state.sums[13] = index['ANNOUNCEMENT-labelSum'];
+                state.sums[4] = index['numberSum'];
+                state.sums[9] = index['diffSum'];
                 state.sums[14] = index['labelSum'];
                 state.sums[15] = index['finalSum'];
             })
