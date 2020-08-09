@@ -545,7 +545,7 @@ export default class Game extends Component {
                 var text = '';
                 for (var i = 0; i < response.length; i++) {
                     var obj = response[i];
-                    text += (i + 1) + '. ' + obj.user + ' - ' + obj.value + '\n';
+                    text += (i + 1) + '. ' + obj.username + ' - ' + obj.value + '\n';
                 }
                 console.log(text);
                 alert('Najbolji rezultati ovaj tjedan:\n' + text);
