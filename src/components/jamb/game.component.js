@@ -93,6 +93,7 @@ export default class Game extends Component {
         this.boxClick = this.boxClick.bind(this);
         this.fillBox = this.fillBox.bind(this);
         this.initializeForm = this.initializeForm.bind(this);
+        this.startRollAnimation = this.startRollAnimation.bind(this);
     }
 
     componentDidMount() {
@@ -183,8 +184,11 @@ export default class Game extends Component {
                     // console.log(dice);
                     this.setState(state => {
                         for (var i = 0; i < dice.length; i++) {
-                            state.dice[i].value = dice[state.dice[i].label].value;
+                            if (!this.state.dice[i].hold) {
+                                state.dice[i].value = dice[i].value;
+                            }
                         }
+                        this.startRollAnimation()
                     });
                     this.setState({});
                 }
@@ -195,8 +199,11 @@ export default class Game extends Component {
             // console.log("randomizing");
             this.setState(state => {
                 for (var i = 0; i < state.dice.length; i++) {
-                    if (!state.dice[i].hold) state.dice[i].value = Math.round(1 + Math.random() * 5);
+                    if (!state.dice[i].hold) {
+                        state.dice[i].value = Math.round(1 + Math.random() * 5);
+                    }
                 }
+                this.startRollAnimation()
             });
         }
         var announcementRequired = this.state.announcement == null;
@@ -210,6 +217,25 @@ export default class Game extends Component {
         }
         // console.log(this.state.dice);
         this.setState({ rollsLeft: this.state.rollsLeft - 1, rollDisabled: (this.state.rollsLeft === 1 || announcementRequired), diceDisabled: (this.state.rollsLeft === 1), boxesDisabled: false });
+    }
+
+    startRollAnimation() {
+        for (var i = 0; i < this.state.dice.length; i++) {
+            if (!this.state.dice[i].hold) {
+                (function (local_i) {
+                    setTimeout(function(){
+                        document.getElementById('dice' + local_i).classList.add('roll'); 
+                        // document.getElementById('dice' + local_i).classList.add('rotation');
+
+                    }, 0);
+                    setTimeout(function(){
+                        document.getElementById('dice' + local_i).classList.remove('roll'); 
+                        // document.getElementById('dice' + local_i).classList.add('rotation');
+
+                    }, 1000);
+                })(i);
+            }
+        }
     }
 
     toggleDice(label) {
@@ -277,8 +303,8 @@ export default class Game extends Component {
                     });
                     this.setState({});
                     setTimeout(() => {
-                            this.updateSums(sums);
-                        }, 100
+                        this.updateSums(sums);
+                    }, 100
                     );
                 }
             });
@@ -456,7 +482,7 @@ export default class Game extends Component {
                     <Box gameInfo={gameInfo} variables={boxes[19]} onBoxClick={this.boxClick} />
                     <Box gameInfo={gameInfo} variables={boxes[32]} onBoxClick={this.boxClick} />
                     <Box gameInfo={gameInfo} variables={boxes[45]} onBoxClick={this.boxClick} />
-                    <button className={"show-button restart"} style={{ backgroundImage: 'url(../images/reset.png)' }} onClick={() => this.restart()} />
+                    <button className={"show-button restart"} style={{ backgroundImage: 'url(../images/reset.png)' }} onClick={() => { if (window.confirm('Jeste li sigurni da želite početi ispočetka?')) this.restart() }} />
                     {/* <div /> */}
                     <Label labelClass={"label"} value={"MIN"} />
                     <Box gameInfo={gameInfo} variables={boxes[7]} onBoxClick={this.boxClick} />
