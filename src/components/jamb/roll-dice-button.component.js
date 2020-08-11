@@ -11,7 +11,7 @@ export default class RollDiceButton extends Component {
     let disabled = this.props.disabled;
     let btnClass = this.getBtnClass(this.props.rollsLeft);
     return (
-      <button disabled={disabled} className={"roll-dice-button " + btnClass} onClick={this.props.onRollDice}>BACI KOCKICE</button>
+      <button disabled={disabled} className={"roll-dice-button " + btnClass} onClick={this.props.onRollDice}>K O C K I C E</button>
     )
   }
   

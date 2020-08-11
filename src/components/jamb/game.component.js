@@ -425,6 +425,8 @@ export default class Game extends Component {
             <div className="game" >
                 {/* <DiceRack  rollDisabled={this.state.rollDisabled} rollsLeft={this.state.rollsLeft} diceDisabled={this.state.diceDisabled} dice={this.state.dice} 
                 onToggleDice={this.toggleDice} /> */}
+                <DiceRack rollDisabled={this.state.rollDisabled} rollsLeft={this.state.rollsLeft} diceDisabled={this.state.diceDisabled} dice={this.state.dice}
+                    onToggleDice={this.toggleDice} />
                 <div className="form">
                     <a href="https://github.com/MatejDanic">
                         <Label labelClass={"label info"} value="matej" />
@@ -433,7 +435,8 @@ export default class Game extends Component {
                     <Label labelClass={"label label-image"} imgUrl={"../images/field/upwards.bmp"} />
                     <Label labelClass={"label label-image"} imgUrl={"../images/field/any_direction.bmp"} />
                     <Label labelClass={"label"} value={"NAJAVA"} />
-                    <button className="show-button leaderboard" onClick={() => this.showLeaderboard()}>Lj e s t v i c a</button>
+                    <RollDiceButton rollsLeft={this.state.rollsLeft} disabled={this.state.rollDisabled} onRollDice={this.rollDice} />
+                    {/* <button className="show-button scoreboard" onClick={() => this.showScoreboard()}>Lj e s t v i c a</button> */}
                     {/* <div /> */}
                     <Label labelClass={"label label-image"} imgUrl={"../images/dice/1.bmp"} />
                     <Box gameInfo={gameInfo} variables={boxes[0]} onBoxClick={this.boxClick} />
@@ -501,7 +504,8 @@ export default class Game extends Component {
                     <Box gameInfo={gameInfo} variables={boxes[21]} onBoxClick={this.boxClick} />
                     <Box gameInfo={gameInfo} variables={boxes[34]} onBoxClick={this.boxClick} />
                     <Box gameInfo={gameInfo} variables={boxes[47]} onBoxClick={this.boxClick} />
-                    <button className="show-button rules" onClick={() => this.showRules()}>P r a v i l a</button>
+                    <button className="show-button scoreboard" onClick={() => this.showScoreboard()}>Lj e s t v i c a</button>
+                    {/* <button className="show-button rules" onClick={() => this.showRules()}>P r a v i l a</button> */}
                     {/* <div /> */}
                     <Label labelClass={"label"} value={"SKALA"} />
                     <Box gameInfo={gameInfo} variables={boxes[9]} onBoxClick={this.boxClick} />
@@ -533,13 +537,12 @@ export default class Game extends Component {
                     <Label labelClass={"label label-sum-number"} number={sums[12]} id="ANY_DIRECTION-labelSum" />
                     <Label labelClass={"label label-sum-number"} number={sums[13]} id="ANNOUNCEMENT-labelSum" />
                     <Label labelClass={"label label-sum-number"} number={sums[14]} id="labelSum" />
-                    <RollDiceButton rollsLeft={this.state.rollsLeft} disabled={this.state.rollDisabled} onRollDice={this.rollDice} />
+                    <button className="show-button rules" onClick={() => this.showRules()}>Pravila</button>
+                    {/* <RollDiceButton rollsLeft={this.state.rollsLeft} disabled={this.state.rollDisabled} onRollDice={this.rollDice} /> */}
                     {/* <button className="show-button rules" onClick={showRules}>Pravila</button>
-                    <button className="show-button leaderboard" onClick={showLeaderboard}>Ljestvica</button> */}
+                    <button className="show-button scoreboard" onClick={showScoreboard}>Ljestvica</button> */}
                     <Label labelClass={"label label-sum-number-final"} number={sums[15]} id="labelSum" />
                 </div>
-                <DiceRack rollDisabled={this.state.rollDisabled} rollsLeft={this.state.rollsLeft} diceDisabled={this.state.diceDisabled} dice={this.state.dice}
-                    onToggleDice={this.toggleDice} />
             </div>
         )
     }
@@ -558,9 +561,9 @@ export default class Game extends Component {
             "Rezultat se može, ali ne mora upisati u cetvrti stupac nakon prvog bacanja.");
     }
 
-    showLeaderboard() {
+    showScoreboard() {
         var http = new XMLHttpRequest();
-        var url = this.state.apiURL + '/scores';
+        var url = this.state.apiURL + '/scores/board';
         http.open('GET', url, true);
 
         http.addEventListener('load', () => {
