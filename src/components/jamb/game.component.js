@@ -181,9 +181,8 @@ export default class Game extends Component {
             http.addEventListener('load', () => {
                 if (http.readyState === 4 && http.status === 200) {
                     var dice = JSON.parse(http.responseText);
-                    // console.log(dice);
                     this.setState(state => {
-                        for (var i = 0; i < dice.length; i++) {
+                        for (var i = 0; i < state.dice.length; i++) {
                             if (!this.state.dice[i].hold) {
                                 state.dice[i].value = dice[i].value;
                             }
@@ -193,10 +192,8 @@ export default class Game extends Component {
                     this.setState({});
                 }
             });
-            // console.log(JSON.parse(text));
             http.send(text);
         } else {
-            // console.log("randomizing");
             this.setState(state => {
                 for (var i = 0; i < state.dice.length; i++) {
                     if (!state.dice[i].hold) {
@@ -570,13 +567,11 @@ export default class Game extends Component {
             if (http.readyState === 4 && http.status === 200) {
 
                 var response = JSON.parse(http.responseText);
-                // console.log(response);
                 var text = '';
                 for (var i = 0; i < response.length; i++) {
                     var obj = response[i];
                     text += (i + 1) + '. ' + obj.username + ' - ' + obj.value + '\n';
                 }
-                // console.log(text);
                 alert('Najbolji rezultati ovaj tjedan:\n' + text);
             }
         });
