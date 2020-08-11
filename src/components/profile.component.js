@@ -23,7 +23,7 @@ export default class Profile extends Component {
             <strong>ID:</strong>{" "}
             {currentUser.id}
           </p>
-          <strong>Roles:</strong>
+          <strong>Uloge:</strong>
           <ul>
             {currentUser.roles &&
               currentUser.roles.map((role, index) => <li key={index}>{role}</li>)}

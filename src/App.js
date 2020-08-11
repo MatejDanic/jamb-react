@@ -68,7 +68,7 @@ class App extends Component {
               {showAdminBoard && (
                 <li className="nav-item">
                   <Link to={"/admin"} className="nav-link">
-                    Admin Board
+                    Administration
         </Link>
                 </li>
               )}
@@ -86,7 +86,7 @@ class App extends Component {
                 </li>
                 <li className="nav-item">
                   <a href="/login" className="nav-link" onClick={this.logout}>
-                    Logout
+                    Odjava
                  </a>
                 </li>
               </div>
@@ -94,13 +94,13 @@ class App extends Component {
                 <div className="navbar-nav ml-auto">
                   <li className="nav-item">
                     <Link to={"/login"} className="nav-link">
-                      Login
+                      Prijava
             </Link>
                   </li>
 
                   <li className="nav-item">
                     <Link to={"/register"} className="nav-link">
-                      Register
+                      Registracija
             </Link>
                   </li>
                 </div>

@@ -9,27 +9,27 @@ const required = value => {
   if (!value) {
     return (
       <div className="alert alert-danger" role="alert">
-        This field is required!
+        Ovo polje je obavezno!
       </div>
     );
   }
 };
 
 const vusername = value => {
-  if (value.length < 3 || value.length > 20) {
+  if (value.length < 3 || value.length > 15) {
     return (
       <div className="alert alert-danger" role="alert">
-        The username must be between 3 and 20 characters.
+        The username must be between 3 and 15 characters.
       </div>
     );
   }
 };
 
 const vpassword = value => {
-  if (value.length < 3 || value.length > 40) {
+  if (value.length < 3 || value.length > 15) {
     return (
       <div className="alert alert-danger" role="alert">
-        The password must be between 3 and 40 characters.
+        The password must be between 3 and 15 characters.
       </div>
     );
   }
@@ -125,7 +125,7 @@ export default class Register extends Component {
             {!this.state.successful && (
               <div>
                 <div className="form-group">
-                  <label htmlFor="username">Username</label>
+                  <label htmlFor="username">Korisnicko ime</label>
                   <Input
                     type="text"
                     className="form-control"
@@ -137,7 +137,7 @@ export default class Register extends Component {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="password">Password</label>
+                  <label htmlFor="password">Lozinka</label>
                   <Input
                     type="password"
                     className="form-control"
@@ -149,7 +149,7 @@ export default class Register extends Component {
                 </div>
 
                 <div className="form-group">
-                  <button className="btn btn-primary btn-block">Register</button>
+                  <button className="btn btn-primary btn-block">Registracija</button>
                 </div>
               </div>
             )}
