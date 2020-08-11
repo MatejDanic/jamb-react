@@ -66,7 +66,7 @@
 
 }
 
-.two-left {
+.one-left {
   background-image: linear-gradient(
     rgba(255, 255, 255, 1) 66.6%,
     rgba(255, 255, 255, 0) 66.6%,
@@ -74,7 +74,7 @@
   );
 }
 
-.one-left {
+.two-left {
   background-image: linear-gradient(
     rgba(255, 255, 255, 1) 33.3%,
     rgba(255, 255, 255, 0) 33.3%,
@@ -123,7 +123,7 @@
   grid-row-end: 8; */
   padding-left: 25px;
   padding-right: 25px;
-  line-height: 1.3em;
+  line-height: 1.1em;
   font-size: 18px;
 }
 
