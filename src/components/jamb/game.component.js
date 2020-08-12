@@ -134,7 +134,7 @@ export default class Game extends Component {
         });
         var announcementRequired
         this.setState({}, () => {
-            announcementRequired = this.isAnnouncementRequired
+            announcementRequired = this.isAnnouncementRequired();
         })
         this.setState({
             formId: form.id,
@@ -143,7 +143,9 @@ export default class Game extends Component {
             diceDisabled: form.rollCount === 0 || form.rollCount === 3,
             boxesDisabled: form.rollCount === 0,
             announcementRequired: announcementRequired,
-            rollDisabled: form.rollCount === 3 || (announcementRequired && this.state.announcement == null)
+            rollDisabled: form.rollCount === 3 || (announcementRequired && form.announcement == null)
+        }, () => {
+            console.log(this.state.rollDisabled, this.state.announcementRequired, this.state.announcement);
         });
     }
 
