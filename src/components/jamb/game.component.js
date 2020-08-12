@@ -132,16 +132,19 @@ export default class Game extends Component {
                 state.dice[i].value = form.dice[i].value;
             }
         });
+        var announcementRequired
+        this.setState({}, () => {
+            announcementRequired = this.isAnnouncementRequired
+        })
         this.setState({
             formId: form.id,
             announcement: form.announcement != null ? 39 + form.announcement : null,
-            announcementRequired: form.announcementRequired,
             rollsLeft: 3 - form.rollCount,
-            rollDisabled: form.rollCount === 3 || form.announcementRequired && form.announcement == null,
             diceDisabled: form.rollCount === 0 || form.rollCount === 3,
-            boxesDisabled: form.rollCount === 0
-        })
-        this.getSums(this.props.user, form.id);
+            boxesDisabled: form.rollCount === 0,
+            announcementRequired: announcementRequired,
+            rollDisabled: form.rollCount === 3 || (announcementRequired && this.state.announcement == null)
+        });
     }
 
     getSums(user, formId) {
@@ -154,11 +157,7 @@ export default class Game extends Component {
             if (http.readyState === 4 && http.status === 200) {
                 var sums = JSON.parse(http.responseText);
                 // console.log(sums);
-                setTimeout(
-                    () => {
-                        this.updateSums(sums);
-                    }, 250
-                );
+                this.updateSums(sums);
             }
         });
         http.send();
@@ -188,9 +187,10 @@ export default class Game extends Component {
                                 state.dice[i].value = dice[i].value;
                             }
                         }
-                        this.startRollAnimation()
                     });
-                    this.setState({});
+                    this.setState({}, () => {
+                        this.startRollAnimation();
+                    });
                 }
             });
             http.send(text);
@@ -201,9 +201,17 @@ export default class Game extends Component {
                         state.dice[i].value = Math.round(1 + Math.random() * 5);
                     }
                 }
-                this.startRollAnimation()
+            });
+            this.setState({}, () => {
+                this.startRollAnimation();
             });
         }
+        var announcementRequired = this.isAnnouncementRequired()
+        // console.log(this.state.dice);
+        this.setState({ rollsLeft: this.state.rollsLeft - 1, rollDisabled: (this.state.rollsLeft === 1 || announcementRequired), diceDisabled: (this.state.rollsLeft === 1), boxesDisabled: false });
+    }
+
+    isAnnouncementRequired() {
         var announcementRequired = this.state.announcement == null;
         for (var column = 0; column < 3; column++) {
             for (var box = 0; box < 13; box++) {
@@ -213,21 +221,20 @@ export default class Game extends Component {
                 }
             }
         }
-        // console.log(this.state.dice);
-        this.setState({ rollsLeft: this.state.rollsLeft - 1, rollDisabled: (this.state.rollsLeft === 1 || announcementRequired), diceDisabled: (this.state.rollsLeft === 1), boxesDisabled: false });
+        return announcementRequired;
     }
 
     startRollAnimation() {
         for (var i = 0; i < this.state.dice.length; i++) {
             if (!this.state.dice[i].hold) {
                 (function (local_i) {
-                    setTimeout(function(){
-                        document.getElementById('dice' + local_i).classList.add('roll'); 
+                    setTimeout(function () {
+                        document.getElementById('dice' + local_i).classList.add('roll');
                         // document.getElementById('dice' + local_i).classList.add('rotation');
 
                     }, 0);
-                    setTimeout(function(){
-                        document.getElementById('dice' + local_i).classList.remove('roll'); 
+                    setTimeout(function () {
+                        document.getElementById('dice' + local_i).classList.remove('roll');
                         // document.getElementById('dice' + local_i).classList.add('rotation');
 
                     }, 1000);
@@ -267,7 +274,6 @@ export default class Game extends Component {
             http.setRequestHeader('Authorization', user.tokenType + " " + user.accessToken);
             http.addEventListener('load', () => {
                 if (http.readyState === 4 && http.status === 200) {
-                    // var box = JSON.parse(http.responseText);
                     this.setState({ boxesDisabled: true, announcement: index, rollDisabled: false });
                 }
             });
@@ -299,11 +305,9 @@ export default class Game extends Component {
                             state.boxes[index - 1].available = true;
                         }
                     });
-                    this.setState({});
-                    setTimeout(() => {
+                    this.setState({}, () => {
                         this.updateSums(sums);
-                    }, 100
-                    );
+                    });
                 }
             });
             http.send();
@@ -318,49 +322,51 @@ export default class Game extends Component {
                 } else if (index >= 14 && index <= 25) {
                     state.boxes[index - 1].available = true;
                 }
+            });
+            this.setState({}, () => {
                 this.updateSums(index);
             });
-
         }
+        this.setState({
+                rollsLeft: 3, rollDisabled: false, diceDisabled: true,
+                boxesDisabled: true, boxesLeft: this.state.boxesLeft - 1, announcement: null}, 
+                () => {
+                if (this.state.boxesLeft === 0) {
+                    setTimeout(
+                        () => {
+                            this.endGame();
+                        }, 500
+                    );
+                }
+        });
         this.setState(state => {
-            // console.log("reset dice");
             for (var i = 0; i < state.dice.length; i++) {
                 state.dice[i].hold = false;
-            }
-        });
-        this.setState({ rollsLeft: 3, rollDisabled: false, diceDisabled: true, boxesDisabled: true, boxesLeft: this.state.boxesLeft - 1, announcement: null }, () => {
-            if (this.state.boxesLeft === 0) {
-                setTimeout(
-                    () => {
-                        this.endGame();
-                    }, 1000
-                );
             }
         });
     }
 
     updateSums(index) {
         if (this.props.user) {
-            // console.log(index);
+            var sums = index;
             this.setState(state => {
-                state.sums[0] = index['DOWNWARDS-numberSum'];
-                state.sums[5] = index['DOWNWARDS-diffSum'];
-                state.sums[10] = index['DOWNWARDS-labelSum'];
-                state.sums[1] = index['UPWARDS-numberSum'];
-                state.sums[6] = index['UPWARDS-diffSum'];
-                state.sums[11] = index['UPWARDS-labelSum'];
-                state.sums[2] = index['ANY_DIRECTION-numberSum'];
-                state.sums[7] = index['ANY_DIRECTION-diffSum'];
-                state.sums[12] = index['ANY_DIRECTION-labelSum'];
-                state.sums[3] = index['ANNOUNCEMENT-numberSum'];
-                state.sums[8] = index['ANNOUNCEMENT-diffSum'];
-                state.sums[13] = index['ANNOUNCEMENT-labelSum'];
-                state.sums[4] = index['numberSum'];
-                state.sums[9] = index['diffSum'];
-                state.sums[14] = index['labelSum'];
-                state.sums[15] = index['finalSum'];
+                state.sums[0] = sums['DOWNWARDS-numberSum'];
+                state.sums[5] = sums['DOWNWARDS-diffSum'];
+                state.sums[10] = sums['DOWNWARDS-labelSum'];
+                state.sums[1] = sums['UPWARDS-numberSum'];
+                state.sums[6] = sums['UPWARDS-diffSum'];
+                state.sums[11] = sums['UPWARDS-labelSum'];
+                state.sums[2] = sums['ANY_DIRECTION-numberSum'];
+                state.sums[7] = sums['ANY_DIRECTION-diffSum'];
+                state.sums[12] = sums['ANY_DIRECTION-labelSum'];
+                state.sums[3] = sums['ANNOUNCEMENT-numberSum'];
+                state.sums[8] = sums['ANNOUNCEMENT-diffSum'];
+                state.sums[13] = sums['ANNOUNCEMENT-labelSum'];
+                state.sums[4] = sums['numberSum'];
+                state.sums[9] = sums['diffSum'];
+                state.sums[14] = sums['labelSum'];
+                state.sums[15] = sums['finalSum'];
             })
-            this.setState({});
         } else {
             var column = parseInt(index / 13, 10);
             var box = index % 13;
@@ -396,6 +402,7 @@ export default class Game extends Component {
                 state.sums[15] = state.sums[4] + state.sums[9] + state.sums[14];
             });
         }
+        this.setState({});
     }
 
     restart() {
@@ -579,4 +586,3 @@ export default class Game extends Component {
         http.send();
     }
 }
-
