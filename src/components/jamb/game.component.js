@@ -145,25 +145,26 @@ export default class Game extends Component {
             announcementRequired: announcementRequired,
             rollDisabled: form.rollCount === 3 || (announcementRequired && form.announcement == null)
         }, () => {
-            console.log(this.state.rollDisabled, this.state.announcementRequired, this.state.announcement);
+            this.updateSums();
+            // console.log(this.state.rollDisabled, this.state.announcementRequired, this.state.announcement);
         });
     }
 
-    getSums(user, formId) {
-        var url = this.state.apiURL + '/forms/' + formId + "/sums";
-        var http = new XMLHttpRequest();
-        http.open('GET', url, true);
-        http.setRequestHeader('Content-type', 'application/json');
-        http.setRequestHeader('Authorization', user.tokenType + " " + user.accessToken);
-        http.addEventListener('load', () => {
-            if (http.readyState === 4 && http.status === 200) {
-                var sums = JSON.parse(http.responseText);
-                // console.log(sums);
-                this.updateSums(sums);
-            }
-        });
-        http.send();
-    }
+    // getSums(user, formId) {
+    //     var url = this.state.apiURL + '/forms/' + formId + "/sums";
+    //     var http = new XMLHttpRequest();
+    //     http.open('GET', url, true);
+    //     http.setRequestHeader('Content-type', 'application/json');
+    //     http.setRequestHeader('Authorization', user.tokenType + " " + user.accessToken);
+    //     http.addEventListener('load', () => {
+    //         if (http.readyState === 4 && http.status === 200) {
+    //             var sums = JSON.parse(http.responseText);
+    //             // console.log(sums);
+    //             this.updateSums(sums);
+    //         }
+    //     });
+    //     http.send();
+    // }
 
     rollDice() {
         if (this.props.user) {
@@ -295,10 +296,10 @@ export default class Game extends Component {
             http.setRequestHeader('Authorization', user.tokenType + " " + user.accessToken);
             http.addEventListener('load', () => {
                 if (http.readyState === 4 && http.status === 200) {
-                    var sums = JSON.parse(http.responseText);
+                    var value = JSON.parse(http.responseText);
                     // console.log("sums", sums);
                     this.setState(state => {
-                        state.boxes[index].value = sums.boxValue;
+                        state.boxes[index].value = value;
                         state.boxes[index].available = false;
                         state.boxes[index].filled = true;
                         if (index <= 11) {
@@ -308,7 +309,7 @@ export default class Game extends Component {
                         }
                     });
                     this.setState({}, () => {
-                        this.updateSums(sums);
+                        this.updateSums();
                     });
                 }
             });
@@ -326,7 +327,7 @@ export default class Game extends Component {
                 }
             });
             this.setState({}, () => {
-                this.updateSums(index);
+                this.updateSums();
             });
         }
         this.setState({
@@ -348,33 +349,35 @@ export default class Game extends Component {
         });
     }
 
-    updateSums(index) {
-        if (this.props.user) {
-            var sums = index;
+    updateSums() {
+        // if (this.props.user) {
+        //     var sums = index;
+        //     this.setState(state => {
+        //         state.sums[0] = sums['DOWNWARDS-numberSum'];
+        //         state.sums[5] = sums['DOWNWARDS-diffSum'];
+        //         state.sums[10] = sums['DOWNWARDS-labelSum'];
+        //         state.sums[1] = sums['UPWARDS-numberSum'];
+        //         state.sums[6] = sums['UPWARDS-diffSum'];
+        //         state.sums[11] = sums['UPWARDS-labelSum'];
+        //         state.sums[2] = sums['ANY_DIRECTION-numberSum'];
+        //         state.sums[7] = sums['ANY_DIRECTION-diffSum'];
+        //         state.sums[12] = sums['ANY_DIRECTION-labelSum'];
+        //         state.sums[3] = sums['ANNOUNCEMENT-numberSum'];
+        //         state.sums[8] = sums['ANNOUNCEMENT-diffSum'];
+        //         state.sums[13] = sums['ANNOUNCEMENT-labelSum'];
+        //         state.sums[4] = sums['numberSum'];
+        //         state.sums[9] = sums['diffSum'];
+        //         state.sums[14] = sums['labelSum'];
+        //         state.sums[15] = sums['finalSum'];
+        //     })
+        // } else {
+            var column, i;
             this.setState(state => {
-                state.sums[0] = sums['DOWNWARDS-numberSum'];
-                state.sums[5] = sums['DOWNWARDS-diffSum'];
-                state.sums[10] = sums['DOWNWARDS-labelSum'];
-                state.sums[1] = sums['UPWARDS-numberSum'];
-                state.sums[6] = sums['UPWARDS-diffSum'];
-                state.sums[11] = sums['UPWARDS-labelSum'];
-                state.sums[2] = sums['ANY_DIRECTION-numberSum'];
-                state.sums[7] = sums['ANY_DIRECTION-diffSum'];
-                state.sums[12] = sums['ANY_DIRECTION-labelSum'];
-                state.sums[3] = sums['ANNOUNCEMENT-numberSum'];
-                state.sums[8] = sums['ANNOUNCEMENT-diffSum'];
-                state.sums[13] = sums['ANNOUNCEMENT-labelSum'];
-                state.sums[4] = sums['numberSum'];
-                state.sums[9] = sums['diffSum'];
-                state.sums[14] = sums['labelSum'];
-                state.sums[15] = sums['finalSum'];
-            })
-        } else {
-            var column = parseInt(index / 13, 10);
-            var box = index % 13;
-            var i;
-            this.setState(state => {
-                if (box <= 5) {
+                // for (i = 0; i < 16; i++) {
+                //     state.sums[i] = 0;
+                // }
+                for (column = 0; column < 4; column++) {
+                // if (box <= 5) {
                     state.sums[column] = 0;
                     for (i = 0; i < 6; i++) {
                         state.sums[column] += state.boxes[column * 13 + i].value;
@@ -384,7 +387,8 @@ export default class Game extends Component {
                     for (i = 0; i < 4; i++) {
                         state.sums[4] += state.sums[i]
                     }
-                } else if (box >= 8) {
+
+                // } else if (box >= 8) {
                     state.sums[column + 10] = 0;
                     for (i = 8; i < 13; i++) {
                         state.sums[column + 10] += state.boxes[column * 13 + i].value;
@@ -393,17 +397,18 @@ export default class Game extends Component {
                     for (i = 0; i < 4; i++) {
                         state.sums[14] += state.sums[10 + i]
                     }
-                }
-                if (state.boxes[column * 13].filled && state.boxes[column * 13 + 6].filled && state.boxes[column * 13 + 7].filled) {
-                    state.sums[column + 5] = state.boxes[column * 13].value * (state.boxes[column * 13 + 6].value - state.boxes[column * 13 + 7].value);
-                    state.sums[9] = 0;
-                    for (i = 0; i < 4; i++) {
-                        state.sums[9] += state.sums[5 + i]
+                // }
+                    if (state.boxes[column * 13].filled && state.boxes[column * 13 + 6].filled && state.boxes[column * 13 + 7].filled) {
+                        state.sums[column + 5] = state.boxes[column * 13].value * (state.boxes[column * 13 + 6].value - state.boxes[column * 13 + 7].value);
+                        state.sums[9] = 0;
+                        for (i = 0; i < 4; i++) {
+                            state.sums[9] += state.sums[5 + i]
+                        }
                     }
                 }
                 state.sums[15] = state.sums[4] + state.sums[9] + state.sums[14];
             });
-        }
+        // }
         this.setState({});
     }
 
