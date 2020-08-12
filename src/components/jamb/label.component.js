@@ -1,7 +1,7 @@
-import React, { PureComponent } from "react";
-import "./label.css"
+import React, { Component } from "react";
+import "./label.css";
 
-export default class Label extends PureComponent {
+export default class Label extends Component {
 
     componentDidUpdate() {
         // console.log(this.props.variables);

@@ -7,6 +7,7 @@ import ScoreUtil from "../../utils/score.util";
 import RollDiceButton from "./roll-dice-button.component";
 import "./game.css";
 import "./button.css";
+import "./animation.css";
 
 export default class Game extends Component {
 

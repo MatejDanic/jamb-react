@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
-
 import AuthService from "../services/auth.service";
 
 const required = value => {
@@ -19,7 +18,7 @@ const vusername = value => {
   if (value.length < 3 || value.length > 15) {
     return (
       <div className="alert alert-danger" role="alert">
-        The username must be between 3 and 15 characters.
+        Korisničko ime mora biti između 3 i 15 slova/znamenki.
       </div>
     );
   }
@@ -29,7 +28,7 @@ const vpassword = value => {
   if (value.length < 3 || value.length > 15) {
     return (
       <div className="alert alert-danger" role="alert">
-        The password must be between 3 and 15 characters.
+        Lozinka mora biti između 3 i 15 slova/znamenki.
       </div>
     );
   }
@@ -110,12 +109,6 @@ export default class Register extends Component {
     return (
       <div className="col-md-12">
         <div className="card card-container">
-          {/* <img
-            src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-            alt="profile-img"
-            className="profile-img-card"
-          /> */}
-
           <Form
             onSubmit={this.handleRegister}
             ref={c => {

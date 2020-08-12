@@ -17,6 +17,7 @@ export default class Profile extends Component {
       <div className="container">
         <header className="jumbotron">
           <h3>
+          <strong>Korisničko ime</strong>
             <strong>{currentUser.username}</strong>
           </h3>
           <p>
@@ -29,11 +30,6 @@ export default class Profile extends Component {
               currentUser.roles.map((role, index) => <li key={index}>{role}</li>)}
           </ul>
         </header>
-        {/* <p>
-          <strong>Token:</strong>{" "}
-          {currentUser.accessToken.substring(0, 20)} ...{" "}
-          {currentUser.accessToken.substr(currentUser.accessToken.length - 20)}
-        </p> */}
       </div>
     );
   }

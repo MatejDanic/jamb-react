@@ -1,15 +1,8 @@
-import React, { PureComponent } from "react";
-import "./button.css"
+import React, { Component } from "react";
+import "./button.css";
+import "./animation.css";
 
-export default class DiceButton extends PureComponent {
-
-    componentDidUpdate() {
-        // console.log("UPDATE (DiceButton): dice ->", this.props.variables);
-    }
-
-    componentDidMount() {
-        // console.log("MOUNT (DiceButton): dice -> ", this.props.variables);
-    }
+export default class DiceButton extends Component {
 
     render() {
         const label = this.props.variables.label;

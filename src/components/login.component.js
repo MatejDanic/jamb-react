@@ -2,14 +2,13 @@ import React, { Component } from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
-
 import AuthService from "../services/auth.service";
 
 const required = value => {
   if (!value) {
     return (
       <div className="alert alert-danger" role="alert">
-        This field is required!
+        Ovo polje je obavezno!
       </div>
     );
   }
@@ -95,7 +94,7 @@ export default class Login extends Component {
             }}
           >
             <div className="form-group">
-              <label htmlFor="username">Korisnicko ime</label>
+              <label htmlFor="username">Korisničko ime</label>
               <Input
                 type="text"
                 className="form-control"
