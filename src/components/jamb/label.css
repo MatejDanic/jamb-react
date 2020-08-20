@@ -1,6 +1,5 @@
 .label {
   height: 32px;
-  width: 64px;
   border-radius: 5px;
   border: 1px solid black;
   line-height: normal;
@@ -34,6 +33,11 @@
   grid-column-start: 5;
   grid-column-end: 7;
   width: auto;
+}
+
+.winner {
+  grid-column-start: 3;
+  grid-column-end: 5;
 }
 
 .info {

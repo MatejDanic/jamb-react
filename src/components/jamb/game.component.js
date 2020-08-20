@@ -10,14 +10,16 @@ import "./button.css";
 import "./animation.css";
 
 export default class Game extends Component {
+    _isMounted = false;
 
     constructor() {
         super();
 
         this.state = {
-            // apiURL: "http://localhost:8080",
+            apiURL: "http://localhost:8080",
             // apiURL: "http://www.jamb.com.hr",
-            apiURL: "https://jamb-spring.herokuapp.com",
+            // apiURL: "https://jamb-spring.herokuapp.com",
+            currentWeekWinner: "",
             formId: null,
             boxesLeft: 52,
             annoucement: null,
@@ -95,9 +97,12 @@ export default class Game extends Component {
         this.fillBox = this.fillBox.bind(this);
         this.initializeForm = this.initializeForm.bind(this);
         this.startRollAnimation = this.startRollAnimation.bind(this);
+        this.getCurrentWeekWinner = this.getCurrentWeekWinner.bind(this);
     }
 
     componentDidMount() {
+        this._isMounted = true;
+        this.getCurrentWeekWinner();
         if (this.props.user) {
             var user = this.props.user;
             var url = this.state.apiURL + '/forms';
@@ -116,8 +121,11 @@ export default class Game extends Component {
         }
     }
 
+    componentWillUnmount() {
+        this._isMounted = false;
+      }
+
     initializeForm(form) {
-        // console.log("initialization");
         this.setState(state => {
             state.boxesLeft = 52;
             for (var column = 0; column < 4; column++) {
@@ -146,25 +154,8 @@ export default class Game extends Component {
             rollDisabled: form.rollCount === 3 || (announcementRequired && form.announcement == null)
         }, () => {
             this.updateSums();
-            // console.log(this.state.rollDisabled, this.state.announcementRequired, this.state.announcement);
         });
     }
-
-    // getSums(user, formId) {
-    //     var url = this.state.apiURL + '/forms/' + formId + "/sums";
-    //     var http = new XMLHttpRequest();
-    //     http.open('GET', url, true);
-    //     http.setRequestHeader('Content-type', 'application/json');
-    //     http.setRequestHeader('Authorization', user.tokenType + " " + user.accessToken);
-    //     http.addEventListener('load', () => {
-    //         if (http.readyState === 4 && http.status === 200) {
-    //             var sums = JSON.parse(http.responseText);
-    //             // console.log(sums);
-    //             this.updateSums(sums);
-    //         }
-    //     });
-    //     http.send();
-    // }
 
     rollDice() {
         if (this.props.user) {
@@ -210,7 +201,6 @@ export default class Game extends Component {
             });
         }
         var announcementRequired = this.isAnnouncementRequired()
-        // console.log(this.state.dice);
         this.setState({ rollsLeft: this.state.rollsLeft - 1, rollDisabled: (this.state.rollsLeft === 1 || announcementRequired), diceDisabled: (this.state.rollsLeft === 1), boxesDisabled: false });
     }
 
@@ -233,13 +223,9 @@ export default class Game extends Component {
                 (function (local_i) {
                     setTimeout(function () {
                         document.getElementById('dice' + local_i).classList.add('roll');
-                        // document.getElementById('dice' + local_i).classList.add('rotation');
-
                     }, 0);
                     setTimeout(function () {
                         document.getElementById('dice' + local_i).classList.remove('roll');
-                        // document.getElementById('dice' + local_i).classList.add('rotation');
-
                     }, 1000);
                 })(i);
             }
@@ -350,65 +336,36 @@ export default class Game extends Component {
     }
 
     updateSums() {
-        // if (this.props.user) {
-        //     var sums = index;
-        //     this.setState(state => {
-        //         state.sums[0] = sums['DOWNWARDS-numberSum'];
-        //         state.sums[5] = sums['DOWNWARDS-diffSum'];
-        //         state.sums[10] = sums['DOWNWARDS-labelSum'];
-        //         state.sums[1] = sums['UPWARDS-numberSum'];
-        //         state.sums[6] = sums['UPWARDS-diffSum'];
-        //         state.sums[11] = sums['UPWARDS-labelSum'];
-        //         state.sums[2] = sums['ANY_DIRECTION-numberSum'];
-        //         state.sums[7] = sums['ANY_DIRECTION-diffSum'];
-        //         state.sums[12] = sums['ANY_DIRECTION-labelSum'];
-        //         state.sums[3] = sums['ANNOUNCEMENT-numberSum'];
-        //         state.sums[8] = sums['ANNOUNCEMENT-diffSum'];
-        //         state.sums[13] = sums['ANNOUNCEMENT-labelSum'];
-        //         state.sums[4] = sums['numberSum'];
-        //         state.sums[9] = sums['diffSum'];
-        //         state.sums[14] = sums['labelSum'];
-        //         state.sums[15] = sums['finalSum'];
-        //     })
-        // } else {
-            var column, i;
-            this.setState(state => {
-                // for (i = 0; i < 16; i++) {
-                //     state.sums[i] = 0;
-                // }
-                for (column = 0; column < 4; column++) {
-                // if (box <= 5) {
-                    state.sums[column] = 0;
-                    for (i = 0; i < 6; i++) {
-                        state.sums[column] += state.boxes[column * 13 + i].value;
-                    }
-                    if (state.sums[column] >= 60) state.sums[column] += 30;
-                    state.sums[4] = 0;
+        var column, i;
+        this.setState(state => {
+            for (column = 0; column < 4; column++) {
+                state.sums[column] = 0;
+                for (i = 0; i < 6; i++) {
+                    state.sums[column] += state.boxes[column * 13 + i].value;
+                }
+                if (state.sums[column] >= 60) state.sums[column] += 30;
+                state.sums[4] = 0;
+                for (i = 0; i < 4; i++) {
+                    state.sums[4] += state.sums[i]
+                }
+                state.sums[column + 10] = 0;
+                for (i = 8; i < 13; i++) {
+                    state.sums[column + 10] += state.boxes[column * 13 + i].value;
+                }
+                state.sums[14] = 0;
+                for (i = 0; i < 4; i++) {
+                    state.sums[14] += state.sums[10 + i]
+                }
+                if (state.boxes[column * 13].filled && state.boxes[column * 13 + 6].filled && state.boxes[column * 13 + 7].filled) {
+                    state.sums[column + 5] = state.boxes[column * 13].value * (state.boxes[column * 13 + 6].value - state.boxes[column * 13 + 7].value);
+                    state.sums[9] = 0;
                     for (i = 0; i < 4; i++) {
-                        state.sums[4] += state.sums[i]
-                    }
-
-                // } else if (box >= 8) {
-                    state.sums[column + 10] = 0;
-                    for (i = 8; i < 13; i++) {
-                        state.sums[column + 10] += state.boxes[column * 13 + i].value;
-                    }
-                    state.sums[14] = 0;
-                    for (i = 0; i < 4; i++) {
-                        state.sums[14] += state.sums[10 + i]
-                    }
-                // }
-                    if (state.boxes[column * 13].filled && state.boxes[column * 13 + 6].filled && state.boxes[column * 13 + 7].filled) {
-                        state.sums[column + 5] = state.boxes[column * 13].value * (state.boxes[column * 13 + 6].value - state.boxes[column * 13 + 7].value);
-                        state.sums[9] = 0;
-                        for (i = 0; i < 4; i++) {
-                            state.sums[9] += state.sums[5 + i]
-                        }
+                        state.sums[9] += state.sums[5 + i]
                     }
                 }
-                state.sums[15] = state.sums[4] + state.sums[9] + state.sums[14];
-            });
-        // }
+            }
+            state.sums[15] = state.sums[4] + state.sums[9] + state.sums[14];
+        });
         this.setState({});
     }
 
@@ -550,6 +507,7 @@ export default class Game extends Component {
                     <Label labelClass={"label label-sum-number"} number={sums[13]} id="ANNOUNCEMENT-labelSum" />
                     <Label labelClass={"label label-sum-number"} number={sums[14]} id="labelSum" />
                     <button className="show-button rules" onClick={() => this.showRules()}>Pravila</button>
+                    <Label labelClass={"label winner"} value={this.state.currentWeekWinner} />
                     {/* <RollDiceButton rollsLeft={this.state.rollsLeft} disabled={this.state.rollDisabled} onRollDice={this.rollDice} /> */}
                     {/* <button className="show-button rules" onClick={showRules}>Pravila</button>
                     <button className="show-button scoreboard" onClick={showScoreboard}>Ljestvica</button> */}
@@ -575,19 +533,32 @@ export default class Game extends Component {
 
     showScoreboard() {
         var http = new XMLHttpRequest();
-        var url = this.state.apiURL + '/scores/board';
+        var url = this.state.apiURL + '/scores/scoreboard';
         http.open('GET', url, true);
 
         http.addEventListener('load', () => {
             if (http.readyState === 4 && http.status === 200) {
 
-                var response = JSON.parse(http.responseText);
+                var scoreboard = JSON.parse(http.responseText);
                 var text = '';
-                for (var i = 0; i < response.length; i++) {
-                    var obj = response[i];
-                    text += (i + 1) + '. ' + obj.username + ' - ' + obj.value + '\n';
+                let i = 1;
+                for (let score in scoreboard) {
+                    text += i + '. ' + scoreboard[score].username + ' - ' + scoreboard[score].value + '\n';
                 }
                 alert('Najbolji rezultati ovaj tjedan:\n' + text);
+            }
+        });
+        http.send();
+    }
+
+    getCurrentWeekWinner() {
+        var http = new XMLHttpRequest();
+        var url = this.state.apiURL + '/scores/leader';
+        http.open('GET', url, true);
+
+        http.addEventListener('load', () => {
+            if (http.readyState === 4 && http.status === 200) {
+                if (this._isMounted) this.setState({currentWeekWinner: http.responseText});
             }
         });
         http.send();
