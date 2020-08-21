@@ -26,7 +26,6 @@ class App extends Component {
 
   componentDidMount() {
     const user = AuthService.getCurrentUser();
-    this.wakeSpringUp();
     if (user) {
       this.setState({
         version: "Online",
@@ -35,19 +34,6 @@ class App extends Component {
       });
     }
   }
-
-  wakeSpringUp() {
-    var url = "https://jamb-spring.herokuapp.com/wake";
-        var http = new XMLHttpRequest();
-        http.open('GET', url, true);
-        http.setRequestHeader('Content-type', 'application/json');
-        http.addEventListener('load', () => {
-            if (http.readyState === 4 && http.status === 200) {
-                console.log(http.responseText);
-            }
-        });
-        http.send();
-}
 
   logout() {
     AuthService.logout();
@@ -106,20 +92,7 @@ class App extends Component {
                 </div>
               )}
           </nav>
-
-          {/* <div>
-            {currentUser ? (
-              <div>
-                <JambReal />
-              </div>
-            ) : (
-                <div>
-                  <JambFake />
-                </div>
-              )}
-          </div> */}
-
-          <div>
+          <div class="background">
             <Switch>
               <Route exact path="/" component={() => <Game user={currentUser} />}/>
               <Route exact path="/login" component={Login} />
