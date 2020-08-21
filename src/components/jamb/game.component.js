@@ -507,7 +507,7 @@ export default class Game extends Component {
                     <Label labelClass={"label label-sum-number"} number={sums[13]} id="ANNOUNCEMENT-labelSum" />
                     <Label labelClass={"label label-sum-number"} number={sums[14]} id="labelSum" />
                     <button className="show-button rules" onClick={() => this.showRules()}>Pravila</button>
-                    <Label labelClass={"label winner"} value={this.state.currentWeekWinner} />
+                    <Label labelClass={"label winner"} value={"1. " + this.state.currentWeekWinner} />
                     {/* <RollDiceButton rollsLeft={this.state.rollsLeft} disabled={this.state.rollDisabled} onRollDice={this.rollDice} /> */}
                     {/* <button className="show-button rules" onClick={showRules}>Pravila</button>
                     <button className="show-button scoreboard" onClick={showScoreboard}>Ljestvica</button> */}
