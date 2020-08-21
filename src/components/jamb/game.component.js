@@ -391,7 +391,7 @@ export default class Game extends Component {
         let boxes = this.state.boxes;
         let gameInfo = [this.state.announcement, this.state.boxesDisabled, this.state.rollsLeft]
         return (
-            <div className="game" >
+            <div className="game">
                 {/* <DiceRack  rollDisabled={this.state.rollDisabled} rollsLeft={this.state.rollsLeft} diceDisabled={this.state.diceDisabled} dice={this.state.dice} 
                 onToggleDice={this.toggleDice} /> */}
                 <DiceRack rollDisabled={this.state.rollDisabled} rollsLeft={this.state.rollsLeft} diceDisabled={this.state.diceDisabled} dice={this.state.dice}

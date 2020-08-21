@@ -45,7 +45,7 @@ class App extends Component {
       <Router>
         <div>
           <title>Jamb</title>
-          <nav className="navbar navbar-expand navbar-dark bg-dark" style={{ height: '32px' }}>
+          <nav className="navbar navbar-expand navbar-dark bg-dark" style={{ height: '5vh'}}>
 
             <div className="navbar-nav mr-auto">
             <Link to={"/"} className="nav-link">
@@ -92,7 +92,7 @@ class App extends Component {
                 </div>
               )}
           </nav>
-          <div class="background">
+          <div>
             <Switch>
               <Route exact path="/" component={() => <Game user={currentUser} />}/>
               <Route exact path="/login" component={Login} />
