@@ -10,8 +10,8 @@ export default class UserListBoard extends Component {
     super(props);
 
     this.state = {
-      apiURL: "http://localhost:8080",
-      // apiURL: "https://jamb-spring.herokuapp.com",
+      // apiURL: "http://localhost:8080",
+      apiURL: "https://jamb-spring.herokuapp.com",
       currentUser: undefined,
       content: "",
       users: [],
