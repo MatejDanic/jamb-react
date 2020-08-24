@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { useHistory } from "react-router-dom";
 import AuthService from "../services/auth.service";
 import UserService from "../services/user.service";
 import UserListBoard from "./board-user-list.component.js";
@@ -47,7 +46,6 @@ export default class AdminBoard extends Component {
   }
 
   render() {
-    const history = useHistory();
     return (
       <div className="administration">
         <Router>
