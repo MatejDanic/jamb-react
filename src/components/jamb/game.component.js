@@ -1,5 +1,6 @@
 
 import React, { Component } from "react";
+import AuthService from "../../services/auth.service";
 import Box from "./box.component";
 import Label from "./label.component";
 import DiceRack from "./dice-rack.component";
@@ -16,10 +17,10 @@ export default class Game extends Component {
         super();
 
         this.state = {
-            // apiURL: "http://localhost:8080",
-            // apiURL: "http://www.jamb.com.hr",
-            apiURL: "https://jamb-spring.herokuapp.com",
-            currentWeekWinner: "",
+            apiURL: "http://localhost:8080",
+            // apiURL: "https://jamb-spring.herokuapp.com",
+            currentUser: undefined,
+            currentWeekLeader: "",
             formId: null,
             boxesLeft: 52,
             annoucement: null,
@@ -97,28 +98,32 @@ export default class Game extends Component {
         this.fillBox = this.fillBox.bind(this);
         this.initializeForm = this.initializeForm.bind(this);
         this.startRollAnimation = this.startRollAnimation.bind(this);
-        this.getCurrentWeekWinner = this.getCurrentWeekWinner.bind(this);
+        this.getCurrentWeekLeader = this.getCurrentWeekLeader.bind(this);
     }
 
     componentDidMount() {
+        const currentUser = AuthService.getCurrentUser();
+        this.setState({currentUser: currentUser}, () => {
+            console.log("User:", this.state.currentUser.username);
+            if (this.state.currentUser) {
+                var url = this.state.apiURL + '/forms';
+                var http = new XMLHttpRequest();
+                http.open('PUT', url, true);
+                http.setRequestHeader('Content-type', 'application/json');
+                http.setRequestHeader('Authorization', currentUser.tokenType + " " + currentUser.accessToken);
+                http.addEventListener('load', () => {
+                    if (http.readyState === 4 && http.status === 200) {
+                        var form = JSON.parse(http.responseText);
+                        console.log("Form:", form);
+                        this.initializeForm(form);
+                    }
+                });
+                http.send();
+            }
+        });
         this._isMounted = true;
-        this.getCurrentWeekWinner();
-        if (this.props.user) {
-            var user = this.props.user;
-            var url = this.state.apiURL + '/forms';
-            var http = new XMLHttpRequest();
-            http.open('PUT', url, true);
-            http.setRequestHeader('Content-type', 'application/json');
-            http.setRequestHeader('Authorization', user.tokenType + " " + user.accessToken);
-            http.addEventListener('load', () => {
-                if (http.readyState === 4 && http.status === 200) {
-                    var form = JSON.parse(http.responseText);
-                    console.log(form);
-                    this.initializeForm(form);
-                }
-            });
-            http.send();
-        }
+        this.getCurrentWeekLeader();
+        
     }
 
     componentWillUnmount() {
@@ -158,8 +163,8 @@ export default class Game extends Component {
     }
 
     rollDice() {
-        if (this.props.user) {
-            var user = this.props.user;
+        if (this.state.currentUser) {
+            let currentUser = this.state.currentUser
             var url = this.state.apiURL + '/forms/' + this.state.formId + "/roll";
             var text = '{';
             for (var i = 0; i < this.state.dice.length; i++) {
@@ -171,7 +176,7 @@ export default class Game extends Component {
             var http = new XMLHttpRequest();
             http.open('PUT', url, true);
             http.setRequestHeader('Content-type', 'application/json');
-            http.setRequestHeader('Authorization', user.tokenType + " " + user.accessToken);
+            http.setRequestHeader('Authorization', currentUser.tokenType + " " + currentUser.accessToken);
             http.addEventListener('load', () => {
                 if (http.readyState === 4 && http.status === 200) {
                     var dice = JSON.parse(http.responseText);
@@ -254,13 +259,13 @@ export default class Game extends Component {
     }
 
     announce(index) {
-        if (this.props.user) {
-            var user = this.props.user;
+        if (this.state.currentUser) {
+            let currentUser = this.state.currentUser
             var url = this.state.apiURL + '/forms/' + this.state.formId + "/announce";
             var http = new XMLHttpRequest();
             http.open('PUT', url, true);
             http.setRequestHeader('Content-type', 'application/json');
-            http.setRequestHeader('Authorization', user.tokenType + " " + user.accessToken);
+            http.setRequestHeader('Authorization', currentUser.tokenType + " " + currentUser.accessToken);
             http.addEventListener('load', () => {
                 if (http.readyState === 4 && http.status === 200) {
                     this.setState({ boxesDisabled: true, announcement: index, rollDisabled: false });
@@ -273,13 +278,13 @@ export default class Game extends Component {
     }
 
     fillBox(index) {
-        if (this.props.user) {
-            var user = this.props.user;
+        if (this.state.currentUser) {
+            let currentUser = this.state.currentUser
             var url = this.state.apiURL + '/forms/' + this.state.formId + "/columns/" + parseInt(index / 13, 10) + "/boxes/" + index % 13 + "/fill";
             var http = new XMLHttpRequest();
             http.open('PUT', url, true);
             http.setRequestHeader('Content-type', 'application/json');
-            http.setRequestHeader('Authorization', user.tokenType + " " + user.accessToken);
+            http.setRequestHeader('Authorization', currentUser.tokenType + " " + currentUser.accessToken);
             http.addEventListener('load', () => {
                 if (http.readyState === 4 && http.status === 200) {
                     var value = JSON.parse(http.responseText);
@@ -370,13 +375,13 @@ export default class Game extends Component {
     }
 
     restart() {
-        if (this.props.user) {
-            var user = this.props.user;
+        if (this.state.currentUser) {
+            let currentUser = this.state.currentUser
             var url = this.state.apiURL + '/forms/' + this.state.formId;
             var http = new XMLHttpRequest();
             http.open('DELETE', url, true);
             http.setRequestHeader('Content-type', 'application/json');
-            http.setRequestHeader('Authorization', user.tokenType + " " + user.accessToken);
+            http.setRequestHeader('Authorization', currentUser.tokenType + " " + currentUser.accessToken);
             http.addEventListener('load', () => {
                 window.location.reload();
             });
@@ -507,7 +512,7 @@ export default class Game extends Component {
                     <Label labelClass={"label label-sum-number"} number={sums[13]} id="ANNOUNCEMENT-labelSum" />
                     <Label labelClass={"label label-sum-number"} number={sums[14]} id="labelSum" />
                     <button className="show-button rules" onClick={() => this.showRules()}>Pravila</button>
-                    <Label labelClass={"label winner"} value={"1. " + this.state.currentWeekWinner} />
+                    <Label labelClass={"label leader"} value={"1. " + this.state.currentWeekLeader} />
                     {/* <RollDiceButton rollsLeft={this.state.rollsLeft} disabled={this.state.rollDisabled} onRollDice={this.rollDice} /> */}
                     {/* <button className="show-button rules" onClick={showRules}>Pravila</button>
                     <button className="show-button scoreboard" onClick={showScoreboard}>Ljestvica</button> */}
@@ -552,14 +557,14 @@ export default class Game extends Component {
         http.send();
     }
 
-    getCurrentWeekWinner() {
+    getCurrentWeekLeader() {
         var http = new XMLHttpRequest();
         var url = this.state.apiURL + '/scores/leader';
         http.open('GET', url, true);
 
         http.addEventListener('load', () => {
             if (http.readyState === 4 && http.status === 200) {
-                if (this._isMounted) this.setState({currentWeekWinner: http.responseText});
+                if (this._isMounted) this.setState({currentWeekLeader: http.responseText});
             }
         });
         http.send();

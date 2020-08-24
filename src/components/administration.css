@@ -1,0 +1,47 @@
+.administration {
+    width: 100%;
+    padding: 5%;
+    text-align: center;
+}
+
+.table {
+    width: 60%;
+    overflow-x: auto;
+}
+
+.details {
+    text-align: center;
+    width: 40%;
+    position: sticky;
+    top: 0;
+}
+
+tr:hover {
+    background-color: lightgray;
+}
+
+.users {
+    display: flex;
+}
+
+.roles {
+    padding-left: 0px;
+    text-align: left;
+}
+
+.roles li {
+    display: inline;
+}
+
+.roles li:after {
+    content: ", ";
+}
+
+.roles li:last-child:after {
+    content: "";
+}
+
+.btn {
+    width: 25%;
+    margin-left: 5px;
+}

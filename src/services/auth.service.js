@@ -1,8 +1,7 @@
 import axios from "axios";
 
-// const API_URL = "http://localhost:8080/auth";
-// const API_URL = "http://www.jamb.com.hr/auth";
-const API_URL = "https://jamb-spring.herokuapp.com/auth";
+const API_URL = "http://localhost:8080/auth";
+// const API_URL = "https://jamb-spring.herokuapp.com/auth";
 
 class AuthService {
   login(username, password) {

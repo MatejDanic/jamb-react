@@ -1,20 +1,23 @@
 import React, { Component } from "react";
 import UserService from "../services/user.service";
 
-export default class BoardUser extends Component {
+export default class UserBoard extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      content: ""
+      content: "",
     };
   }
 
   componentDidMount() {
-    UserService.getUserBoard().then(
+    console.log("mounting");
+    UserService.getUserBoard(this.props.userId).then(
       response => {
         this.setState({
-          content: response.data
+          content: response.data.scores
+        }, () => {
+          console.log(this.state.content);
         });
       },
       error => {
@@ -32,11 +35,7 @@ export default class BoardUser extends Component {
 
   render() {
     return (
-      <div className="container">
-        <header className="jumbotron">
-          <h3>{this.state.content}</h3>
-        </header>
-      </div>
+      <div></div>
     );
   }
 }

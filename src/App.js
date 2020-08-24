@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { withRouter } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
@@ -8,7 +9,7 @@ import AuthService from "./services/auth.service";
 import Login from "./components/login.component";
 import Register from "./components/register.component";
 import Profile from "./components/profile.component";
-import BoardAdmin from "./components/board-admin.component";
+import AdminBoard from "./components/board-admin.component";
 import Game from "./components/jamb/game.component";
 
 
@@ -18,7 +19,6 @@ class App extends Component {
     this.logout = this.logout.bind(this);
 
     this.state = {
-      version: "Offline",
       showAdminBoard: false,
       currentUser: undefined
     };
@@ -28,7 +28,6 @@ class App extends Component {
     const user = AuthService.getCurrentUser();
     if (user) {
       this.setState({
-        version: "Online",
         currentUser: user,
         showAdminBoard: user.roles.includes("ADMIN")
       });
@@ -45,16 +44,16 @@ class App extends Component {
       <Router>
         <div>
           <title>Jamb</title>
-          <nav className="navbar navbar-expand navbar-dark bg-dark" style={{ height: '5vh'}}>
+          <nav className="navbar navbar-expand navbar-dark bg-dark" style={{ height: '5vh' }}>
 
             <div className="navbar-nav mr-auto">
-            <Link to={"/"} className="nav-link">
-                    Jamb
+              <Link to={"/"} className="nav-link">
+                Jamb
         </Link>
               {showAdminBoard && (
                 <li className="nav-item">
                   <Link to={"/admin"} className="nav-link">
-                    Administration
+                    Administracija
         </Link>
                 </li>
               )}
@@ -94,11 +93,11 @@ class App extends Component {
           </nav>
           <div>
             <Switch>
-              <Route exact path="/" component={() => <Game user={currentUser} />}/>
+              <Route exact path="/" component={Game} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
               <Route exact path="/profile" component={Profile} />
-              <Route path="/admin" component={BoardAdmin} />
+              <Route exact path="/admin" component={AdminBoard} />
             </Switch>
           </div>
         </div>
@@ -107,4 +106,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withRouter(App);
