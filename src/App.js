@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { withRouter } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
@@ -11,6 +10,10 @@ import Register from "./components/register.component";
 import Profile from "./components/profile.component";
 import AdminBoard from "./components/board-admin.component";
 import Game from "./components/jamb/game.component";
+import UserListBoard from "./components/board-user-list.component";
+import UserBoard from "./components/board-user.component";
+import ScoreListBoard from "./components/board-score-list.component";
+import ScoreBoard from "./components/board-score.component";
 
 
 class App extends Component {
@@ -98,6 +101,10 @@ class App extends Component {
               <Route exact path="/register" component={Register} />
               <Route exact path="/profile" component={Profile} />
               <Route exact path="/admin" component={AdminBoard} />
+              <Route exact path="/users" component={UserListBoard} />
+              <Route exact path="/users/:userId" component={UserBoard} />
+              <Route exact path="/scores" component={ScoreListBoard} />
+              <Route exact path="/users/:scoreId" component={ScoreBoard} />
             </Switch>
           </div>
         </div>
@@ -106,4 +113,4 @@ class App extends Component {
   }
 }
 
-export default withRouter(App);
+export default App;

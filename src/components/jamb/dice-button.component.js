@@ -9,7 +9,7 @@ export default class DiceButton extends Component {
         let value = this.props.variables.value; 
         let hold = this.props.variables.hold;
         let disabled = this.props.disabled;
-        let btnClass = disabled ? "gray-border" : hold ? "red-border" : "black-border";
+        let btnClass = disabled ? "dice-gray-border" : hold ? "dice-red-border" : "dice-black-border";
         let imgUrl = 'url(images/dice/' + value + '.bmp)';
 
         return (

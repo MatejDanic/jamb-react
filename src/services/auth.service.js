@@ -1,12 +1,12 @@
 import axios from "axios";
+import API_URL from "./api-url";
 
-// const API_URL = "http://localhost:8080/auth";
-const API_URL = "https://jamb-spring.herokuapp.com/auth";
+const apiURL = API_URL + "/auth";
 
 class AuthService {
   login(username, password) {
     return axios
-      .post(API_URL + "/login", {
+      .post(apiURL + "/login", {
         username,
         password
       })
@@ -24,7 +24,7 @@ class AuthService {
   }
 
   register(username, password) {
-    return axios.post(API_URL + "/register", {
+    return axios.post(apiURL + "/register", {
       username,
       password
     });

@@ -1,6 +1,8 @@
 
 import React, { Component } from "react";
 import AuthService from "../../services/auth.service";
+import ScoreService from "../../services/score.service";
+import FormService from "../../services/form.service";
 import Box from "./box.component";
 import Label from "./label.component";
 import DiceRack from "./dice-rack.component";
@@ -15,10 +17,7 @@ export default class Game extends Component {
 
     constructor() {
         super();
-
         this.state = {
-            // apiURL: "http://localhost:8080",
-            apiURL: "https://jamb-spring.herokuapp.com",
             currentUser: undefined,
             currentWeekLeader: "",
             formId: null,
@@ -102,33 +101,29 @@ export default class Game extends Component {
     }
 
     componentDidMount() {
-        const currentUser = AuthService.getCurrentUser();
-        this.setState({currentUser: currentUser}, () => {
-            console.log("User:", this.state.currentUser.username);
+        this._isMounted = true;
+        this.setState({ currentUser: AuthService.getCurrentUser() }, () => {
             if (this.state.currentUser) {
-                var url = this.state.apiURL + '/forms';
-                var http = new XMLHttpRequest();
-                http.open('PUT', url, true);
-                http.setRequestHeader('Content-type', 'application/json');
-                http.setRequestHeader('Authorization', currentUser.tokenType + " " + currentUser.accessToken);
-                http.addEventListener('load', () => {
-                    if (http.readyState === 4 && http.status === 200) {
-                        var form = JSON.parse(http.responseText);
+                console.log("User:", this.state.currentUser.username);
+                FormService.initializeForm().then(
+                    response => {
+                        var form = response.data;
                         console.log("Form:", form);
                         this.initializeForm(form);
+                    },
+                    error => {
+                        console.log(error);
                     }
-                });
-                http.send();
+                );
             }
         });
-        this._isMounted = true;
         this.getCurrentWeekLeader();
         
     }
 
     componentWillUnmount() {
         this._isMounted = false;
-      }
+    }
 
     initializeForm(form) {
         this.setState(state => {
@@ -164,22 +159,16 @@ export default class Game extends Component {
 
     rollDice() {
         if (this.state.currentUser) {
-            let currentUser = this.state.currentUser
-            var url = this.state.apiURL + '/forms/' + this.state.formId + "/roll";
-            var text = '{';
+            var diceToRoll = '{';
             for (var i = 0; i < this.state.dice.length; i++) {
-                text += '"' + this.state.dice[i].label + '" : "';
-                text += !this.state.dice[i].hold;
-                text += '",';
+                diceToRoll += '"' + this.state.dice[i].label + '" : "';
+                diceToRoll += !this.state.dice[i].hold;
+                diceToRoll += '",';
             }
-            text = text.substring(0, text.length - 1) + '}';
-            var http = new XMLHttpRequest();
-            http.open('PUT', url, true);
-            http.setRequestHeader('Content-type', 'application/json');
-            http.setRequestHeader('Authorization', currentUser.tokenType + " " + currentUser.accessToken);
-            http.addEventListener('load', () => {
-                if (http.readyState === 4 && http.status === 200) {
-                    var dice = JSON.parse(http.responseText);
+            diceToRoll = diceToRoll.substring(0, diceToRoll.length - 1) + '}';
+            FormService.rollDice(this.state.formId, diceToRoll).then(
+                response => {
+                    let dice = response.data
                     this.setState(state => {
                         for (var i = 0; i < state.dice.length; i++) {
                             if (!this.state.dice[i].hold) {
@@ -190,9 +179,11 @@ export default class Game extends Component {
                     this.setState({}, () => {
                         this.startRollAnimation();
                     });
+                },
+                error => {
+                    console.log(error);
                 }
-            });
-            http.send(text);
+            );
         } else {
             this.setState(state => {
                 for (var i = 0; i < state.dice.length; i++) {
@@ -239,7 +230,6 @@ export default class Game extends Component {
 
     toggleDice(label) {
         this.setState(state => {
-            // console.log("toggle dice", label);
             state.dice[label].hold = !state.dice[label].hold;
         });
         this.setState({});
@@ -260,18 +250,14 @@ export default class Game extends Component {
 
     announce(index) {
         if (this.state.currentUser) {
-            let currentUser = this.state.currentUser
-            var url = this.state.apiURL + '/forms/' + this.state.formId + "/announce";
-            var http = new XMLHttpRequest();
-            http.open('PUT', url, true);
-            http.setRequestHeader('Content-type', 'application/json');
-            http.setRequestHeader('Authorization', currentUser.tokenType + " " + currentUser.accessToken);
-            http.addEventListener('load', () => {
-                if (http.readyState === 4 && http.status === 200) {
-                    this.setState({ boxesDisabled: true, announcement: index, rollDisabled: false });
+            FormService.announce(this.state.formId, index % 13).then(
+                response => {
+                    this.setState({ boxesDisabled: true, announcement: response.data + 13*3, rollDisabled: false });
+                },
+                error => {
+                    console.log(error);
                 }
-            });
-            http.send(index % 13);
+            );
         } else {
             this.setState({ boxesDisabled: true, announcement: index, rollDisabled: false });
         }
@@ -279,16 +265,9 @@ export default class Game extends Component {
 
     fillBox(index) {
         if (this.state.currentUser) {
-            let currentUser = this.state.currentUser
-            var url = this.state.apiURL + '/forms/' + this.state.formId + "/columns/" + parseInt(index / 13, 10) + "/boxes/" + index % 13 + "/fill";
-            var http = new XMLHttpRequest();
-            http.open('PUT', url, true);
-            http.setRequestHeader('Content-type', 'application/json');
-            http.setRequestHeader('Authorization', currentUser.tokenType + " " + currentUser.accessToken);
-            http.addEventListener('load', () => {
-                if (http.readyState === 4 && http.status === 200) {
-                    var value = JSON.parse(http.responseText);
-                    // console.log("sums", sums);
+            FormService.fillBox(this.state.formId, parseInt(index / 13, 10), index % 13).then(
+                response => {
+                    let value = response.data;
                     this.setState(state => {
                         state.boxes[index].value = value;
                         state.boxes[index].available = false;
@@ -301,10 +280,11 @@ export default class Game extends Component {
                     });
                     this.setState({}, () => {
                         this.updateSums();
-                    });
+                    });                },
+                error => {
+                    console.log(error);
                 }
-            });
-            http.send();
+            );
         } else {
             var score = ScoreUtil.checkScore(index % 13, this.state.dice);
             this.setState(state => {
@@ -322,9 +302,10 @@ export default class Game extends Component {
             });
         }
         this.setState({
-                rollsLeft: 3, rollDisabled: false, diceDisabled: true,
-                boxesDisabled: true, boxesLeft: this.state.boxesLeft - 1, announcement: null}, 
-                () => {
+            rollsLeft: 3, rollDisabled: false, diceDisabled: true,
+            boxesDisabled: true, boxesLeft: this.state.boxesLeft - 1, announcement: null
+        },
+            () => {
                 if (this.state.boxesLeft === 0) {
                     setTimeout(
                         () => {
@@ -332,7 +313,7 @@ export default class Game extends Component {
                         }, 500
                     );
                 }
-        });
+            });
         this.setState(state => {
             for (var i = 0; i < state.dice.length; i++) {
                 state.dice[i].hold = false;
@@ -376,16 +357,14 @@ export default class Game extends Component {
 
     restart() {
         if (this.state.currentUser) {
-            let currentUser = this.state.currentUser
-            var url = this.state.apiURL + '/forms/' + this.state.formId;
-            var http = new XMLHttpRequest();
-            http.open('DELETE', url, true);
-            http.setRequestHeader('Content-type', 'application/json');
-            http.setRequestHeader('Authorization', currentUser.tokenType + " " + currentUser.accessToken);
-            http.addEventListener('load', () => {
-                window.location.reload();
-            });
-            http.send();
+            FormService.deleteForm(this.state.formId).then(
+                () => {
+                    window.location.reload();
+                },
+                error => {
+                    console.log(error);
+                }
+            );
         } else {
             window.location.reload();
         }
@@ -537,36 +516,32 @@ export default class Game extends Component {
     }
 
     showScoreboard() {
-        var http = new XMLHttpRequest();
-        var url = this.state.apiURL + '/scores/scoreboard';
-        http.open('GET', url, true);
-
-        http.addEventListener('load', () => {
-            if (http.readyState === 4 && http.status === 200) {
-
-                var scoreboard = JSON.parse(http.responseText);
-                var text = '';
+        ScoreService.getScoreboard().then(
+            response => {
+                let scoreboard = response.data;
+                let text = '';
                 let i = 1;
                 for (let score in scoreboard) {
                     text += i + '. ' + scoreboard[score].username + ' - ' + scoreboard[score].value + '\n';
                     i += 1;
                 }
                 alert('Najbolji rezultati ovaj tjedan:\n' + text);
+            },
+            error => {
+                console.log(error);
             }
-        });
-        http.send();
+        );
     }
 
     getCurrentWeekLeader() {
-        var http = new XMLHttpRequest();
-        var url = this.state.apiURL + '/scores/leader';
-        http.open('GET', url, true);
-
-        http.addEventListener('load', () => {
-            if (http.readyState === 4 && http.status === 200) {
-                if (this._isMounted) this.setState({currentWeekLeader: http.responseText});
+        ScoreService.getCurrentWeekLeader().then(
+            response => {
+                console.log(response.data);
+                if (this._isMounted) this.setState({ currentWeekLeader: response.data });
+            },
+            error => {
+                console.log(error);
             }
-        });
-        http.send();
+        );
     }
 }

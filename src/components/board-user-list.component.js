@@ -1,8 +1,8 @@
 
 
 import React, { Component } from "react";
-import UserBoard from "./board-user.component";
 import AuthService from "../services/auth.service";
+import UserService from "../services/user.service";
 import "./administration.css";
 
 export default class UserListBoard extends Component {
@@ -10,76 +10,72 @@ export default class UserListBoard extends Component {
     super(props);
 
     this.state = {
-      // apiURL: "http://localhost:8080",
-      apiURL: "https://jamb-spring.herokuapp.com",
       currentUser: undefined,
       content: "",
-      users: [],
-      userVisibility: []
+      users: []
     };
   }
 
   componentDidMount() {
     const currentUser = AuthService.getCurrentUser();
     this.setState({ currentUser: currentUser }, () => {
-      this.getUsers();
+      console.log("User:", this.state.currentUser.username);
     });
-  }
-
-  getUsers() {
-    var http = new XMLHttpRequest();
-    var url = this.state.apiURL + '/users';
-    let currentUser = this.state.currentUser;
-    http.open('GET', url, true);
-    http.setRequestHeader('Authorization', currentUser.tokenType + " " + currentUser.accessToken);
-    http.addEventListener('load', () => {
-      if (http.readyState === 4 && http.status === 200) {
-        let users = JSON.parse(http.responseText);
-        console.log(users);
-        this.setState(state => {
-          for (let user in users) {
-            state.userVisibility[users[user].id] = false;
-          }
-        });
+    UserService.getUsers().then(
+      response => {
         this.setState({
-          users: users.map((user) => {
-            return <tr key={user.id}>
-              <td>
-                {user.id}
-              </td>
-              <td>
-                {user.username}
-              </td>
-              <td>
-                <button className="btn btn-info btn-margin">Detalji</button>
-                <button className="btn btn-warning btn-margin">Uredi</button>
-                <button className="btn btn-danger btn-margin">Izbriši</button>
-              </td>
-            </tr>
-          })
+          content: response.data,
+          users: []
+        }, () => {
+          for (let key in this.state.content) {
+            this.setState(state => {
+              state.users.push(this.state.content[key]);
+            });
+          }
+          this.setState({});
+        });
+      },
+      error => {
+        this.setState({
+          content:
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString()
         });
       }
-    });
-    http.send();
+    );
   }
 
   render() {
+    let users = this.state.users;
     return (
-      <div>
-        <h3>Korisnici:</h3>
-      <div className="users">
-        <table className="table">
+      <div className="container-custom">
+        <table style={{width: '100%'}}>
           <tbody>
             <tr>
               <th>ID</th>
               <th>Korisničko ime</th>
+              <th>Stvoren</th>
+              <th>Posljednja igra</th>
+              <th></th>
             </tr>
-            {this.state.users}
+            {users.map(user => <tr key={user.id}>
+              <td>{user.id}</td>
+              <td>{user.username}</td>
+              <td>TBA</td>
+              <td>TBA</td>
+              <td className="container-button">
+                <button className="btn btn-info button-admin" onClick={() => {this.props.history.push("/users/" + user.id)}}>Detalji</button>
+                <button className="btn btn-warning button-admin" onClick={() => {}}>Uredi</button>
+                <button className="btn btn-danger button-admin" onClick={() => {}}>Izbriši</button>
+              </td>
+              </tr>)}
           </tbody>
         </table>
-        <div className="details">Strana</div>
-      </div></div>
-      
+        
+      </div>
     );
   }
 }

@@ -1,15 +1,15 @@
-import axios from 'axios';
-import authHeader from './auth-header';
+import axios from "axios";
+import authHeader from "./auth-header";
+import API_URL from "./api-url";
 
-// const API_URL = "http://localhost:8080";
-const API_URL = 'https://jamb-spring.herokuapp.com';
+const apiURL = API_URL + "/users";
 
 class UserService {
-  getUserBoard(userId) {
-    return axios.get(API_URL + '/users/' + userId, { headers: authHeader() });
+  getUsers() {
+    return axios.get(apiURL, { headers: authHeader() })
   }
-  getAdminBoard() {
-    return axios.get(API_URL + '/admin', { headers: authHeader() });
+  getUser(userId) {
+    return axios.get(apiURL + "/" + userId, { headers: authHeader() });
   }
 }
 

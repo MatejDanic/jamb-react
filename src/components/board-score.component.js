@@ -11,9 +11,13 @@ export default class UserBoard extends Component {
   }
 
   componentDidMount() {
-    UserService.getUser(this.props.match.params.userId).then(
+    UserService.getUserBoard(this.props.match.params.scoreId).then(
       response => {
-        this.setState({ content: response.data });
+        this.setState({
+          content: response.data
+        }, () => {
+          console.log(this.state.content);
+        });
       },
       error => {
         this.setState({
@@ -29,27 +33,25 @@ export default class UserBoard extends Component {
   }
 
   render() {
-    let user = this.state.content;
+    let score = this.state.content;
     return (
       <div className="container-custom">
           <h3>
-          <strong>Korisničko ime: </strong>
-            <strong>{user.username}</strong>
+          <strong>Rezultat: </strong>
+            <strong>{score.value}</strong>
           </h3>
           <p>
             <strong>ID: </strong>
-            {user.id}
+            {score.id}
           </p>
-          <strong>Uloge:</strong>
-          <ul>
-            {user.roles &&
-              user.roles.map((role, id) => <li key={id}>{role.label}</li>)}
-          </ul>
-          <strong>Rezultati</strong>
-          <ul>
-            {user.scores &&
-              user.scores.map((score, id) => <li key={id}>{score.value}</li>)}
-          </ul>
+          <p>
+            <strong>Korisnik: </strong>
+            {score.user.username}
+          </p>
+          <p>
+            <strong>Datum: </strong>
+            {score.date}
+          </p>
       </div>
     );
   }
