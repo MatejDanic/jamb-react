@@ -19,10 +19,12 @@
 th {
     text-align: center;
     background-color: lightskyblue;
+    cursor: pointer;
 }
 
 tr {
     background-color: white;
+    cursor:pointer;
 }
 
 td {
@@ -40,9 +42,19 @@ tr:hover {
 
 .container-custom {
     background-color: aliceblue;
-    height: 95vh;
+    min-height: 95vh;
     width: 100%;
     padding: 5%;
+}
+
+.container-custom-inner {
+    padding: 5%;
+    padding-top: 0px;
+}
+
+.container-button {
+    text-align: center;
+    width: 100%;
 }
 
 .roles {
@@ -78,22 +90,17 @@ tr:hover {
 }
 
 @media screen and (max-width: 512px) {
-    .button-admin {
-        width: 75%;
-        font-size: 150%;
-    }
-
     .container-button {
         width: auto;
-        margin: 0px;
+        padding-top: 5px;
+    }
+
+    .container-custom {
         padding: 0px;
     }
     
     .button-admin {
-        margin-left: 0px;
-        margin-right: 0px;
-        margin-top: 1px;
-        margin-bottom: 1px;
+        margin-bottom: 5px;
         width: 80%;
         font-size: 100%;
     }

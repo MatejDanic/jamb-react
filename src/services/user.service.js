@@ -11,6 +11,9 @@ class UserService {
   getUser(userId) {
     return axios.get(apiURL + "/" + userId, { headers: authHeader() });
   }
+  deleteUser(userId) {
+    return axios.delete(apiURL + "/" + userId, { headers: authHeader() });
+  }
 }
 
 export default new UserService();

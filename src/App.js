@@ -68,7 +68,7 @@ class App extends Component {
                 <li className="nav-item">
                 </li>
                 <li className="nav-item">
-                  <Link to={"/profile"} className="nav-link">
+                  <Link to={"/users/" + currentUser.id} className="nav-link">
                     {currentUser.username}
                   </Link>
                 </li>
@@ -99,12 +99,11 @@ class App extends Component {
               <Route exact path="/" component={Game} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
-              <Route exact path="/profile" component={Profile} />
               <Route exact path="/admin" component={AdminBoard} />
               <Route exact path="/users" component={UserListBoard} />
               <Route exact path="/users/:userId" component={UserBoard} />
               <Route exact path="/scores" component={ScoreListBoard} />
-              <Route exact path="/users/:scoreId" component={ScoreBoard} />
+              <Route exact path="/scores/:scoreId" component={ScoreBoard} />
             </Switch>
           </div>
         </div>

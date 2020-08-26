@@ -1,57 +1,71 @@
 import React, { Component } from "react";
-import UserService from "../services/user.service";
+import ScoreService from "../services/score.service";
+import AuthService from "../services/auth.service";
 
-export default class UserBoard extends Component {
+export default class ScoreBoard extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      currentUser: undefined,
       content: "",
     };
   }
 
   componentDidMount() {
-    UserService.getUserBoard(this.props.match.params.scoreId).then(
+    this.setState({ currentUser: AuthService.getCurrentUser() });
+    ScoreService.getScore(this.props.match.params.scoreId).then(
       response => {
-        this.setState({
-          content: response.data
-        }, () => {
-          console.log(this.state.content);
-        });
+        this.setState({ content: response.data });
       },
       error => {
-        this.setState({
-          content:
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString()
-        });
+        console.log(error);
       }
     );
   }
 
+  deleteScore() {
+    ScoreService.deleteScore(this.props.match.params.scoreId).then(
+      response => {
+        this.props.history.push("/scores");
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
+  editScore() {
+    console.log("edit");
+  }
+
   render() {
     let score = this.state.content;
+    let currentUser = this.state.currentUser;
+    const dateFormat = new Intl.DateTimeFormat('UK', { year: 'numeric', month: '2-digit', day: '2-digit' });
     return (
       <div className="container-custom">
-          <h3>
+        {currentUser && currentUser.roles.includes("ADMIN") && <div className="container-button">
+          <button className="btn btn-warning button-admin" onClick={() => this.editScore()}>Uredi</button>
+          <button className="btn btn-danger button-admin" onClick={() => { if (window.confirm('Jeste li sigurni da izbrisati ovaj rezultat?')) this.deleteScore() }}>Izbriši</button>
+        </div>}
+        <div className="container-custom-inner">
+        <h3>
           <strong>Rezultat: </strong>
-            <strong>{score.value}</strong>
-          </h3>
+          <strong>{score.value}</strong>
+        </h3>
           <p>
             <strong>ID: </strong>
             {score.id}
           </p>
           <p>
-            <strong>Korisnik: </strong>
-            {score.user.username}
+            <strong>Datum: </strong>
+            {score.date && dateFormat.format(new Date(score.date))}
           </p>
           <p>
-            <strong>Datum: </strong>
-            {score.date}
+            {score.user && <button className="btn btn-primary" onClick={() => { this.props.history.push("/users/" + score.user.id) }}>{score.user.username}</button>}
           </p>
+        </div>
       </div>
     );
   }

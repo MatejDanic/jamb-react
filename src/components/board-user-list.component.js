@@ -1,7 +1,6 @@
 
 
 import React, { Component } from "react";
-import AuthService from "../services/auth.service";
 import UserService from "../services/user.service";
 import "./administration.css";
 
@@ -10,17 +9,12 @@ export default class UserListBoard extends Component {
     super(props);
 
     this.state = {
-      currentUser: undefined,
       content: "",
       users: []
     };
   }
 
   componentDidMount() {
-    const currentUser = AuthService.getCurrentUser();
-    this.setState({ currentUser: currentUser }, () => {
-      console.log("User:", this.state.currentUser.username);
-    });
     UserService.getUsers().then(
       response => {
         this.setState({
@@ -52,30 +46,78 @@ export default class UserListBoard extends Component {
     let users = this.state.users;
     return (
       <div className="container-custom">
-        <table style={{width: '100%'}}>
-          <tbody>
-            <tr>
-              <th>ID</th>
-              <th>Korisničko ime</th>
-              <th>Stvoren</th>
-              <th>Posljednja igra</th>
-              <th></th>
+        <table style={{ width: '100%' }}>
+          <thead>
+            <tr> 
+              <th onClick={() => sortTable(0)}>ID</th>
+              <th onClick={() => sortTable(1)}>Korisničko ime</th>
+              <th onClick={() => sortTable(2)}>Stvoren</th>
+              <th onClick={() => sortTable(3)}>Posljednja igra</th>
             </tr>
-            {users.map(user => <tr key={user.id}>
-              <td>{user.id}</td>
-              <td>{user.username}</td>
-              <td>TBA</td>
-              <td>TBA</td>
-              <td className="container-button">
-                <button className="btn btn-info button-admin" onClick={() => {this.props.history.push("/users/" + user.id)}}>Detalji</button>
-                <button className="btn btn-warning button-admin" onClick={() => {}}>Uredi</button>
-                <button className="btn btn-danger button-admin" onClick={() => {}}>Izbriši</button>
-              </td>
+          </thead>
+          <tbody id="tbody-users">
+            {users.map(user =>
+              <tr key={user.id} onClick={() => { this.props.history.push("/users/" + user.id) }}>
+                <td>{user.id}</td>
+                <td>{user.username}</td>
+                <td>TBA</td>
+                <td>TBA</td>
               </tr>)}
           </tbody>
         </table>
-        
+
       </div>
     );
+  }
+}
+
+let index;      // cell index
+let toggleBool; // sorting asc, desc 
+function sortTable(idx) {
+  index = idx;
+  if (toggleBool) {
+    toggleBool = false;
+  } else {
+    toggleBool = true;
+  }
+  let tbody = document.getElementById("tbody-users");
+  let datas = [];
+  let tbodyLength = tbody.rows.length;
+  for (let i = 0; i < tbodyLength; i++) {
+    datas[i] = tbody.rows[i];
+  }
+
+  // sort by cell[index] 
+  datas.sort(compareCells);
+  for (let i = 0; i < tbody.rows.length; i++) {
+    // rearrange table rows by sorted rows
+    tbody.appendChild(datas[i]);
+  }
+}
+
+function compareCells(a, b) {
+  let aVal = a.cells[index].innerText;
+  let bVal = b.cells[index].innerText;
+
+  aVal = aVal.replace(/,/g, '');
+  bVal = bVal.replace(/,/g, '');
+
+  if (toggleBool) {
+    let temp = aVal;
+    aVal = bVal;
+    bVal = temp;
+  }
+
+  if (aVal.match(/^[0-9]+$/) && bVal.match(/^[0-9]+$/)) {
+    return parseFloat(aVal) - parseFloat(bVal);
+  }
+  else {
+    if (aVal < bVal) {
+      return -1;
+    } else if (aVal > bVal) {
+      return 1;
+    } else {
+      return 0;
+    }
   }
 }
