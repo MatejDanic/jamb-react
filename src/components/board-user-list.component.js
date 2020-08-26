@@ -44,6 +44,7 @@ export default class UserListBoard extends Component {
 
   render() {
     let users = this.state.users;
+    const dateFormat = new Intl.DateTimeFormat('UK', { year: 'numeric', month: '2-digit', day: '2-digit' });
     return (
       <div className="container-custom">
         <table style={{ width: '100%' }}>
@@ -51,8 +52,8 @@ export default class UserListBoard extends Component {
             <tr> 
               <th onClick={() => sortTable(0)}>ID</th>
               <th onClick={() => sortTable(1)}>Korisničko ime</th>
-              <th onClick={() => sortTable(2)}>Stvoren</th>
-              <th onClick={() => sortTable(3)}>Posljednja igra</th>
+              <th onClick={() => sortTable(2)}>Posljednja igra</th>
+              <th onClick={() => sortTable(3)}>Najveći rezultat</th>
             </tr>
           </thead>
           <tbody id="tbody-users">
@@ -60,8 +61,8 @@ export default class UserListBoard extends Component {
               <tr key={user.id} onClick={() => { this.props.history.push("/users/" + user.id) }}>
                 <td>{user.id}</td>
                 <td>{user.username}</td>
-                <td>TBA</td>
-                <td>TBA</td>
+                <td>{user.scores.length === 0 ? "-----" : UserService.getLastScoreDate(user.scores)}</td>
+                <td>{UserService.getHighScore(user.scores)}</td>
               </tr>)}
           </tbody>
         </table>

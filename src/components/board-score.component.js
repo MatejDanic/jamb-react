@@ -35,10 +35,6 @@ export default class ScoreBoard extends Component {
     );
   }
 
-  editScore() {
-    console.log("edit");
-  }
-
   render() {
     let score = this.state.content;
     let currentUser = this.state.currentUser;
@@ -46,14 +42,16 @@ export default class ScoreBoard extends Component {
     return (
       <div className="container-custom">
         {currentUser && currentUser.roles.includes("ADMIN") && <div className="container-button">
-          <button className="btn btn-warning button-admin" onClick={() => this.editScore()}>Uredi</button>
           <button className="btn btn-danger button-admin" onClick={() => { if (window.confirm('Jeste li sigurni da izbrisati ovaj rezultat?')) this.deleteScore() }}>Izbriši</button>
         </div>}
         <div className="container-custom-inner">
-        <h3>
-          <strong>Rezultat: </strong>
-          <strong>{score.value}</strong>
-        </h3>
+          <h3>
+            <strong>{score.value}</strong>
+          </h3>
+
+          <p>
+            {score.user && <button className="btn btn-primary" onClick={() => { this.props.history.push("/users/" + score.user.id) }}>{score.user.username}</button>}
+          </p>
           <p>
             <strong>ID: </strong>
             {score.id}
@@ -61,9 +59,6 @@ export default class ScoreBoard extends Component {
           <p>
             <strong>Datum: </strong>
             {score.date && dateFormat.format(new Date(score.date))}
-          </p>
-          <p>
-            {score.user && <button className="btn btn-primary" onClick={() => { this.props.history.push("/users/" + score.user.id) }}>{score.user.username}</button>}
           </p>
         </div>
       </div>

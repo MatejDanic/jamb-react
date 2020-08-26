@@ -8,7 +8,8 @@ export default class UserBoard extends Component {
 
     this.state = {
       currentUser: undefined,
-      content: ""
+      content: "",
+      userIsAdmin: false
     };
   }
 
@@ -16,6 +17,11 @@ export default class UserBoard extends Component {
     this.setState({ currentUser: AuthService.getCurrentUser() });
     UserService.getUser(this.props.match.params.userId).then(
       response => {
+        this.setState(state => {
+          for (let key in response.data.roles) {
+            if (response.data.roles[key].label === "ADMIN") state.userIsAdmin = true;
+          }
+        })
         this.setState({ content: response.data });
       },
       error => {
@@ -35,10 +41,6 @@ export default class UserBoard extends Component {
     );
   }
 
-  editUser() {
-    console.log("edit");
-  }
-
   render() {
     let user = this.state.content;
     let currentUser = this.state.currentUser;
@@ -46,14 +48,12 @@ export default class UserBoard extends Component {
     const dateFormat = new Intl.DateTimeFormat('UK', { year: 'numeric', month: '2-digit', day: '2-digit' });
     return (
       <div className="container-custom">
-        {currentUser && currentUser.roles.includes("ADMIN") && <div className="container-button">
-          <button className="btn btn-warning button-admin" onClick={() => this.editUser()}>Uredi</button>
+        {currentUser && currentUser.roles.includes("ADMIN") && !this.state.userIsAdmin && <div className="container-button">
           <button className="btn btn-danger button-admin" onClick={() => { if (window.confirm('Jeste li sigurni da izbrisati ovog korisnika?')) this.deleteUser() }}>Izbriši</button>
         </div>}
 
         <div className="container-custom-inner">
           <h3>
-            <strong>Korisničko ime: </strong>
             <strong>{user.username}</strong>
           </h3>
           <p>
@@ -65,9 +65,15 @@ export default class UserBoard extends Component {
             {user.roles &&
               user.roles.map((role, id) => <li key={id}>{role.label}</li>)}
           </ul>
+          <strong>Posljednja igra:</strong>
+          <p>{UserService.getLastScoreDate(user.scores)}</p>
+          <strong>Najveći rezultat:</strong>
+          <p>{UserService.getHighScore(user.scores)}</p>
+
+
+          <strong>Rezultati</strong>
         </div>
 
-        <strong>Rezultati</strong>
         {user.scores && <table style={{ width: '100%' }}>
           <thead>
             <tr>

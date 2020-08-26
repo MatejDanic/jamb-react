@@ -14,6 +14,23 @@ class UserService {
   deleteUser(userId) {
     return axios.delete(apiURL + "/" + userId, { headers: authHeader() });
   }
+  getLastScoreDate(scores) {
+    const dateFormat = new Intl.DateTimeFormat('UK', { year: 'numeric', month: '2-digit', day: '2-digit' });
+    let date = dateFormat.format(new Date("2000-01-01"));
+    for (let key in scores) {
+      let scoreDate = dateFormat.format(new Date(scores[key].date.toString()));
+      if (scoreDate > date) date = scoreDate;
+    }
+    console.log(date.toString());
+    return date.toString();
+  }
+  getHighScore(scores) {
+    let highScore = 0;
+    for (let key in scores) {
+      if (scores[key].value > highScore) highScore = scores[key].value;
+    }
+    return highScore;
+  }
 }
 
 export default new UserService();

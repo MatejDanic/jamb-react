@@ -7,7 +7,7 @@ import AuthService from "./services/auth.service";
 
 import Login from "./components/login.component";
 import Register from "./components/register.component";
-import Profile from "./components/profile.component";
+// import Profile from "./components/profile.component";
 import AdminBoard from "./components/board-admin.component";
 import Game from "./components/jamb/game.component";
 import UserListBoard from "./components/board-user-list.component";
