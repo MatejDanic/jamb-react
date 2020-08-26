@@ -21,7 +21,6 @@ class UserService {
       let scoreDate = dateFormat.format(new Date(scores[key].date.toString()));
       if (scoreDate > date) date = scoreDate;
     }
-    console.log(date.toString());
     return date.toString();
   }
   getHighScore(scores) {

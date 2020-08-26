@@ -44,7 +44,6 @@ export default class UserListBoard extends Component {
 
   render() {
     let users = this.state.users;
-    const dateFormat = new Intl.DateTimeFormat('UK', { year: 'numeric', month: '2-digit', day: '2-digit' });
     return (
       <div className="container-custom">
         <table style={{ width: '100%' }}>
@@ -113,6 +112,8 @@ function compareCells(a, b) {
     return parseFloat(aVal) - parseFloat(bVal);
   }
   else {
+    aVal = aVal.toLowerCase();
+    bVal = bVal.toLowerCase();
     if (aVal < bVal) {
       return -1;
     } else if (aVal > bVal) {

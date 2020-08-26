@@ -137,6 +137,8 @@ function compareCells(a, b) {
     return parseFloat(aVal) - parseFloat(bVal);
   }
   else {
+    aVal = aVal.toLowerCase();
+    bVal = bVal.toLowerCase();
     if (aVal < bVal) {
       return -1;
     } else if (aVal > bVal) {
