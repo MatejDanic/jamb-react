@@ -66,7 +66,7 @@ export default class UserBoard extends Component {
               user.roles.map((role, id) => <li key={id}>{role.label}</li>)}
           </ul>
           <strong>Posljednja igra:</strong>
-          <p>{UserService.getLastScoreDate(user.scores)}</p>
+          <p>{user.scores && user.scores.length === 0 ? "-----" : UserService.getLastScoreDate(user.scores)}</p>
           <strong>Najveći rezultat:</strong>
           <p>{UserService.getHighScore(user.scores)}</p>
 

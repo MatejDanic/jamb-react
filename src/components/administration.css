@@ -4,42 +4,6 @@
     text-align: center;
 }
 
-.details {
-    text-align: center;
-    width: 40%;
-    position: sticky;
-    top: 0;
-}
-
-.table-users {
-    text-align: center;
-    border-radius: 10px;
-}
-
-th {
-    text-align: center;
-    background-color: lightskyblue;
-    cursor: pointer;
-}
-
-tr {
-    background-color: white;
-    cursor:pointer;
-}
-
-td {
-    border-bottom: 1px solid black;
-    text-align: center;
-}
-
-tr:hover {
-    background-color: lightgray;
-}
-
-.users {
-    display: flex;
-}
-
 .container-custom {
     background-color: aliceblue;
     min-height: 95vh;
@@ -57,6 +21,26 @@ tr:hover {
     width: 100%;
 }
 
+th {
+    text-align: center;
+    background-color: lightskyblue;
+    cursor: pointer;
+}
+
+tr {
+    background-color: white;
+    cursor:pointer;
+}
+
+tr:hover {
+    background-color: lightgray;
+}
+
+td {
+    border-bottom: 1px solid black;
+    text-align: center;
+}
+
 .roles {
     padding-left: 0px;
     text-align: left;
@@ -72,14 +56,6 @@ tr:hover {
 
 .roles li:last-child:after {
     content: "";
-}
-
-.white-text {
-    color: white;
-}
-
-.container-button {
-    width: 40%;
 }
 
 .button-admin {
