@@ -77,9 +77,7 @@ export default class UserBoard extends Component {
           <strong>Broj igara:</strong>
           <p>{scores && scores.length}</p>
           <strong>Prosjek:</strong>
-          <p>{scores && Math.round(totalScore/scores.length * 100) / 100}</p>
-
-
+          <p>{scores && (scores.length === 0 ? "0" : Math.round(totalScore/scores.length * 100) / 100) }</p>
           <strong>Rezultati:</strong>
         </div>
 
