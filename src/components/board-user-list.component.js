@@ -30,7 +30,7 @@ export default class UserListBoard extends Component {
             });
           }
           this.setState({}, () => {
-            sortTable(1);
+            sortTable(1, false);
             pagination();
           });
         });
@@ -76,7 +76,8 @@ export default class UserListBoard extends Component {
 
 let index;      // cell index
 let toggleBool; // sorting asc, desc 
-function sortTable(idx) {
+function sortTable(idx, order) {
+  if (order != null) toggleBool = order;
   index = idx;
   if (toggleBool) {
     toggleBool = false;

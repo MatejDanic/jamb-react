@@ -33,7 +33,7 @@ export default class ScoreListBoard extends Component {
               });
             }
             this.setState({}, () => {
-              sortTable(0);
+              sortTable(this.state.columnIndexDate, false);
               pagination();
             });
           });
@@ -59,7 +59,7 @@ export default class ScoreListBoard extends Component {
           });
         }
         this.setState({ columnIndexValue: 1 }, () => {
-          sortTable(0);
+          sortTable(this.state.columnIndexDate, false);
           pagination();
         });
       });
@@ -97,8 +97,9 @@ export default class ScoreListBoard extends Component {
 
 let index;      // cell index
 let toggleBool; // sorting asc, desc 
-function sortTable(idx) {
+function sortTable(idx, order) {
   index = idx;
+  if (order != null) toggleBool = order;
   if (toggleBool) {
     toggleBool = false;
   } else {
