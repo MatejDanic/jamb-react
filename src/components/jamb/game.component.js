@@ -502,7 +502,9 @@ export default class Game extends Component {
     }
 
     endGame() {
-        alert("Čestitamo, vaš ukupni rezultat je " + this.state.sums[15]);
+        this.setState({rollDisabled: true}, () => {
+            alert("Čestitamo, vaš ukupni rezultat je " + this.state.sums[15]);
+        })
     }
 
     showRules() {
