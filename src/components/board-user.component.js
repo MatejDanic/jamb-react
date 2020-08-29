@@ -51,7 +51,7 @@ export default class UserBoard extends Component {
     let user = this.state.content;
     let currentUser = this.state.currentUser;
     let scores = user.scores;
-    let totalScore =  ScoreUtil.getTotalScore(scores);
+    let totalScore = ScoreUtil.getTotalScore(scores);
     let highScore = ScoreUtil.getHighScore(scores);
 
     return (
@@ -86,8 +86,7 @@ export default class UserBoard extends Component {
         </div>
         {user.scores && (user.scores.length > 0 &&
           <div>
-            <strong>Rezultati:</strong>
-            <ScoreListBoard scores={user.scores}></ScoreListBoard>
+            <ScoreListBoard scores={user.scores} history={this.props.history}></ScoreListBoard>
           </div>)}
       </div>
     );

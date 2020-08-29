@@ -13,7 +13,7 @@ export default class Profile extends Component {
 
   render() {
     return (
-      <UserBoard userId={this.state.currentUser.id}></UserBoard>
+      <UserBoard userId={this.state.currentUser.id} history={this.props.history}></UserBoard>
     );
   }
 }
