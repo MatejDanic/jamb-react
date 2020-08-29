@@ -18,7 +18,6 @@ class UserService {
     let date = Date.UTC(2020, 1, 1, 0, 0);
     for (let key in scores) {
       let scoreDate = Date.UTC(scores[key].date[0], scores[key].date[1], scores[key].date[2], scores[key].date[3], scores[key].date[4]);
-      console.log(scoreDate, ">", date, "==", scoreDate > date);
       if (scoreDate > date) date = scoreDate;
     }
     return date;
