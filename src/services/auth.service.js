@@ -1,5 +1,5 @@
 import axios from "axios";
-import API_URL from "./api-url";
+import API_URL from "../misc/api-url";
 
 const apiURL = API_URL + "/auth";
 

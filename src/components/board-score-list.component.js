@@ -3,7 +3,8 @@
 import React, { Component } from "react";
 import ScoreService from "../services/score.service";
 import "./administration.css";
-import { dateFormatShort } from "../services/date-format";
+import { dateFormatShort } from "../misc/date-format";
+import DateUtil from "../utils/date.util";
 
 export default class ScoreListBoard extends Component {
   constructor(props) {
@@ -58,7 +59,7 @@ export default class ScoreListBoard extends Component {
           <tbody id="tbody-scores">
             {scores && scores.map(score =>
               <tr key={score.id} onClick={() => { this.props.history.push("/scores/" + score.id) }}>
-                <td>{dateFormatShort.format(Date.UTC(score.date[0], score.date[1], score.date[2], score.date[3], score.date[4]))}</td>
+                <td>{dateFormatShort.format(DateUtil.getDateFromLocalDateTime(score.date))}</td>
                 <td>{score.user.username}</td>
                 <td>{score.value}</td>
               </tr>)}

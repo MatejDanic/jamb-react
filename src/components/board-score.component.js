@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import ScoreService from "../services/score.service";
 import AuthService from "../services/auth.service";
-import { dateFormatLong } from "../services/date-format";
+import { dateFormatLong } from "../misc/date-format";
+import DateUtil from "../utils/date.util";
 
 export default class ScoreBoard extends Component {
   constructor(props) {
@@ -58,7 +59,7 @@ export default class ScoreBoard extends Component {
           </p>
           <p>
             <strong>Datum: </strong>
-            {score.date && dateFormatLong.format(Date.UTC(score.date[0], score.date[1], score.date[2], score.date[3], score.date[4]))}
+            {score.date && dateFormatLong.format(DateUtil.getDateFromLocalDateTime(score.date))}
           </p>
         </div>
       </div>

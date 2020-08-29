@@ -3,7 +3,7 @@
 import React, { Component } from "react";
 import UserService from "../services/user.service";
 import "./administration.css";
-import { dateFormatShort } from "../services/date-format";
+import { dateFormatShort } from "../misc/date-format";
 
 export default class UserListBoard extends Component {
   constructor(props) {
