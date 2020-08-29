@@ -66,7 +66,7 @@ export default class UserBoard extends Component {
               user.roles.map((role, id) => <li key={id}>{role.label}</li>)}
           </ul>
           <strong>Posljednja igra:</strong>
-          <p>{user.scores && user.scores.length === 0 ? "-----" : UserService.getLastScoreDate(user.scores, dateFormatLong)}</p>
+          <p>{user.scores && user.scores.length === 0 ? "-----" : dateFormatLong.format(UserService.getLastScoreDate(user.scores))}</p>
           <strong>Najveći rezultat:</strong>
           <p>{UserService.getHighScore(user.scores)}</p>
 
@@ -77,7 +77,6 @@ export default class UserBoard extends Component {
         {user.scores && <table style={{ width: '100%' }}>
           <thead>
             <tr>
-              <th onClick={() => sortTable(0)}>ID</th>
               <th onClick={() => sortTable(1)}>Datum</th>
               <th onClick={() => sortTable(2)}>Vrijednost</th>
             </tr>
@@ -85,7 +84,6 @@ export default class UserBoard extends Component {
           <tbody id="tbody-scores">
             {scores && scores.map(score =>
               <tr key={score.id} onClick={() => { this.props.history.push("/scores/" + score.id) }}>
-                <td>{score.id}</td>
                 <td>{dateFormatShort.format(Date.UTC(score.date[0], score.date[1], score.date[2], score.date[3], score.date[4]))}</td>
                 <td>{score.value}</td>
               </tr>)}

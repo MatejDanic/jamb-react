@@ -59,7 +59,7 @@ export default class UserListBoard extends Component {
             {users.map(user =>
               <tr key={user.id} onClick={() => { this.props.history.push("/users/" + user.id) }}>
                 <td>{user.username}</td>
-                <td>{user.scores.length === 0 ? "-----" : UserService.getLastScoreDate(user.scores, dateFormatShort)}</td>
+                <td>{user.scores.length === 0 ? "-----" : dateFormatShort.format(UserService.getLastScoreDate(user.scores))}</td>
                 <td>{UserService.getHighScore(user.scores)}</td>
               </tr>)}
           </tbody>
