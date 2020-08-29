@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import UserService from "../services/user.service";
 import AuthService from "../services/auth.service";
+import { dateFormatShort, dateFormatLong } from "../services/date-format";
 
 export default class UserBoard extends Component {
   constructor(props) {
@@ -45,7 +46,6 @@ export default class UserBoard extends Component {
     let user = this.state.content;
     let currentUser = this.state.currentUser;
     let scores = user.scores;
-    const dateFormat = new Intl.DateTimeFormat('UK', { year: 'numeric', month: '2-digit', day: '2-digit' });
     return (
       <div className="container-custom">
         {currentUser && currentUser.roles.includes("ADMIN") && !this.state.userIsAdmin && <div className="container-button">
@@ -66,7 +66,7 @@ export default class UserBoard extends Component {
               user.roles.map((role, id) => <li key={id}>{role.label}</li>)}
           </ul>
           <strong>Posljednja igra:</strong>
-          <p>{user.scores && user.scores.length === 0 ? "-----" : UserService.getLastScoreDate(user.scores)}</p>
+          <p>{user.scores && user.scores.length === 0 ? "-----" : UserService.getLastScoreDate(user.scores, dateFormatLong)}</p>
           <strong>Najveći rezultat:</strong>
           <p>{UserService.getHighScore(user.scores)}</p>
 
@@ -86,7 +86,7 @@ export default class UserBoard extends Component {
             {scores && scores.map(score =>
               <tr key={score.id} onClick={() => { this.props.history.push("/scores/" + score.id) }}>
                 <td>{score.id}</td>
-                <td>{dateFormat.format(new Date(score.date))}</td>
+                <td>{dateFormatShort.format(Date.UTC(score.date[0], score.date[1], score.date[2], score.date[3], score.date[4]))}</td>
                 <td>{score.value}</td>
               </tr>)}
           </tbody>

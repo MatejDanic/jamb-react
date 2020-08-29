@@ -3,6 +3,7 @@
 import React, { Component } from "react";
 import UserService from "../services/user.service";
 import "./administration.css";
+import { dateFormatShort } from "../services/date-format";
 
 export default class UserListBoard extends Component {
   constructor(props) {
@@ -48,19 +49,17 @@ export default class UserListBoard extends Component {
       <div className="container-custom">
         <table style={{ width: '100%' }}>
           <thead>
-            <tr> 
-              <th onClick={() => sortTable(0)}>ID</th>
-              <th onClick={() => sortTable(1)}>Korisničko ime</th>
-              <th onClick={() => sortTable(2)}>Posljednja igra</th>
-              <th onClick={() => sortTable(3)}>Najveći rezultat</th>
+            <tr>
+              <th onClick={() => sortTable(0)}>Korisničko ime</th>
+              <th onClick={() => sortTable(1)}>Posljednja igra</th>
+              <th onClick={() => sortTable(2)}>Najveći rezultat</th>
             </tr>
           </thead>
           <tbody id="tbody-users">
             {users.map(user =>
               <tr key={user.id} onClick={() => { this.props.history.push("/users/" + user.id) }}>
-                <td>{user.id}</td>
                 <td>{user.username}</td>
-                <td>{user.scores.length === 0 ? "-----" : UserService.getLastScoreDate(user.scores)}</td>
+                <td>{user.scores.length === 0 ? "-----" : UserService.getLastScoreDate(user.scores, dateFormatShort)}</td>
                 <td>{UserService.getHighScore(user.scores)}</td>
               </tr>)}
           </tbody>

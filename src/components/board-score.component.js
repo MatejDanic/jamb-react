@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ScoreService from "../services/score.service";
 import AuthService from "../services/auth.service";
+import { dateFormatLong } from "../services/date-format";
 
 export default class ScoreBoard extends Component {
   constructor(props) {
@@ -38,7 +39,6 @@ export default class ScoreBoard extends Component {
   render() {
     let score = this.state.content;
     let currentUser = this.state.currentUser;
-    const dateFormat = new Intl.DateTimeFormat('UK', { year: 'numeric', month: '2-digit', day: '2-digit' });
     return (
       <div className="container-custom">
         {currentUser && currentUser.roles.includes("ADMIN") && <div className="container-button">
@@ -58,7 +58,7 @@ export default class ScoreBoard extends Component {
           </p>
           <p>
             <strong>Datum: </strong>
-            {score.date && dateFormat.format(new Date(score.date))}
+            {score.date && dateFormatLong.format(Date.UTC(score.date[0], score.date[1], score.date[2], score.date[3], score.date[4]))}
           </p>
         </div>
       </div>

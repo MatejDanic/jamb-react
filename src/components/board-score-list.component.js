@@ -3,6 +3,7 @@
 import React, { Component } from "react";
 import ScoreService from "../services/score.service";
 import "./administration.css";
+import { dateFormatShort } from "../services/date-format";
 
 export default class ScoreListBoard extends Component {
   constructor(props) {
@@ -44,26 +45,23 @@ export default class ScoreListBoard extends Component {
 
   render() {
     let scores = this.state.scores;
-    const dateFormat = new Intl.DateTimeFormat('UK', { year: 'numeric', month: '2-digit', day: '2-digit' });
     return (
       <div className="container-custom">
         <table style={{ width: '100%' }}>
           <thead>
             <tr>
-              <th onClick={() => sortTable(0)}>ID</th>
+              <th onClick={() => sortTable(0)}>Datum</th>
               <th onClick={() => sortTable(1)}>Korisnik</th>
-              <th onClick={() => sortTable(2)}>Datum</th>
-              <th onClick={() => sortTable(3)}>Vrijednost</th>
+              <th onClick={() => sortTable(2)}>Vrijednost</th>
             </tr>
           </thead>
           <tbody id="tbody-scores">
             {scores && scores.map(score =>
-            <tr key={score.id} onClick={() => { this.props.history.push("/scores/" + score.id) }}>
-              <td>{score.id}</td>
-              <td>{score.user.username}</td>
-              <td>{dateFormat.format(new Date(score.date))}</td>
-              <td>{score.value}</td>
-            </tr>)}
+              <tr key={score.id} onClick={() => { this.props.history.push("/scores/" + score.id) }}>
+                <td>{dateFormatShort.format(Date.UTC(score.date[0], score.date[1], score.date[2], score.date[3], score.date[4]))}</td>
+                <td>{score.user.username}</td>
+                <td>{score.value}</td>
+              </tr>)}
           </tbody>
         </table>
       </div>

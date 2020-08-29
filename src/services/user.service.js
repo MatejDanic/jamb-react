@@ -14,11 +14,10 @@ class UserService {
   deleteUser(userId) {
     return axios.delete(apiURL + "/" + userId, { headers: authHeader() });
   }
-  getLastScoreDate(scores) {
-    const dateFormat = new Intl.DateTimeFormat('UK', { year: 'numeric', month: '2-digit', day: '2-digit' });
-    let date = dateFormat.format(new Date("2000-01-01"));
+  getLastScoreDate(scores, dateFormat) {
+    let date = dateFormat.format(Date.UTC(2020, 1, 1, 0, 0));
     for (let key in scores) {
-      let scoreDate = dateFormat.format(new Date(scores[key].date.toString()));
+      let scoreDate = dateFormat.format(Date.UTC(scores[key].date[0], scores[key].date[1], scores[key].date[2], scores[key].date[3], scores[key].date[4]));
       if (scoreDate > date) date = scoreDate;
     }
     return date.toString();
