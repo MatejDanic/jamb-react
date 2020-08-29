@@ -104,11 +104,10 @@ export default class Game extends Component {
         this._isMounted = true;
         this.setState({ currentUser: AuthService.getCurrentUser() }, () => {
             if (this.state.currentUser) {
-                console.log("User:", this.state.currentUser.username);
                 FormService.initializeForm().then(
                     response => {
                         var form = response.data;
-                        console.log("Form:", form);
+                        console.log(form);
                         this.initializeForm(form);
                     },
                     error => {
@@ -538,7 +537,6 @@ export default class Game extends Component {
     getCurrentWeekLeader() {
         ScoreService.getCurrentWeekLeader().then(
             response => {
-                console.log(response.data);
                 if (this._isMounted) this.setState({ currentWeekLeader: response.data });
             },
             error => {

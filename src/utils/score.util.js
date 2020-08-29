@@ -108,7 +108,6 @@ class ScoreUtil {
                 }
             }
         }
-        // console.log("Score: ", score);
         return score;
     }
     getHighScore(scores) {

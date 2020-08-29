@@ -66,6 +66,19 @@ td {
     margin: 5px;
 }
 
+.button-pagination {
+    background-color: lightskyblue;
+    width: 4vw;
+    border-radius: 4px;
+    margin-top: 5px;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+.hidden {
+    display: none;
+}
+
 @media screen and (max-width: 512px) {
     .container-button {
         width: auto;
@@ -73,7 +86,7 @@ td {
     }    
 
     tr {
-        height: 8vh;
+        height: 6vh;
         background-color: white;
         cursor:pointer;
     }
@@ -86,5 +99,13 @@ td {
         margin-bottom: 5px;
         width: 80%;
         font-size: 100%;
+    }
+
+    .button-pagination {
+        width: 10vw;
+        border-radius: 4px;
+        margin-top: 5px;
+        margin-left: 2px;
+        margin-right: 2px;
     }
 }

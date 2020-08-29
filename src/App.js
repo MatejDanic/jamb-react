@@ -9,11 +9,11 @@ import Login from "./components/login.component";
 import Register from "./components/register.component";
 import AdminBoard from "./components/board-admin.component";
 import Game from "./components/jamb/game.component";
+import Profile from "./components/profile.component";
 import UserListBoard from "./components/board-user-list.component";
 import UserBoard from "./components/board-user.component";
 import ScoreListBoard from "./components/board-score-list.component";
 import ScoreBoard from "./components/board-score.component";
-
 
 class App extends Component {
   constructor(props) {
@@ -67,7 +67,7 @@ class App extends Component {
                 <li className="nav-item">
                 </li>
                 <li className="nav-item">
-                  <Link to={"/users/" + currentUser.id} className="nav-link">
+                  <Link to={"/profile"} className="nav-link">
                     {currentUser.username}
                   </Link>
                 </li>
@@ -101,6 +101,7 @@ class App extends Component {
               <Route exact path="/admin" component={AdminBoard} />
               <Route exact path="/users" component={UserListBoard} />
               <Route exact path="/users/:userId" component={UserBoard} />
+              <Route exact path="/profile" component={Profile} /> 
               <Route exact path="/scores" component={ScoreListBoard} />
               <Route exact path="/scores/:scoreId" component={ScoreBoard} />
             </Switch>

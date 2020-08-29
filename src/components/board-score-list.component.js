@@ -1,10 +1,10 @@
 
 
 import React, { Component } from "react";
-import ScoreService from "../services/score.service";
-import "./administration.css";
 import { dateFormatMedium } from "../misc/date-format";
+import ScoreService from "../services/score.service";
 import DateUtil from "../utils/date.util";
+import "./administration.css";
 
 export default class ScoreListBoard extends Component {
   constructor(props) {
@@ -12,55 +12,80 @@ export default class ScoreListBoard extends Component {
 
     this.state = {
       content: "",
-      scores: []
+      scores: [],
+      columnIndexDate: 0,
+      columnIndexUsername: 1,
+      columnIndexValue: 2
+
     };
   }
 
   componentDidMount() {
-    ScoreService.getScores().then(
-      response => {
-        this.setState({
-          content: response.data,
-          scores: []
-        }, () => {
-          for (let key in this.state.content) {
-            this.setState(state => {
-              state.scores.push(this.state.content[key]);
+    if (this.props.scores == null) {
+      ScoreService.getScores().then(
+        response => {
+          this.setState({
+            content: response.data
+          }, () => {
+            for (let key in this.state.content) {
+              this.setState(state => {
+                state.scores.push(this.state.content[key]);
+              });
+            }
+            this.setState({}, () => {
+              sortTable(0);
+              pagination();
             });
-          }
-          this.setState({});
+          });
+        },
+        error => {
+          this.setState({
+            content:
+              (error.response &&
+                error.response.data &&
+                error.response.data.message) ||
+              error.message ||
+              error.toString()
+          });
+        }
+      );
+    } else {
+      this.setState({
+        content: this.props.scores
+      }, () => {
+        for (let key in this.state.content) {
+          this.setState(state => {
+            state.scores.push(this.state.content[key]);
+          });
+        }
+        this.setState({ columnIndexValue: 1 }, () => {
+          sortTable(0);
+          pagination();
         });
-      },
-      error => {
-        this.setState({
-          content:
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString()
-        });
-      }
-    );
+      });
+    }
   }
 
   render() {
     let scores = this.state.scores;
+    let columnIndexDate = this.state.columnIndexDate;
+    let columnIndexUsername = this.state.columnIndexUsername;
+    let columnIndexValue = this.state.columnIndexValue;
     return (
-      <div className="container-custom">
+      <div className="container-custom" id="pagination">
         <table style={{ width: '100%' }}>
           <thead>
             <tr>
-              <th onClick={() => sortTable(0)}>Datum</th>
-              <th onClick={() => sortTable(1)}>Korisnik</th>
-              <th onClick={() => sortTable(2)}>Vrijednost</th>
+              <th onClick={() => sortTable(columnIndexDate)}>Datum</th>
+              {!this.props.scores && <th onClick={() => sortTable(columnIndexUsername)}>Korisnik</th>}
+              <th onClick={() => sortTable(columnIndexValue)}>Vrijednost</th>
             </tr>
           </thead>
           <tbody id="tbody-scores">
             {scores && scores.map(score =>
-              <tr key={score.id} onClick={() => { this.props.history.push("/scores/" + score.id) }}>
+              <tr className={"tr"} key={score.id} id={score.id} onClick={() => { this.props.history.push("/scores/" + score.id) }}>
                 <td>{dateFormatMedium.format(DateUtil.getDateFromLocalDateTime(score.date))}</td>
-                <td>{score.user.username}</td>
+                {!this.props.scores && <td>{score.user.username}</td>}
                 <td>{score.value}</td>
               </tr>)}
           </tbody>
@@ -83,15 +108,18 @@ function sortTable(idx) {
   let datas = [];
   let tbodyLength = tbody.rows.length;
   for (let i = 0; i < tbodyLength; i++) {
+    document.getElementById(tbody.rows[i].id).style.display = "";
+  }
+  for (let i = 0; i < tbodyLength; i++) {
     datas[i] = tbody.rows[i];
   }
-
   // sort by cell[index] 
   datas.sort(compareCells);
   for (let i = 0; i < tbody.rows.length; i++) {
     // rearrange table rows by sorted rows
     tbody.appendChild(datas[i]);
   }
+  pagination();
 }
 
 function compareCells(a, b) {
@@ -119,6 +147,48 @@ function compareCells(a, b) {
       return 1;
     } else {
       return 0;
+    }
+  }
+}
+
+function pagination() {
+  let rowsPerPage = 10;
+  let tbody = document.getElementById("tbody-scores");
+  if (tbody.rows.length < rowsPerPage) return;
+  let numOfPages = 0;
+  if (tbody.rows.length % rowsPerPage === 0) {
+    numOfPages = tbody.rows.length / rowsPerPage;
+  }
+  if (tbody.rows.length % rowsPerPage >= 1) {
+    numOfPages = tbody.rows.length / rowsPerPage;
+    numOfPages++;
+    numOfPages = Math.floor(numOfPages++);
+  }
+  if (document.getElementsByClassName("button-pagination").length === 0) {
+    for (let i = 1; i <= numOfPages; i++) {
+      let node = document.createElement("BUTTON");
+      node.className = "button-pagination";
+      node.innerText = i;
+      node.onclick = function (e) {
+        e.preventDefault();
+        for (let i = 0; i < tbody.rows.length; i++) {
+          document.getElementById(tbody.rows[i].id).style.display = "none";
+        }
+        let page = e.target.innerText;
+        let temp = page - 1;
+        let start = temp * rowsPerPage;
+        for (let j = 0; j < rowsPerPage; j++) {
+          let k = start + j;
+          if (k < tbody.rows.length) document.getElementById(tbody.rows[k].id).style.display = "";
+        }
+        window.scrollTo(0, document.body.scrollHeight);
+      }
+      document.getElementById('pagination').appendChild(node);
+    }
+  }
+  for (let i = 0; i < tbody.rows.length; i++) {
+    if (i + 1 > rowsPerPage) {
+      document.getElementById(tbody.rows[i].id).style.display = "none";
     }
   }
 }
