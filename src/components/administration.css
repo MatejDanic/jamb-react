@@ -28,7 +28,7 @@ th {
 }
 
 tr {
-    height: 8vh;
+    height: 4vh;
     background-color: white;
     cursor:pointer;
 }
@@ -70,6 +70,14 @@ td {
     .container-button {
         width: auto;
         padding-top: 5px;
+    }
+
+    
+
+    tr {
+        height: 8vh;
+        background-color: white;
+        cursor:pointer;
     }
 
     .container-custom {
