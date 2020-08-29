@@ -68,34 +68,37 @@ export default class UserBoard extends Component {
             {user.roles &&
               user.roles.map((role, id) => <li key={id}>{role.label}</li>)}
           </ul>
-          <strong>Posljednja igra:</strong>
-          <p>{scores && scores.length === 0 ? "-----" : dateFormatLong.format(DateUtil.getLastScoreDate(scores))}</p>
-          <strong>Najveći rezultat:</strong>
-          <p>{ScoreUtil.getHighScore(scores)}</p>
-          <strong>Ukupni rezultat:</strong>
-          <p>{totalScore}</p>
-          <strong>Broj igara:</strong>
-          <p>{scores && scores.length}</p>
-          <strong>Prosjek:</strong>
-          <p>{scores && (scores.length === 0 ? "0" : Math.round(totalScore/scores.length * 100) / 100) }</p>
-          <strong>Rezultati:</strong>
+          <p><strong>Posljednja igra: </strong>{scores && scores.length === 0 ? "-----" : dateFormatLong.format(DateUtil.getLastScoreDate(scores))}</p>
+          <p><strong>Najveći rezultat: </strong>{ScoreUtil.getHighScore(scores)}</p>
+          <p>
+            <strong>Ukupni rezultat: </strong>{totalScore}
+          </p>
+          <p>
+            <strong>Broj igara: </strong>{scores && scores.length}
+          </p>
+          <p>
+            <strong>Prosjek: </strong>{scores && (scores.length === 0 ? "0" : Math.round(totalScore / scores.length * 100) / 100)}
+          </p>
         </div>
-
-        {user.scores && <table style={{ width: '100%' }}>
-          <thead>
-            <tr>
-              <th onClick={() => sortTable(1)}>Datum</th>
-              <th onClick={() => sortTable(2)}>Vrijednost</th>
-            </tr>
-          </thead>
-          <tbody id="tbody-scores">
-            {scores && scores.map(score =>
-              <tr key={score.id} onClick={() => { this.props.history.push("/scores/" + score.id) }}>
-                <td>{dateFormatMedium.format(DateUtil.getDateFromLocalDateTime(score.date))}</td>
-                <td>{score.value}</td>
-              </tr>)}
-          </tbody>
-        </table>}
+        {user.scores && (user.scores.length > 0 &&
+          <div>
+            <strong>Rezultati:</strong>
+            <table style={{ width: '100%' }}>
+              <thead>
+                <tr>
+                  <th onClick={() => sortTable(1)}>Datum</th>
+                  <th onClick={() => sortTable(2)}>Vrijednost</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-scores">
+                {scores && scores.map(score =>
+                  <tr key={score.id} onClick={() => { this.props.history.push("/scores/" + score.id) }}>
+                    <td>{dateFormatMedium.format(DateUtil.getDateFromLocalDateTime(score.date))}</td>
+                    <td>{score.value}</td>
+                  </tr>)}
+              </tbody>
+            </table>
+          </div>)}
       </div>
     );
   }
