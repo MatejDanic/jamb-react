@@ -4,6 +4,8 @@ import React, { Component } from "react";
 import UserService from "../services/user.service";
 import "./administration.css";
 import { dateFormatShort } from "../misc/date-format";
+import DateUtil from "../utils/date.util";
+import ScoreUtil from "../utils/score.util";
 
 export default class UserListBoard extends Component {
   constructor(props) {
@@ -59,12 +61,11 @@ export default class UserListBoard extends Component {
             {users.map(user =>
               <tr key={user.id} onClick={() => { this.props.history.push("/users/" + user.id) }}>
                 <td>{user.username}</td>
-                <td>{user.scores.length === 0 ? "-----" : dateFormatShort.format(UserService.getLastScoreDate(user.scores))}</td>
-                <td>{UserService.getHighScore(user.scores)}</td>
+                <td>{user.scores.length === 0 ? "-----" : dateFormatShort.format(DateUtil.getLastScoreDate(user.scores))}</td>
+                <td>{ScoreUtil.getHighScore(user.scores)}</td>
               </tr>)}
           </tbody>
         </table>
-
       </div>
     );
   }

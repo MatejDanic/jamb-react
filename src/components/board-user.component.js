@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import UserService from "../services/user.service";
 import AuthService from "../services/auth.service";
-import { dateFormatShort, dateFormatLong } from "../misc/date-format";
+import { dateFormatMedium, dateFormatLong } from "../misc/date-format";
 import DateUtil from "../utils/date.util";
-
+import ScoreUtil from "../utils/score.util";
 
 export default class UserBoard extends Component {
   constructor(props) {
@@ -48,6 +48,7 @@ export default class UserBoard extends Component {
     let user = this.state.content;
     let currentUser = this.state.currentUser;
     let scores = user.scores;
+    let totalScore = ScoreUtil.getTotalScore(scores);
     return (
       <div className="container-custom">
         {currentUser && currentUser.roles.includes("ADMIN") && !this.state.userIsAdmin && <div className="container-button">
@@ -68,12 +69,18 @@ export default class UserBoard extends Component {
               user.roles.map((role, id) => <li key={id}>{role.label}</li>)}
           </ul>
           <strong>Posljednja igra:</strong>
-          <p>{user.scores && user.scores.length === 0 ? "-----" : dateFormatLong.format(UserService.getLastScoreDate(user.scores))}</p>
+          <p>{scores && scores.length === 0 ? "-----" : dateFormatLong.format(DateUtil.getLastScoreDate(scores))}</p>
           <strong>Najveći rezultat:</strong>
-          <p>{UserService.getHighScore(user.scores)}</p>
+          <p>{ScoreUtil.getHighScore(scores)}</p>
+          <strong>Ukupni rezultat:</strong>
+          <p>{totalScore}</p>
+          <strong>Broj igara:</strong>
+          <p>{scores && scores.length}</p>
+          <strong>Prosjek:</strong>
+          <p>{scores && Math.round(totalScore/scores.length * 100) / 100}</p>
 
 
-          <strong>Rezultati</strong>
+          <strong>Rezultati:</strong>
         </div>
 
         {user.scores && <table style={{ width: '100%' }}>
@@ -86,7 +93,7 @@ export default class UserBoard extends Component {
           <tbody id="tbody-scores">
             {scores && scores.map(score =>
               <tr key={score.id} onClick={() => { this.props.history.push("/scores/" + score.id) }}>
-                <td>{dateFormatShort.format(DateUtil.getDateFromLocalDateTime(score.date))}</td>
+                <td>{dateFormatMedium.format(DateUtil.getDateFromLocalDateTime(score.date))}</td>
                 <td>{score.value}</td>
               </tr>)}
           </tbody>

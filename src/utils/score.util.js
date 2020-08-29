@@ -111,6 +111,20 @@ class ScoreUtil {
         // console.log("Score: ", score);
         return score;
     }
+    getHighScore(scores) {
+        let highScore = 0;
+        for (let key in scores) {
+            if (scores[key].value > highScore) highScore = scores[key].value;
+        }
+        return highScore;
+    }
+    getTotalScore(scores) {
+        let totalScore = 0;
+        for (let key in scores) {
+            totalScore += scores[key].value;
+        }
+        return totalScore;
+    }
 }
 
 export default new ScoreUtil();
