@@ -72,24 +72,25 @@ export default class ScoreListBoard extends Component {
     let columnIndexUsername = this.state.columnIndexUsername;
     let columnIndexValue = this.state.columnIndexValue;
     return (
-      <div className="container-custom" id="pagination">
-        <table style={{ width: '100%' }}>
-          <thead>
-            <tr>
-              <th onClick={() => sortTable(columnIndexDate)}>Datum</th>
-              {!this.props.scores && <th onClick={() => sortTable(columnIndexUsername)}>Korisnik</th>}
-              <th onClick={() => sortTable(columnIndexValue)}>Vrijednost</th>
-            </tr>
-          </thead>
-          <tbody id="tbody-scores">
-            {scores && scores.map(score =>
-              <tr className={"tr"} key={score.id} id={score.id} onClick={() => { this.props.history.push("/scores/" + score.id) }}>
-                <td>{dateFormatMedium.format(DateUtil.getDateFromLocalDateTime(score.date))}</td>
-                {!this.props.scores && <td>{score.user.username}</td>}
-                <td>{score.value}</td>
-              </tr>)}
-          </tbody>
-        </table>
+      <div className="container-custom">
+          <table style={{ width: '100%' }}>
+            <thead>
+              <tr>
+                <th onClick={() => sortTable(columnIndexDate)}>Datum</th>
+                {!this.props.scores && <th onClick={() => sortTable(columnIndexUsername)}>Korisnik</th>}
+                <th onClick={() => sortTable(columnIndexValue)}>Vrijednost</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-scores">
+              {scores && scores.map(score =>
+                <tr className={"tr"} key={score.id} id={score.id} onClick={() => { this.props.history.push("/scores/" + score.id) }}>
+                  <td>{dateFormatMedium.format(DateUtil.getDateFromLocalDateTime(score.date))}</td>
+                  {!this.props.scores && <td>{score.user.username}</td>}
+                  <td>{score.value}</td>
+                </tr>)}
+            </tbody>
+          </table>
+          <div className="pagination" id="pagination" />
       </div>
     );
   }
