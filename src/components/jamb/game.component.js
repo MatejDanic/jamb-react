@@ -361,6 +361,7 @@ export default class Game extends Component {
                     window.location.reload();
                 },
                 error => {
+                    window.location.reload();
                     console.log(error);
                 }
             );
