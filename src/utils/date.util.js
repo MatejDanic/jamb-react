@@ -14,14 +14,16 @@ class DateUtil {
     let aList = aVal.split(".");
     let bList = bVal.split(".");
     let aDate, bDate;
-    if (aList.length === 4 && !aList[3]) {
-      aDate = Date.parse(aList[1], aList[0], aList[2]);
-      bDate = Date.parse(bList[1], bList[0], bList[2]);
-    } else if (aList.length === 4 && aList[3]) {
-      aDate = Date.parse(aList[1], aList[0], aList[2], aList[3]);
-      bDate = Date.parse(bList[1], bList[0], bList[2], aList[3]);
+    if (!aList[3] || !bList[3]) {
+      aDate = new Date(aList[2], aList[1]-1, aList[0]);
+      bDate = new Date(bList[2], bList[1]-1, bList[0]);
+    } else {
+      let aTime = aList[3].split(":");
+      let bTime = bList[3].split(":");
+      aDate = new Date(aList[2], aList[1]-1, aList[0], aTime[0], aTime[1]);
+      bDate = new Date(bList[2], bList[1]-1, bList[0], bTime[0], bTime[1]); 
     }
-    let diff = aDate - bDate;
+    let diff = aDate.getTime() - bDate.getTime();
     return diff === 0 ? 0 : (diff > 0 ? 1 : -1);
   }
 
