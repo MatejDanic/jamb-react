@@ -6,6 +6,8 @@ import ScoreService from "../services/score.service";
 import DateUtil from "../utils/date.util";
 import "./administration.css";
 
+let columnIndexDate = 0;
+
 export default class ScoreListBoard extends Component {
   constructor(props) {
     super(props);
@@ -135,6 +137,10 @@ function compareCells(a, b) {
     let temp = aVal;
     aVal = bVal;
     bVal = temp;
+  }
+  
+  if (index === columnIndexDate) {
+    return DateUtil.compareDateStrings(aVal, bVal);
   }
 
   if (aVal.match(/^[0-9]+$/) && bVal.match(/^[0-9]+$/)) {

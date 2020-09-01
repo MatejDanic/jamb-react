@@ -7,6 +7,8 @@ import ScoreUtil from "../utils/score.util";
 import DateUtil from "../utils/date.util";
 import "./administration.css";
 
+let columnIndexDate = 1;
+
 export default class UserListBoard extends Component {
   constructor(props) {
     super(props);
@@ -113,11 +115,14 @@ function compareCells(a, b) {
     aVal = bVal;
     bVal = temp;
   }
+  
+  if (index === columnIndexDate) {
+    return DateUtil.compareDateStrings(aVal, bVal);
+  }
 
   if (aVal.match(/^[0-9]+$/) && bVal.match(/^[0-9]+$/)) {
     return parseFloat(aVal) - parseFloat(bVal);
-  }
-  else {
+  } else {
     aVal = aVal.toLowerCase();
     bVal = bVal.toLowerCase();
     if (aVal < bVal) {
