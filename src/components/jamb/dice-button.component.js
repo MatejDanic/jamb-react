@@ -5,7 +5,7 @@ import "./animation.css";
 export default class DiceButton extends Component {
 
     render() {
-        const label = this.props.variables.label;
+        const label = this.props.variables.ordinalNumber;
         let value = this.props.variables.value; 
         let hold = this.props.variables.hold;
         let disabled = this.props.disabled;

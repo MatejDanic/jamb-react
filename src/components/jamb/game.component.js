@@ -30,11 +30,11 @@ export default class Game extends Component {
             boxesDisabled: true,
             sums: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             dice: [
-                { value: 6, hold: false, label: 0 },
-                { value: 6, hold: false, label: 1 },
-                { value: 6, hold: false, label: 2 },
-                { value: 6, hold: false, label: 3 },
-                { value: 6, hold: false, label: 4 }
+                { value: 6, hold: false, ordinalNumber: 0 },
+                { value: 6, hold: false, ordinalNumber: 1 },
+                { value: 6, hold: false, ordinalNumber: 2 },
+                { value: 6, hold: false, ordinalNumber: 3 },
+                { value: 6, hold: false, ordinalNumber: 4 }
             ],
             boxes: [
                 { available: true, value: 0, filled: false, label: 0 },
@@ -160,7 +160,7 @@ export default class Game extends Component {
         if (this.state.currentUser) {
             var diceToRoll = '{';
             for (var i = 0; i < this.state.dice.length; i++) {
-                diceToRoll += '"' + this.state.dice[i].label + '" : "';
+                diceToRoll += '"' + this.state.dice[i].ordinalNumber + '" : "';
                 diceToRoll += !this.state.dice[i].hold;
                 diceToRoll += '",';
             }
