@@ -1,7 +1,7 @@
 
 
 import React, { Component } from "react";
-import { dateFormatMedium } from "../../misc/date-format";
+import { dateFormatMedium } from "../../constants/date-format";
 import ScoreService from "../../services/score.service";
 import DateUtil from "../../utils/date.util";
 import "./admin.css";

@@ -2,7 +2,7 @@
 
 import React, { Component } from "react";
 import UserService from "../../services/user.service";
-import { dateFormatShort } from "../../misc/date-format";
+import { dateFormatShort } from "../../constants/date-format";
 import ScoreUtil from "../../utils/score.util";
 import DateUtil from "../../utils/date.util";
 import "./admin.css";

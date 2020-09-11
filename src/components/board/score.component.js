@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ScoreService from "../../services/score.service";
 import AuthService from "../../services/auth.service";
-import { dateFormatLong } from "../../misc/date-format";
+import { dateFormatLong } from "../../constants/date-format";
 import DateUtil from "../../utils/date.util";
 
 export default class Score extends Component {
