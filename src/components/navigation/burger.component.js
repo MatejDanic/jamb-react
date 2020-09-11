@@ -25,7 +25,7 @@ export default class Burger extends Component {
         const { currentUser, showAdmin } = this.state;
         return (
             <div>
-               I am a burger! :P
+               I am a burger! :P {showAdmin} {currentUser && currentUser.username}
             </div>
         );
     }

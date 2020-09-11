@@ -24,8 +24,7 @@ class App extends Component {
     this.state = {
       windowWidth: 0,
       windowHeight: 0,
-      currentUser: undefined,
-      showAdmin: false
+      currentUser: undefined
     };
     this.logout = this.logout.bind(this);
     this.updateDimensions = this.updateDimensions.bind(this);
@@ -42,8 +41,7 @@ class App extends Component {
     const user = AuthService.getCurrentUser();
     if (user) {
       this.setState({
-        currentUser: user,
-        showAdmin: user.roles.includes("ADMIN")
+        currentUser: user
       });
     }
     this.updateDimensions();
@@ -60,7 +58,7 @@ class App extends Component {
   }
 
   render() {
-    const { currentUser, showAdmin } = this.state;
+    const { currentUser } = this.state;
     let links = {
       jamb: <Link to={"/"} className="nav-link">Jamb</Link>,
       admin: <Link to={"/admin"} className="nav-link">Administracija</Link>,
