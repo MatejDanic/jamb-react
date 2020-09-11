@@ -47,13 +47,14 @@
 }
 
 
-@media screen and ( max-width : 512px) {
-	.label{
+@media screen and (max-width : 512px) {
+  .label {
     width: auto;
     height: auto;
     padding: 0px;
     margin: 0px;
   }
+
   .info {
     height: 100%;
   }

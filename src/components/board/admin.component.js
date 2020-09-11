@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import AuthService from "../services/auth.service";
+import AuthService from "../../services/auth.service";
 
-import "./administration.css";
+import "./admin.css";
 
-export default class AdminBoard extends Component {
+export default class Admin extends Component {
 
   constructor(props) {
     super(props);
@@ -26,7 +26,7 @@ export default class AdminBoard extends Component {
     return (
       <div className="container-custom">
         <div className="container-button">
-          <div className="administration">
+          <div className="admin">
             <div>
               <button className="btn btn-primary button-admin" onClick={() => { this.props.history.push("/users") }}>Korisnici</button>
             </div>

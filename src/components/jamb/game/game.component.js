@@ -1,16 +1,17 @@
 
 import React, { Component } from "react";
-import AuthService from "../../services/auth.service";
-import ScoreService from "../../services/score.service";
-import FormService from "../../services/form.service";
-import Box from "./box.component";
-import Label from "./label.component";
-import DiceRack from "./dice-rack.component";
-import ScoreUtil from "../../utils/score.util";
-import RollDiceButton from "./roll-dice-button.component";
+import AuthService from "../../../services/auth.service";
+import ScoreService from "../../../services/score.service";
+import FormService from "../../../services/form.service";
+import Box from "../box/box.component";
+import Label from "../label/label.component";
+import DiceRack from "../dice/dice-rack.component";
+import ScoreUtil from "../../../utils/score.util";
+import RollDiceButton from "../button/roll-dice-button.component";
+import ScoreboardButton from "../button/scoreboard-button.component";
+import RulesButton from "../button/rules-button.component";
+import RestartButton from "../button/restart-button.component";
 import "./game.css";
-import "./button.css";
-import "./animation.css";
 
 export default class Game extends Component {
     _isMounted = false;
@@ -117,7 +118,7 @@ export default class Game extends Component {
             }
         });
         this.getCurrentWeekLeader();
-        
+
     }
 
     componentWillUnmount() {
@@ -251,7 +252,7 @@ export default class Game extends Component {
         if (this.state.currentUser) {
             FormService.announce(this.state.formId, index % 13).then(
                 response => {
-                    this.setState({ boxesDisabled: true, announcement: response.data + 13*3, rollDisabled: false });
+                    this.setState({ boxesDisabled: true, announcement: response.data + 13 * 3, rollDisabled: false });
                 },
                 error => {
                     console.log(error);
@@ -279,7 +280,8 @@ export default class Game extends Component {
                     });
                     this.setState({}, () => {
                         this.updateSums();
-                    });                },
+                    });
+                },
                 error => {
                     console.log(error);
                 }
@@ -354,22 +356,6 @@ export default class Game extends Component {
         this.setState({});
     }
 
-    restart() {
-        if (this.state.currentUser) {
-            FormService.deleteForm(this.state.formId).then(
-                () => {
-                    window.location.reload();
-                },
-                error => {
-                    window.location.reload();
-                    console.log(error);
-                }
-            );
-        } else {
-            window.location.reload();
-        }
-    }
-
     render() {
         let sums = this.state.sums;
         let boxes = this.state.boxes;
@@ -438,7 +424,8 @@ export default class Game extends Component {
                     <Box gameInfo={gameInfo} variables={boxes[19]} onBoxClick={this.boxClick} />
                     <Box gameInfo={gameInfo} variables={boxes[32]} onBoxClick={this.boxClick} />
                     <Box gameInfo={gameInfo} variables={boxes[45]} onBoxClick={this.boxClick} />
-                    <button className={"show-button restart"} style={{ backgroundImage: 'url(../images/reset.png)' }} onClick={() => { if (window.confirm('Jeste li sigurni da želite početi ispočetka?')) this.restart() }} />
+                    {/* <button className={"show-button restart"} style={{ backgroundImage: 'url(../images/reset.png)' }} onClick={() => { if (window.confirm('Jeste li sigurni da želite početi ispočetka?')) this.restart() }} /> */}
+                    <RestartButton currentUser={this.state.currentUser} formId={this.state.formId} />
                     {/* <div /> */}
                     <Label labelClass={"label"} value={"MIN"} />
                     <Box gameInfo={gameInfo} variables={boxes[7]} onBoxClick={this.boxClick} />
@@ -457,7 +444,8 @@ export default class Game extends Component {
                     <Box gameInfo={gameInfo} variables={boxes[21]} onBoxClick={this.boxClick} />
                     <Box gameInfo={gameInfo} variables={boxes[34]} onBoxClick={this.boxClick} />
                     <Box gameInfo={gameInfo} variables={boxes[47]} onBoxClick={this.boxClick} />
-                    <button className="show-button scoreboard" onClick={() => this.showScoreboard()}>Lj e s t v i c a</button>
+                    {/* <button className="show-button scoreboard" onClick={() => this.showScoreboard()}>Lj e s t v i c a</button> */}
+                    <ScoreboardButton />
                     {/* <button className="show-button rules" onClick={() => this.showRules()}>P r a v i l a</button> */}
                     {/* <div /> */}
                     <Label labelClass={"label"} value={"SKALA"} />
@@ -490,7 +478,8 @@ export default class Game extends Component {
                     <Label labelClass={"label label-sum-number"} number={sums[12]} id="ANY_DIRECTION-labelSum" />
                     <Label labelClass={"label label-sum-number"} number={sums[13]} id="ANNOUNCEMENT-labelSum" />
                     <Label labelClass={"label label-sum-number"} number={sums[14]} id="labelSum" />
-                    <button className="show-button rules" onClick={() => this.showRules()}>Pravila</button>
+                    {/* <button className="show-button rules" onClick={() => this.showRules()}>Pravila</button> */}
+                    <RulesButton />
                     <Label labelClass={"label leader"} value={"1. " + this.state.currentWeekLeader} />
                     {/* <RollDiceButton rollsLeft={this.state.rollsLeft} disabled={this.state.rollDisabled} onRollDice={this.rollDice} /> */}
                     {/* <button className="show-button rules" onClick={showRules}>Pravila</button>
@@ -502,37 +491,9 @@ export default class Game extends Component {
     }
 
     endGame() {
-        this.setState({rollDisabled: true}, () => {
+        this.setState({ rollDisabled: true }, () => {
             alert("Čestitamo, vaš ukupni rezultat je " + this.state.sums[15]);
         })
-    }
-
-    showRules() {
-        alert("Bacanjem kockica postižu se odredeni rezultati koji se upisuju u obrazac. Na kraju igre postignuti se rezultati zbrajaju.\n" +
-            "Nakon prvog bacanja, igrac gleda u obrazac i odlucuje hoce li nešto odmah upisati ili ce igrati dalje.\n" +
-            "U jednom potezu igrac može kockice (sve ili samo one koje izabere) bacati tri puta\n" +
-            "Prvi stupac obrasca upisuje se odozgo prema dolje, a drugom obrnuto. U treci stupac rezultati se upisuju bez odredenog redosljeda.\n" +
-            "Cetvrti stupac mora se popunjavati tako da se nakon prvog bacanja najavljuje igra za odredeni rezultat.\n" +
-            "Igrac je obavezan u to polje upisati ostvareni rezultat bez obzira da li mu to nakon tri bacanja odgovara ili ne.\n" +
-            "Rezultat se može, ali ne mora upisati u cetvrti stupac nakon prvog bacanja.");
-    }
-
-    showScoreboard() {
-        ScoreService.getScoreboard().then(
-            response => {
-                let scoreboard = response.data;
-                let text = '';
-                let i = 1;
-                for (let score in scoreboard) {
-                    text += i + '. ' + scoreboard[score].username + ' - ' + scoreboard[score].value + '\n';
-                    i += 1;
-                }
-                alert('Najbolji rezultati ovaj tjedan:\n' + text);
-            },
-            error => {
-                console.log(error);
-            }
-        );
     }
 
     getCurrentWeekLeader() {

@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import UserService from "../services/user.service";
-import AuthService from "../services/auth.service";
-import { dateFormatLong } from "../misc/date-format";
-import DateUtil from "../utils/date.util";
-import ScoreUtil from "../utils/score.util";
-import ScoreListBoard from "./board-score-list.component";
+import UserService from "../../services/user.service";
+import AuthService from "../../services/auth.service";
+import { dateFormatLong } from "../../misc/date-format";
+import DateUtil from "../../utils/date.util";
+import ScoreUtil from "../../utils/score.util";
+import ScoreList from "./score-list.component";
 
-export default class UserBoard extends Component {
+export default class User extends Component {
   constructor(props) {
     super(props);
 
@@ -86,7 +86,7 @@ export default class UserBoard extends Component {
         </div>
         {user.scores && (user.scores.length > 0 &&
           <div>
-            <ScoreListBoard scores={user.scores} history={this.props.history}></ScoreListBoard>
+            <ScoreList scores={user.scores} history={this.props.history}></ScoreList>
           </div>)}
       </div>
     );

@@ -1,0 +1,14 @@
+.dice-rack {
+  padding-top: 5px;
+}
+
+
+@media screen and (max-width : 512px) {
+
+  .dice-rack {
+    padding: 0px;
+
+    padding-top: 1%;
+    padding-bottom: 1%;
+  }
+}

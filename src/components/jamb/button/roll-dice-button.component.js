@@ -1,11 +1,7 @@
 import React, { Component } from "react";
-import "./button.css"
+import "./roll-dice-button.css"
 
 export default class RollDiceButton extends Component {
-
-  componentDidUpdate() {
-    // console.log("UPDATE (RollDiceButton): button -> ", this.props);
-  }
 
   render() {
     let disabled = this.props.disabled;
@@ -14,7 +10,7 @@ export default class RollDiceButton extends Component {
       <button disabled={disabled} className={"roll-dice-button " + btnClass} onClick={this.props.onRollDice}>K O C K I C E</button>
     )
   }
-  
+
   getBtnClass(rollsLeft) {
     var btnClass;
     switch (rollsLeft) {

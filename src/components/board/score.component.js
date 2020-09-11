@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import ScoreService from "../services/score.service";
-import AuthService from "../services/auth.service";
-import { dateFormatLong } from "../misc/date-format";
-import DateUtil from "../utils/date.util";
+import ScoreService from "../../services/score.service";
+import AuthService from "../../services/auth.service";
+import { dateFormatLong } from "../../misc/date-format";
+import DateUtil from "../../utils/date.util";
 
-export default class ScoreBoard extends Component {
+export default class Score extends Component {
   constructor(props) {
     super(props);
 

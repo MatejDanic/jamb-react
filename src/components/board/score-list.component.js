@@ -1,76 +1,98 @@
 
 
 import React, { Component } from "react";
-import UserService from "../services/user.service";
-import { dateFormatShort } from "../misc/date-format";
-import ScoreUtil from "../utils/score.util";
-import DateUtil from "../utils/date.util";
-import "./administration.css";
+import { dateFormatMedium } from "../../misc/date-format";
+import ScoreService from "../../services/score.service";
+import DateUtil from "../../utils/date.util";
+import "./admin.css";
 
-let columnIndexDate = 1;
+let columnIndexDate = 0;
 
-export default class UserListBoard extends Component {
+export default class ScoreList extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       content: "",
-      users: []
+      scores: [],
+      columnIndexDate: 0,
+      columnIndexUsername: 1,
+      columnIndexValue: 2
+
     };
   }
 
   componentDidMount() {
-    UserService.getUsers().then(
-      response => {
-        this.setState({
-          content: response.data,
-          users: []
-        }, () => {
-          for (let key in this.state.content) {
-            this.setState(state => {
-              state.users.push(this.state.content[key]);
+    if (this.props.scores == null) {
+      ScoreService.getScores().then(
+        response => {
+          this.setState({
+            content: response.data
+          }, () => {
+            for (let key in this.state.content) {
+              this.setState(state => {
+                state.scores.push(this.state.content[key]);
+              });
+            }
+            this.setState({}, () => {
+              sortTable(this.state.columnIndexDate, false);
+              pagination();
             });
-          }
-          this.setState({}, () => {
-            sortTable(1, false);
-            pagination();
           });
+        },
+        error => {
+          this.setState({
+            content:
+              (error.response &&
+                error.response.data &&
+                error.response.data.message) ||
+              error.message ||
+              error.toString()
+          });
+        }
+      );
+    } else {
+      this.setState({
+        content: this.props.scores
+      }, () => {
+        for (let key in this.state.content) {
+          this.setState(state => {
+            state.scores.push(this.state.content[key]);
+          });
+        }
+        this.setState({ columnIndexValue: 1 }, () => {
+          sortTable(this.state.columnIndexDate, false);
+          pagination();
         });
-      },
-      error => {
-        this.setState({
-          content:
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString()
-        });
-      }
-    );
+      });
+    }
   }
 
   render() {
-    let users = this.state.users;
+    let scores = this.state.scores;
+    let columnIndexDate = this.state.columnIndexDate;
+    let columnIndexUsername = this.state.columnIndexUsername;
+    let columnIndexValue = this.state.columnIndexValue;
     return (
-      <div className="container-custom" id="pagination">
-        <table style={{ width: '100%' }}>
-          <thead>
-            <tr>
-              <th onClick={() => sortTable(0)}>Korisničko ime</th>
-              <th onClick={() => sortTable(1)}>Posljednja igra</th>
-              <th onClick={() => sortTable(2)}>Najveći rezultat</th>
-            </tr>
-          </thead>
-          <tbody id="tbody-users">
-            {users.map(user =>
-              <tr key={user.id} id={user.id} onClick={() => { this.props.history.push("/users/" + user.id) }}>
-                <td>{user.username}</td>
-                <td>{user.scores.length === 0 ? "-----" : dateFormatShort.format(DateUtil.getLastScoreDate(user.scores))}</td>
-                <td>{ScoreUtil.getHighScore(user.scores)}</td>
-              </tr>)}
-          </tbody>
-        </table>
+      <div className="container-custom">
+          <table style={{ width: '100%' }}>
+            <thead>
+              <tr>
+                <th onClick={() => sortTable(columnIndexDate)}>Datum</th>
+                {!this.props.scores && <th onClick={() => sortTable(columnIndexUsername)}>Korisnik</th>}
+                <th onClick={() => sortTable(columnIndexValue)}>Vrijednost</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-scores">
+              {scores && scores.map(score =>
+                <tr className={"tr"} key={score.id} id={score.id} onClick={() => { this.props.history.push("/scores/" + score.id) }}>
+                  <td>{dateFormatMedium.format(DateUtil.getDateFromLocalDateTime(score.date))}</td>
+                  {!this.props.scores && <td>{score.user.username}</td>}
+                  <td>{score.value}</td>
+                </tr>)}
+            </tbody>
+          </table>
+          <div className="pagination" id="pagination" />
       </div>
     );
   }
@@ -79,14 +101,14 @@ export default class UserListBoard extends Component {
 let index;      // cell index
 let toggleBool; // sorting asc, desc 
 function sortTable(idx, order) {
-  if (order != null) toggleBool = order;
   index = idx;
+  if (order != null) toggleBool = order;
   if (toggleBool) {
     toggleBool = false;
   } else {
     toggleBool = true;
   }
-  let tbody = document.getElementById("tbody-users");
+  let tbody = document.getElementById("tbody-scores");
   let datas = [];
   let tbodyLength = tbody.rows.length;
   for (let i = 0; i < tbodyLength; i++) {
@@ -103,6 +125,7 @@ function sortTable(idx, order) {
   }
   pagination();
 }
+
 function compareCells(a, b) {
   let aVal = a.cells[index].innerText;
   let bVal = b.cells[index].innerText;
@@ -122,7 +145,8 @@ function compareCells(a, b) {
 
   if (aVal.match(/^[0-9]+$/) && bVal.match(/^[0-9]+$/)) {
     return parseFloat(aVal) - parseFloat(bVal);
-  } else {
+  }
+  else {
     aVal = aVal.toLowerCase();
     bVal = bVal.toLowerCase();
     if (aVal < bVal) {
@@ -137,7 +161,7 @@ function compareCells(a, b) {
 
 function pagination() {
   let rowsPerPage = 10;
-  let tbody = document.getElementById("tbody-users");
+  let tbody = document.getElementById("tbody-scores");
   if (tbody.rows.length < rowsPerPage) return;
   let numOfPages = 0;
   if (tbody.rows.length % rowsPerPage === 0) {

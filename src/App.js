@@ -5,15 +5,15 @@ import "./App.css";
 
 import AuthService from "./services/auth.service";
 
-import Login from "./components/login.component";
-import Register from "./components/register.component";
-import AdminBoard from "./components/board-admin.component";
-import Game from "./components/jamb/game.component";
-import Profile from "./components/profile.component";
-import UserListBoard from "./components/board-user-list.component";
-import UserBoard from "./components/board-user.component";
-import ScoreListBoard from "./components/board-score-list.component";
-import ScoreBoard from "./components/board-score.component";
+import Login from "./components/authentication/login.component";
+import Register from "./components/authentication/register.component";
+import Admin from "./components/board/admin.component";
+import Game from "./components/jamb/game/game.component";
+import Profile from "./components/board/profile.component";
+import UserList from "./components/board/user-list.component";
+import User from "./components/board/user.component";
+import ScoreList from "./components/board/score-list.component";
+import Score from "./components/board/score.component";
 
 class App extends Component {
   constructor(props) {
@@ -21,7 +21,7 @@ class App extends Component {
     this.logout = this.logout.bind(this);
 
     this.state = {
-      showAdminBoard: false,
+      showAdmin: false,
       currentUser: undefined
     };
   }
@@ -31,7 +31,7 @@ class App extends Component {
     if (user) {
       this.setState({
         currentUser: user,
-        showAdminBoard: user.roles.includes("ADMIN")
+        showAdmin: user.roles.includes("ADMIN")
       });
     }
   }
@@ -41,7 +41,7 @@ class App extends Component {
   }
 
   render() {
-    const { currentUser, showAdminBoard } = this.state;
+    const { currentUser, showAdmin } = this.state;
     return (
       <Router>
         <div>
@@ -52,7 +52,7 @@ class App extends Component {
               <Link to={"/"} className="nav-link">
                 Jamb
         </Link>
-              {showAdminBoard && (
+              {showAdmin && (
                 <li className="nav-item">
                   <Link to={"/admin"} className="nav-link">
                     Administracija
@@ -98,12 +98,12 @@ class App extends Component {
               <Route exact path="/" component={Game} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
-              <Route exact path="/admin" component={AdminBoard} />
-              <Route exact path="/users" component={UserListBoard} />
-              <Route exact path="/users/:userId" component={UserBoard} />
-              <Route exact path="/profile" component={Profile} /> 
-              <Route exact path="/scores" component={ScoreListBoard} />
-              <Route exact path="/scores/:scoreId" component={ScoreBoard} />
+              <Route exact path="/admin" component={Admin} />
+              <Route exact path="/users" component={UserList} />
+              <Route exact path="/users/:userId" component={User} />
+              <Route exact path="/profile" component={Profile} />
+              <Route exact path="/scores" component={ScoreList} />
+              <Route exact path="/scores/:scoreId" component={Score} />
             </Switch>
           </div>
         </div>

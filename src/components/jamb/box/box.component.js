@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./box.css";
 
 export default class Box extends Component {
-    
+
     render() {
         const label = this.props.variables.label;
         let disabled = this.getDisabled()
