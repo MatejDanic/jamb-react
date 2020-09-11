@@ -14,16 +14,28 @@ import UserList from "./components/board/user-list.component";
 import User from "./components/board/user.component";
 import ScoreList from "./components/board/score-list.component";
 import Score from "./components/board/score.component";
+import Bar from "./components/navigation/bar.component";
+import Burger from "./components/navigation/burger.component";
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.logout = this.logout.bind(this);
-
     this.state = {
-      showAdmin: false,
-      currentUser: undefined
+      windowWidth: 0,
+      windowHeight: 0,
+      currentUser: undefined,
+      showAdmin: false
     };
+    this.logout = this.logout.bind(this);
+    this.updateDimensions = this.updateDimensions.bind(this);
+  }
+
+  updateDimensions() {
+    let windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
+    let windowHeight = typeof window !== "undefined" ? window.innerHeight : 0;
+
+    this.setState({ windowWidth, windowHeight });
   }
 
   componentDidMount() {
@@ -34,79 +46,44 @@ class App extends Component {
         showAdmin: user.roles.includes("ADMIN")
       });
     }
+    this.updateDimensions();
+    window.addEventListener("resize", this.updateDimensions);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.updateDimensions);
   }
 
   logout() {
+    // console.log("logout");
     AuthService.logout();
   }
 
   render() {
     const { currentUser, showAdmin } = this.state;
+    let links = {
+      jamb: <Link to={"/"} className="nav-link">Jamb</Link>,
+      admin: <Link to={"/admin"} className="nav-link">Administracija</Link>,
+      profile: <Link to={"/profile"} className="nav-link">{currentUser && currentUser.username}</Link>,
+      login: <Link to={"/login"} className="nav-link">Prijava</Link>,
+      register: <Link to={"/register"} className="nav-link">Registracija</Link>,
+      logout: <a href="/login" className="nav-link" onClick={() => this.logout}>Odjava</a>
+    }
     return (
       <Router>
-        <div>
-          <title>Jamb</title>
-          <nav className="navbar navbar-expand navbar-dark bg-dark" style={{ height: '5vh' }}>
-
-            <div className="navbar-nav mr-auto">
-              <Link to={"/"} className="nav-link">
-                Jamb
-        </Link>
-              {showAdmin && (
-                <li className="nav-item">
-                  <Link to={"/admin"} className="nav-link">
-                    Administracija
-        </Link>
-                </li>
-              )}
-
-            </div>
-
-            {currentUser ? (
-              <div className="navbar-nav ml-auto">
-                <li className="nav-item">
-                </li>
-                <li className="nav-item">
-                  <Link to={"/profile"} className="nav-link">
-                    {currentUser.username}
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <a href="/login" className="nav-link" onClick={this.logout}>
-                    Odjava
-                 </a>
-                </li>
-              </div>
-            ) : (
-                <div className="navbar-nav ml-auto">
-                  <li className="nav-item">
-                    <Link to={"/login"} className="nav-link">
-                      Prijava
-            </Link>
-                  </li>
-
-                  <li className="nav-item">
-                    <Link to={"/register"} className="nav-link">
-                      Registracija
-            </Link>
-                  </li>
-                </div>
-              )}
-          </nav>
-          <div>
-            <Switch>
-              <Route exact path="/" component={Game} />
-              <Route exact path="/login" component={Login} />
-              <Route exact path="/register" component={Register} />
-              <Route exact path="/admin" component={Admin} />
-              <Route exact path="/users" component={UserList} />
-              <Route exact path="/users/:userId" component={User} />
-              <Route exact path="/profile" component={Profile} />
-              <Route exact path="/scores" component={ScoreList} />
-              <Route exact path="/scores/:scoreId" component={Score} />
-            </Switch>
-          </div>
-        </div>
+        <title>Jamb</title>
+        {this.state.windowWidth > 512 ? <Bar links={links}/> : <Burger links={links} />}
+        <Switch>
+          <Route exact path="/" component={Game} />
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/register" component={Register} />
+          <Route exact path="/admin" component={Admin} />
+          <Route exact path="/users" component={UserList} />
+          <Route exact path="/users/:userId" component={User} />
+          <Route exact path="/profile" component={Profile} />
+          <Route exact path="/scores" component={ScoreList} />
+          <Route exact path="/scores/:scoreId" component={Score} />
+        </Switch>
       </Router>
     );
   }
