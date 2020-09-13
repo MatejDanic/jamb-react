@@ -23,11 +23,12 @@
     padding: 0px;
     padding-top: 0.5%;
     padding-bottom: 0.5%;
+    height: 100vh;
   }
 
   .form {
     grid-template-columns: repeat(6, 16.6vw);
-    grid-template-rows: repeat(18, 4.6vh);
+    grid-template-rows: repeat(18, 4.9vh);
     padding: 0px;
   }
 

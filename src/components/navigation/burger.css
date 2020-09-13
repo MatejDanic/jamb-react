@@ -1,0 +1,32 @@
+.menu {
+    background-color: lightgray;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 70vw;
+    height: 100vh;
+    opacity: 0.9;
+    border: 1px solid black;
+}
+
+.mask {
+    background-color: lightskyblue;
+    left: 0;
+    width: 30vw;
+    opacity: 0.4;
+}
+
+.link > .nav-link {
+    text-transform: uppercase;
+    border: 1px solid black;
+    color: black !important;
+    border-radius: 10px;
+    background: pink;
+    margin: 2vw;
+    font-weight: bold;
+    font-size: 3vh;
+}
+
+.down {
+    vertical-align: bottom;
+}

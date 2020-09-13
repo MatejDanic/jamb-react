@@ -11,6 +11,7 @@ import RollDiceButton from "../button/roll-dice-button.component";
 import ScoreboardButton from "../button/scoreboard-button.component";
 import RulesButton from "../button/rules-button.component";
 import RestartButton from "../button/restart-button.component";
+import BurgerButton from "../button/burger-button.component.js";
 import "./game.css";
 
 export default class Game extends Component {
@@ -108,7 +109,7 @@ export default class Game extends Component {
                 FormService.initializeForm().then(
                     response => {
                         var form = response.data;
-                        console.log(form);
+                        // console.log(form);
                         this.initializeForm(form);
                     },
                     error => {
@@ -126,35 +127,37 @@ export default class Game extends Component {
     }
 
     initializeForm(form) {
-        this.setState(state => {
-            state.boxesLeft = 52;
-            for (var column = 0; column < 4; column++) {
-                for (var box = 0; box < 13; box++) {
-                    state.boxes[column * 13 + box].value = form.columns[column].boxes[box].value;
-                    state.boxes[column * 13 + box].filled = form.columns[column].boxes[box].filled;
-                    if (form.columns[column].boxes[box].filled) state.boxesLeft--;
-                    state.boxes[column * 13 + box].available = form.columns[column].boxes[box].available;
+        if (this._isMounted) {
+            this.setState(state => {
+                state.boxesLeft = 52;
+                for (var column = 0; column < 4; column++) {
+                    for (var box = 0; box < 13; box++) {
+                        state.boxes[column * 13 + box].value = form.columns[column].boxes[box].value;
+                        state.boxes[column * 13 + box].filled = form.columns[column].boxes[box].filled;
+                        if (form.columns[column].boxes[box].filled) state.boxesLeft--;
+                        state.boxes[column * 13 + box].available = form.columns[column].boxes[box].available;
+                    }
                 }
-            }
-            for (var i = 0; i < form.dice.length; i++) {
-                state.dice[i].value = form.dice[i].value;
-            }
-        });
-        var announcementRequired
-        this.setState({}, () => {
-            announcementRequired = this.isAnnouncementRequired();
-        })
-        this.setState({
-            formId: form.id,
-            announcement: form.announcement != null ? 39 + form.announcement : null,
-            rollsLeft: 3 - form.rollCount,
-            diceDisabled: form.rollCount === 0 || form.rollCount === 3,
-            boxesDisabled: form.rollCount === 0,
-            announcementRequired: announcementRequired,
-            rollDisabled: form.rollCount === 3 || (announcementRequired && form.announcement == null)
-        }, () => {
-            this.updateSums();
-        });
+                for (var i = 0; i < form.dice.length; i++) {
+                    state.dice[i].value = form.dice[i].value;
+                }
+            });
+            var announcementRequired
+            this.setState({}, () => {
+                announcementRequired = this.isAnnouncementRequired();
+            })
+            this.setState({
+                formId: form.id,
+                announcement: form.announcement != null ? 39 + form.announcement : null,
+                rollsLeft: 3 - form.rollCount,
+                diceDisabled: form.rollCount === 0 || form.rollCount === 3,
+                boxesDisabled: form.rollCount === 0,
+                announcementRequired: announcementRequired,
+                rollDisabled: form.rollCount === 3 || (announcementRequired && form.announcement == null)
+            }, () => {
+                this.updateSums();
+            });
+        }
     }
 
     rollDice() {
@@ -359,7 +362,7 @@ export default class Game extends Component {
     render() {
         let sums = this.state.sums;
         let boxes = this.state.boxes;
-        let gameInfo = [this.state.announcement, this.state.boxesDisabled, this.state.rollsLeft]
+        let gameInfo = [this.state.announcement, this.state.boxesDisabled, this.state.rollsLeft];
         return (
             <div className="game">
                 {/* <DiceRack  rollDisabled={this.state.rollDisabled} rollsLeft={this.state.rollsLeft} diceDisabled={this.state.diceDisabled} dice={this.state.dice} 
@@ -367,9 +370,9 @@ export default class Game extends Component {
                 <DiceRack rollDisabled={this.state.rollDisabled} rollsLeft={this.state.rollsLeft} diceDisabled={this.state.diceDisabled} dice={this.state.dice}
                     onToggleDice={this.toggleDice} />
                 <div className="form">
-                    <a href="https://github.com/MatejDanic">
+                    {this.props.showBurgerButton ? <BurgerButton onToggleBurgerMenu={this.props.onToggleBurgerMenu} /> : <a href="https://github.com/MatejDanic">
                         <Label labelClass={"label info"} value="matej" />
-                    </a>
+                    </a>}
                     <Label labelClass={"label label-image"} imgUrl={"../images/field/downwards.bmp"} />
                     <Label labelClass={"label label-image"} imgUrl={"../images/field/upwards.bmp"} />
                     <Label labelClass={"label label-image"} imgUrl={"../images/field/any_direction.bmp"} />

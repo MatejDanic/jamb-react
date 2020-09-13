@@ -7,8 +7,10 @@
 }
 
 .form-button {
+  width: 100%;
+  height: 100%;
   border-radius: 5px;
-  background-color: lightpink;
+  background-color: pink;
   border: 1px solid black;
   text-align: center;
   vertical-align: middle;
@@ -50,12 +52,4 @@
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
-}
-
-
-@media screen and (max-width : 512px) {
-  .show-button {
-    width: auto;
-    height: auto;
-  }
 }
