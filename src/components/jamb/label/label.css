@@ -17,18 +17,15 @@
   background-repeat: no-repeat;
 }
 
-.label-sum {
-  background-color: lightskyblue;
+.sum {
   font-size: 10px;
 }
 
-.label-sum-number {
-  background-color: lightskyblue;
+.number {
   font-size: 25px;
 }
 
-.label-sum-number-final {
-  background-color: lightskyblue;
+.final {
   font-size: 25px;
   grid-column-start: 5;
   grid-column-end: 7;
@@ -42,7 +39,6 @@
 }
 
 .info {
-  background-color: lightpink;
   font-size: 16px;
 }
 

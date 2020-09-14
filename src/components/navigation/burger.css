@@ -5,28 +5,37 @@
     right: 0;
     width: 70vw;
     height: 100vh;
-    opacity: 0.9;
+    opacity: 0.98;
     border: 1px solid black;
 }
 
 .mask {
-    background-color: lightskyblue;
+    background-color: dimgray;
     left: 0;
     width: 30vw;
-    opacity: 0.4;
+    opacity: 0.6;
 }
 
 .link > .nav-link {
+    opacity: 1;
+    background-color: lightpink;
     text-transform: uppercase;
     border: 1px solid black;
     color: black !important;
     border-radius: 10px;
-    background: pink;
-    margin: 2vw;
+    margin: 4vw;
     font-weight: bold;
     font-size: 3vh;
 }
 
-.down {
-    vertical-align: bottom;
+.top {
+    position: fixed;
+    top: 0;
+    margin-top: 5vh;
+}
+
+.bottom {
+    position: fixed;
+    bottom: 0;
+    margin-bottom: 5vh;
 }

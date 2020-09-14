@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import ScoreService from "../../../services/score.service";
-import "./button.css"
+import "./button.css";
+import "../../../constants/colors.css";
 
 export default class ScoreboardButton extends Component {
 
   render() {
     return (
-      <button className="form-button scoreboard" onClick={() => this.handleClick()}>Lj e s t v i c a</button>
+      <button className="form-button bg-light-pink scoreboard" onClick={() => this.handleClick()}>Lj e s t v i c a</button>
     )
   }
 

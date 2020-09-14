@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import "./button.css"
+import "./button.css";
+import "../../../constants/colors.css";
 
 export default class RulesButton extends Component {
 
   render() {
     return (
-      <button className="form-button rules" onClick={() => this.handleClick()}>Pravila</button>
+      <button className="form-button bg-light-pink rules" onClick={() => this.handleClick()}>Pravila</button>
     )
   }
 

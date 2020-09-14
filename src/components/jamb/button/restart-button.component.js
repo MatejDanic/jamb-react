@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import FormService from "../../../services/form.service";
-import "./button.css"
+import "./button.css";
+import "../../../constants/colors.css";
 
 export default class RestartButton extends Component {
 
   render() {
     return (
-      <button className="form-button restart" style={{ backgroundImage: 'url(/images/restart.png)' }} onClick={() => { if (window.confirm('Jeste li sigurni da želite početi ispočetka?')) this.handleClick() }}></button>
+      <button className="form-button bg-light-pink restart" style={{ backgroundImage: 'url(/images/restart.png)' }} onClick={() => { if (window.confirm('Jeste li sigurni da želite početi ispočetka?')) this.handleClick() }}></button>
     )
   }
 

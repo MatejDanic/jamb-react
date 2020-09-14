@@ -84,7 +84,7 @@ class App extends Component {
     return (
       <Router>
         <title>Jamb</title>
-        {this.state.windowWidth > 512 ? <Bar links={links} /> : (showBurgerMenu && <Burger links={links} onToggleBurgerMenu={() => this.toggleBurgerMenu()}/>)}
+        {!showBurgerButton ? <Bar links={links} /> : (showBurgerMenu && <Burger links={links} onToggleBurgerMenu={() => this.toggleBurgerMenu()}/>)}
         <Switch>
           <Route exact path="/" component={() => <Game showBurgerButton={showBurgerButton} onToggleBurgerMenu={() => this.toggleBurgerMenu()}/>} />
           <Route exact path="/login" component={Login} />

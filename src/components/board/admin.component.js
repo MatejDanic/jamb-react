@@ -28,10 +28,10 @@ export default class Admin extends Component {
         <div className="container-button">
           <div className="admin">
             <div>
-              <button className="btn btn-primary button-admin" onClick={() => { this.props.history.push("/users") }}>Korisnici</button>
+              <button className="btn btn-primary button-admin bg-light-sky-blue" onClick={() => { this.props.history.push("/users") }}>Korisnici</button>
             </div>
             <div>
-              <button className="btn btn-primary button-admin" onClick={() => { this.props.history.push("/scores") }}>Rezultati</button>
+              <button className="btn btn-primary button-admin bg-light-sky-blue" onClick={() => { this.props.history.push("/scores") }}>Rezultati</button>
             </div>
           </div>
         </div>

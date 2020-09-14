@@ -370,9 +370,8 @@ export default class Game extends Component {
                 <DiceRack rollDisabled={this.state.rollDisabled} rollsLeft={this.state.rollsLeft} diceDisabled={this.state.diceDisabled} dice={this.state.dice}
                     onToggleDice={this.toggleDice} />
                 <div className="form">
-                    {this.props.showBurgerButton ? <BurgerButton onToggleBurgerMenu={this.props.onToggleBurgerMenu} /> : <a href="https://github.com/MatejDanic">
-                        <Label labelClass={"label info"} value="matej" />
-                    </a>}
+                    {this.props.showBurgerButton ? <BurgerButton onToggleBurgerMenu={this.props.onToggleBurgerMenu} /> :
+                        <a className="form-button bg-light-pink" href="https://github.com/MatejDanic">matej</a>}
                     <Label labelClass={"label label-image"} imgUrl={"../images/field/downwards.bmp"} />
                     <Label labelClass={"label label-image"} imgUrl={"../images/field/upwards.bmp"} />
                     <Label labelClass={"label label-image"} imgUrl={"../images/field/any_direction.bmp"} />
@@ -416,12 +415,12 @@ export default class Game extends Component {
                     <Box gameInfo={gameInfo} variables={boxes[31]} onBoxClick={this.boxClick} />
                     <Box gameInfo={gameInfo} variables={boxes[44]} onBoxClick={this.boxClick} />
                     {/* <div /> */}
-                    <Label labelClass={"label label-sum"} value={"zbroj (1-6) + 30 ako >= 60"} />
-                    <Label labelClass={"label label-sum-number"} number={sums[0]} id="DOWNWARDS-numberSum" />
-                    <Label labelClass={"label label-sum-number"} number={sums[1]} id="UPWARDS-numberSum" />
-                    <Label labelClass={"label label-sum-number"} number={sums[2]} id="ANY_DIRECTION-numberSum" />
-                    <Label labelClass={"label label-sum-number"} number={sums[3]} id="ANNOUNCEMENT-numberSum" />
-                    <Label labelClass={"label label-sum-number"} number={sums[4]} id="numberSum" />
+                    <Label labelClass={"label sum bg-light-sky-blue"} value={"zbroj (1-6) + 30 ako >= 60"} />
+                    <Label labelClass={"label number bg-light-sky-blue"} number={sums[0]} id="DOWNWARDS-numberSum" />
+                    <Label labelClass={"label number bg-light-sky-blue"} number={sums[1]} id="UPWARDS-numberSum" />
+                    <Label labelClass={"label number bg-light-sky-blue"} number={sums[2]} id="ANY_DIRECTION-numberSum" />
+                    <Label labelClass={"label number bg-light-sky-blue"} number={sums[3]} id="ANNOUNCEMENT-numberSum" />
+                    <Label labelClass={"label number bg-light-sky-blue"} number={sums[4]} id="numberSum" />
                     <Label labelClass={"label"} value={"MAX"} />
                     <Box gameInfo={gameInfo} variables={boxes[6]} onBoxClick={this.boxClick} />
                     <Box gameInfo={gameInfo} variables={boxes[19]} onBoxClick={this.boxClick} />
@@ -436,12 +435,12 @@ export default class Game extends Component {
                     <Box gameInfo={gameInfo} variables={boxes[33]} onBoxClick={this.boxClick} />
                     <Box gameInfo={gameInfo} variables={boxes[46]} onBoxClick={this.boxClick} />
                     {/* <div /> */}
-                    <Label labelClass={"label label-sum"} value={"(max-min) x jedinice"} />
-                    <Label labelClass={"label label-sum-number"} number={sums[5]} id="DOWNWARDS-diffSum" />
-                    <Label labelClass={"label label-sum-number"} number={sums[6]} id="UPWARDS-diffSum" />
-                    <Label labelClass={"label label-sum-number"} number={sums[7]} id="ANY_DIRECTION-diffSum" />
-                    <Label labelClass={"label label-sum-number"} number={sums[8]} id="ANNOUNCEMENT-diffSum" />
-                    <Label labelClass={"label label-sum-number"} number={sums[9]} id="diffSum" />
+                    <Label labelClass={"label sum bg-light-sky-blue"} value={"(max-min) x jedinice"} />
+                    <Label labelClass={"label number bg-light-sky-blue"} number={sums[5]} id="DOWNWARDS-diffSum" />
+                    <Label labelClass={"label number bg-light-sky-blue"} number={sums[6]} id="UPWARDS-diffSum" />
+                    <Label labelClass={"label number bg-light-sky-blue"} number={sums[7]} id="ANY_DIRECTION-diffSum" />
+                    <Label labelClass={"label number bg-light-sky-blue"} number={sums[8]} id="ANNOUNCEMENT-diffSum" />
+                    <Label labelClass={"label number bg-light-sky-blue"} number={sums[9]} id="diffSum" />
                     <Label labelClass={"label"} value={"TRIS"} />
                     <Box gameInfo={gameInfo} variables={boxes[8]} onBoxClick={this.boxClick} />
                     <Box gameInfo={gameInfo} variables={boxes[21]} onBoxClick={this.boxClick} />
@@ -475,19 +474,19 @@ export default class Game extends Component {
                     <Box gameInfo={gameInfo} variables={boxes[38]} onBoxClick={this.boxClick} />
                     <Box gameInfo={gameInfo} variables={boxes[51]} onBoxClick={this.boxClick} />
                     {/* <div /> */}
-                    <Label labelClass={"label label-sum"} value={"zbroj (tris‑jamb)"} /> {/* unicode hyphen! */}
-                    <Label labelClass={"label label-sum-number"} number={sums[10]} id="DOWNWARDS-labelSum" />
-                    <Label labelClass={"label label-sum-number"} number={sums[11]} id="UPWARDS-labelSum" />
-                    <Label labelClass={"label label-sum-number"} number={sums[12]} id="ANY_DIRECTION-labelSum" />
-                    <Label labelClass={"label label-sum-number"} number={sums[13]} id="ANNOUNCEMENT-labelSum" />
-                    <Label labelClass={"label label-sum-number"} number={sums[14]} id="labelSum" />
+                    <Label labelClass={"label sum bg-light-sky-blue"} value={"zbroj (tris‑jamb)"} /> {/* unicode hyphen! */}
+                    <Label labelClass={"label number bg-light-sky-blue"} number={sums[10]} id="DOWNWARDS-labelSum" />
+                    <Label labelClass={"label number bg-light-sky-blue"} number={sums[11]} id="UPWARDS-labelSum" />
+                    <Label labelClass={"label number bg-light-sky-blue"} number={sums[12]} id="ANY_DIRECTION-labelSum" />
+                    <Label labelClass={"label number bg-light-sky-blue"} number={sums[13]} id="ANNOUNCEMENT-labelSum" />
+                    <Label labelClass={"label number bg-light-sky-blue"} number={sums[14]} id="labelSum" />
                     {/* <button className="show-button rules" onClick={() => this.showRules()}>Pravila</button> */}
                     <RulesButton />
                     <Label labelClass={"label leader"} value={"1. " + this.state.currentWeekLeader} />
                     {/* <RollDiceButton rollsLeft={this.state.rollsLeft} disabled={this.state.rollDisabled} onRollDice={this.rollDice} /> */}
                     {/* <button className="show-button rules" onClick={showRules}>Pravila</button>
                     <button className="show-button scoreboard" onClick={showScoreboard}>Ljestvica</button> */}
-                    <Label labelClass={"label label-sum-number-final"} number={sums[15]} id="labelSum" />
+                    <Label labelClass={"label final bg-light-sky-blue"} number={sums[15]} id="labelSum" />
                 </div>
             </div>
         )
