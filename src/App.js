@@ -14,8 +14,8 @@ import UserList from "./components/board/user-list.component";
 import User from "./components/board/user.component";
 import ScoreList from "./components/board/score-list.component";
 import Score from "./components/board/score.component";
-import Bar from "./components/navigation/bar.component";
-import Burger from "./components/navigation/burger.component";
+import TopBar from "./components/navigation/top-bar.component";
+import Menu from "./components/navigation/menu.component";
 
 class App extends Component {
   constructor(props) {
@@ -25,8 +25,9 @@ class App extends Component {
       windowWidth: 0,
       windowHeight: 0,
       currentUser: undefined,
-      showBurgerButton: false,
-      showBurgerMenu: false
+      smallWindow: false,
+      gameMounted: true,
+      showMenu: false
     };
     this.logout = this.logout.bind(this);
     this.updateDimensions = this.updateDimensions.bind(this);
@@ -35,10 +36,10 @@ class App extends Component {
   updateDimensions() {
     let windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
     let windowHeight = typeof window !== "undefined" ? window.innerHeight : 0;
-    if ((windowWidth > 512 && this.state.showBurgerButton === true) || (windowWidth <= 512 && this.state.showBurgerButton === false)) {
+    if ((windowWidth > 512 && this.state.smallWindow === true) || (windowWidth <= 512 && this.state.smallWindow === false)) {
       this.setState({ windowWidth, windowHeight }, () => {
-        let showBurgerButton = windowWidth <= 512 && this.state.showBurgerButton === false;        
-        this.setState({ showBurgerButton });
+        let smallWindow = windowWidth <= 512 && this.state.smallWindow === false;        
+        this.setState({ smallWindow });
       });
     }
   }
@@ -59,14 +60,24 @@ class App extends Component {
   }
 
   logout() {
-    // console.log("logout");
     AuthService.logout();
   }
 
-  toggleBurgerMenu() {
-    this.setState({ showBurgerMenu: !this.state.showBurgerMenu }, () => {
-      // console.log(this.state.showBurgerMenu);
+  toggleMenu() {
+    this.setState({ showMenu: !this.state.showMenu }, () => {
+      // console.log(this.state.showMenu);
     })
+  }
+
+  // toggleMounted(gameMounted) {
+  //   console.log(gameMounted);
+  //   this.setState({ gameMounted: gameMounted }, () => {
+  //     console.log(this.state.gameMounted);
+  //   })
+  // } 
+  
+  toggleMounted() {
+    console.log("App.js");
   }
 
   render() {
@@ -77,16 +88,18 @@ class App extends Component {
       profile: <Link to={"/profile"} className="nav-link">{currentUser && currentUser.username}</Link>,
       login: <Link to={"/login"} className="nav-link">Prijava</Link>,
       register: <Link to={"/register"} className="nav-link">Registracija</Link>,
-      logout: <a href="/login" className="nav-link" onClick={() => this.logout}>Odjava</a>
+      logout: <a href="/login" className="nav-link" onClick={() => this.logout}>Odjava</a>,
+      users: <Link to={"/users"} className="nav-link">Korisnici</Link>,
+      scores: <Link to={"/scores"} className="nav-link">Rezultati</Link>
     }
-    let showBurgerButton = this.state.showBurgerButton;
-    let showBurgerMenu = this.state.showBurgerMenu;
+    let smallWindow = this.state.smallWindow;
+    let showMenu = this.state.showMenu;
     return (
       <Router>
         <title>Jamb</title>
-        {!showBurgerButton ? <Bar links={links} /> : (showBurgerMenu && <Burger links={links} onToggleBurgerMenu={() => this.toggleBurgerMenu()}/>)}
+        {smallWindow ? (showMenu && <Menu links={links} gameMounted={this.state.gameMounted} onToggleMenu={() => this.toggleMenu()} />) : <TopBar links={links} />}
         <Switch>
-          <Route exact path="/" component={() => <Game showBurgerButton={showBurgerButton} onToggleBurgerMenu={() => this.toggleBurgerMenu()}/>} />
+          <Route exact path="/" component={() => <Game smallWindow={smallWindow} onToggleMenu={() => this.toggleMenu()} onToggleMounted={() => this.toggleMounted}/>} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/admin" component={Admin} />

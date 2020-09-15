@@ -11,7 +11,7 @@ import RollDiceButton from "../button/roll-dice-button.component";
 import ScoreboardButton from "../button/scoreboard-button.component";
 import RulesButton from "../button/rules-button.component";
 import RestartButton from "../button/restart-button.component";
-import BurgerButton from "../button/burger-button.component.js";
+import MenuButton from "../button/menu-button.component.js";
 import "./game.css";
 
 export default class Game extends Component {
@@ -104,6 +104,7 @@ export default class Game extends Component {
 
     componentDidMount() {
         this._isMounted = true;
+        this.toggleMounted();
         this.setState({ currentUser: AuthService.getCurrentUser() }, () => {
             if (this.state.currentUser) {
                 FormService.initializeForm().then(
@@ -122,8 +123,14 @@ export default class Game extends Component {
 
     }
 
+    toggleMounted() {
+        console.log("toggleMounted:", this._isMounted);
+        this.props.onToggleMounted();
+    }
+
     componentWillUnmount() {
         this._isMounted = false;
+        this.toggleMounted()
     }
 
     initializeForm(form) {
@@ -370,7 +377,7 @@ export default class Game extends Component {
                 <DiceRack rollDisabled={this.state.rollDisabled} rollsLeft={this.state.rollsLeft} diceDisabled={this.state.diceDisabled} dice={this.state.dice}
                     onToggleDice={this.toggleDice} />
                 <div className="form">
-                    {this.props.showBurgerButton ? <BurgerButton onToggleBurgerMenu={this.props.onToggleBurgerMenu} /> :
+                    {this.props.smallWindow ? <MenuButton onToggleMenu={this.props.onToggleMenu} /> :
                         <a className="form-button bg-light-pink" href="https://github.com/MatejDanic">matej</a>}
                     <Label labelClass={"label label-image"} imgUrl={"../images/field/downwards.bmp"} />
                     <Label labelClass={"label label-image"} imgUrl={"../images/field/upwards.bmp"} />
@@ -426,7 +433,7 @@ export default class Game extends Component {
                     <Box gameInfo={gameInfo} variables={boxes[19]} onBoxClick={this.boxClick} />
                     <Box gameInfo={gameInfo} variables={boxes[32]} onBoxClick={this.boxClick} />
                     <Box gameInfo={gameInfo} variables={boxes[45]} onBoxClick={this.boxClick} />
-                    {/* <button className={"show-button restart"} style={{ backgroundImage: 'url(../images/reset.png)' }} onClick={() => { if (window.confirm('Jeste li sigurni da želite početi ispočetka?')) this.restart() }} /> */}
+                    {/* <button className={"show-button restart"} style={{ backgroundImage: 'url(../images/misc/restart.png)' }} onClick={() => { if (window.confirm('Jeste li sigurni da želite početi ispočetka?')) this.restart() }} /> */}
                     <RestartButton currentUser={this.state.currentUser} formId={this.state.formId} />
                     {/* <div /> */}
                     <Label labelClass={"label"} value={"MIN"} />

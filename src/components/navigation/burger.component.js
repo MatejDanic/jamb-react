@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import AuthService from "../../services/auth.service";
-import "./burger.css";
+import "./navigation.css";
 import "../../constants/colors.css";
 
 export default class Burger extends Component {
@@ -30,11 +30,13 @@ export default class Burger extends Component {
                 <div className="menu">
                     <div className="top">
                         <div className="link">{this.props.links.jamb}</div>
-                        <div className="link">{this.props.links.admin}</div>
+                        <div className="link">{this.props.links.profile}</div>
+                        <div className="link">{this.props.links.users}</div>
+                        <div className="link">{this.props.links.scores}</div>
                     </div>
                     <div className="spacing" />
                     <div className="bottom">
-                        <div className="link">{this.props.links.profile}</div>
+                        <div className="link">{this.props.links.admin}</div>
                         <div className="link">{this.props.links.logout}</div>
                     </div>
                 </div>

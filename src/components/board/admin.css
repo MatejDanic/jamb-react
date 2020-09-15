@@ -6,7 +6,6 @@
 
 .container-custom {
     background-color: aliceblue;
-    min-height: 95vh;
     width: 100%;
     padding: 5%;
 }
@@ -100,6 +99,10 @@ td {
 }
 
 @media screen and (max-width: 512px) {
+
+    .admin {
+        padding: 0px;
+    }
     .container-button {
         width: auto;
         padding-top: 5px;
