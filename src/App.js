@@ -17,6 +17,9 @@ import User from "./components/board/user.component";
 import ScoreList from "./components/board/score-list.component";
 import Score from "./components/board/score.component";
 import Menu from "./components/navigation/menu.component";
+import Bar from "./components/navigation/bar.component";
+
+import "./constants/colors.css";
 
 class App extends Component {
 
@@ -33,7 +36,6 @@ class App extends Component {
     };
     this.logout = this.logout.bind(this);
     this.updateDimensions = this.updateDimensions.bind(this);
-    this.toggleMenu = this.toggleMenu.bind(this);
   }
 
   updateDimensions() {
@@ -64,10 +66,7 @@ class App extends Component {
 
   logout() {
     AuthService.logout();
-  }
-
-  toggleMenu() {
-    this.setState({ showMenu: !this.state.showMenu });
+    history.push("/login");
   }
 
   handleGameMounted(mounted) {
@@ -79,29 +78,25 @@ class App extends Component {
   }
 
   render() {
-    const links = this.state.links;
-
     let smallWindow = this.state.smallWindow;
     let showMenu = this.state.showMenu;
     let gameMounted = this.state.gameMounted;
     return (
-      <div className="app">
         <Router history={history}>
           <title>Jamb</title>
-          <Menu showMenu={showMenu} history={history} gameMounted={gameMounted} links={links} onToggleMenu={this.toggleMenu} />
+          {smallWindow ? <Menu showMenu={showMenu} history={history} gameMounted={gameMounted} /> : <Bar onLogout={this.logout} history={history} />}
           <Switch>
             <Route exact path="/" component={() => <Game onGameMounted={(mounted) => this.handleGameMounted(mounted)} smallWindow={smallWindow} onToggleMenu={this.toggleMenu} />} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/admin" component={Admin} />
             <Route exact path="/users" component={UserList} />
-            <Route exact path="/users/:userId" component={User} />
-            <Route exact path="/profile" component={Profile} />
+            <Route exact path="/users/:userId" component={User}/>
+            <Route exact path="/profile" component={() => <Profile smallWindow={smallWindow} onLogout={this.logout} />}  />
             <Route exact path="/scores" component={ScoreList} />
             <Route exact path="/scores/:scoreId" component={Score} />
           </Switch>
         </Router>
-      </div>
     );
   }
 }

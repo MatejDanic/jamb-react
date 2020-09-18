@@ -13,9 +13,26 @@
   grid-template-rows: repeat(18, 32px);
 }
 
+.form-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .dice-rack {
   padding-top: 5px;
 }
+
+.menu-button-replacement {
+  background-size: 8vw;
+  background-position: center center;
+  background-repeat: no-repeat;
+  border: 1px solid black;
+  border-radius: 5px;
+  width: 16.6vw;
+  height: 4.9vh;
+}
+
 
 @media screen and (max-width: 512px) {
   .game {

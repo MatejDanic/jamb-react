@@ -31,9 +31,17 @@
     border-radius: 10px;
 }
 
-strong {
+.menu-element-text {
     position: absolute;
     bottom: 0;
     right: 0;
     left: 0;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
 }
+
+.bar-element-text {
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+}
+

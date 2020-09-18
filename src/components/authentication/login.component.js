@@ -82,17 +82,7 @@ export default class Login extends Component {
     return (
       <div className="col-md-12">
         <div className="card card-container">
-          {/* <img
-            src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-            alt="profile-img"
-            className="profile-img-card"
-          /> */}
-          <Form
-            onSubmit={this.handleLogin}
-            ref={c => {
-              this.form = c;
-            }}
-          >
+          <Form onSubmit={this.handleLogin} ref={c => {this.form = c; }}>
             <div className="form-group">
               <label htmlFor="username">Korisničko ime</label>
               <Input

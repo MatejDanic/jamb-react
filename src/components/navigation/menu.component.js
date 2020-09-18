@@ -10,8 +10,10 @@ export default class Menu extends Component {
         super(props);
         this.state = {
             currentUser: undefined,
-            showAdmin: false
+            showAdmin: false,
+            showMenu: false
         };
+        this.toggleMenu = this.toggleMenu.bind(this);
     }
 
     componentDidMount() {
@@ -24,20 +26,29 @@ export default class Menu extends Component {
         }
     }
 
+    toggleMenu() {
+        this.setState({ showMenu: !this.state.showMenu });
+    }
+
     render() {
         let currentUser = this.state.currentUser;
+        let showMenu = this.state.showMenu;
+        let history = this.props.history;
+        let gameMounted = this.props.gameMounted;
         return (
             <div>
-                {this.props.showMenu ? <div>
+                {showMenu ? <div>
                     <div className="menu">
-                        <div className="menu-element" onClick={() => this.props.history.push("/")} style={{ backgroundImage: 'url(/images/misc/logo.png)' }}><strong>Jamb</strong></div>
-                        <div className="menu-element" onClick={() => this.props.history.push("/users")}><strong>Korisnici</strong></div>
-                        <div className="menu-element" onClick={() => this.props.history.push("/scores")}><strong>Rezultati</strong></div>
-                        <div className="menu-element" onClick={() => this.props.history.push("/profile")}><strong>{currentUser && currentUser.username}</strong></div>
+                        <div className="menu-element" onClick={() => history.push("/")} style={{ backgroundImage: 'url(/images/misc/logo.png)' }}><div className="menu-element-text">Jamb</div></div>
+                        <div className="menu-element" onClick={() => history.push("/users")} style={{ backgroundImage: 'url(/images/misc/users.png)' }}><div className="menu-element-text">Korisnici</div></div>
+                        <div className="menu-element" onClick={() => history.push("/scores")} style={{ backgroundImage: 'url(/images/misc/scores.png)' }}><div className="menu-element-text">Rezultati</div></div>
+                        {currentUser ? 
+                        (<div className="menu-element" onClick={() => history.push("/profile")} style={{ backgroundImage: 'url(/images/misc/profile.png)' }}><div className="menu-element-text">{currentUser && currentUser.username}</div></div>) : 
+                        (<div className="menu-element" onClick={() => history.push("/login")} style={{ backgroundImage: 'url(/images/misc/login.png)' }}><div className="menu-element-text">Prijava</div></div>)}
                     </div>
-                    {this.props.gameMounted && <div className="menu mask" onClick={this.props.onToggleMenu} />}
-                    </div>
-                 : !this.props.gameMounted && <MenuButton onToggleMenu={this.props.onToggleMenu} gameMounted={this.props.gameMounted} />}
+                    {gameMounted && <div className="menu mask" onClick={this.toggleMenu} />}
+                </div>
+                    : <MenuButton onToggleMenu={this.toggleMenu} gameMounted={gameMounted} />}
 
             </div>
         );

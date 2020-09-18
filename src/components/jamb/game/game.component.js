@@ -11,7 +11,6 @@ import RollDiceButton from "../button/roll-dice-button.component";
 import ScoreboardButton from "../button/scoreboard-button.component";
 import RulesButton from "../button/rules-button.component";
 import RestartButton from "../button/restart-button.component";
-import MenuButton from "../button/menu-button.component.js";
 import "./game.css";
 
 export default class Game extends Component {
@@ -374,8 +373,8 @@ export default class Game extends Component {
                 <DiceRack rollDisabled={this.state.rollDisabled} rollsLeft={this.state.rollsLeft} diceDisabled={this.state.diceDisabled} dice={this.state.dice}
                     onToggleDice={this.toggleDice} />
                 <div className="form">
-                    {this.props.smallWindow ? <MenuButton gameMounted={this._isMounted} onToggleMenu={this.props.onToggleMenu} /> :
-                        <a className="form-button bg-light-pink" href="https://github.com/MatejDanic">matej</a>}
+                    {this.props.smallWindow ? <div className="bg-light-pink menu-button-replacement" style={{ backgroundImage: 'url(../images/misc/cog.png)' }} /> : 
+                    <a className="bg-light-pink form-button" href="https://github.com/MatejDanic">Matej</a>}
                     <Label labelClass={"label label-image"} imgUrl={"../images/field/downwards.bmp"} />
                     <Label labelClass={"label label-image"} imgUrl={"../images/field/upwards.bmp"} />
                     <Label labelClass={"label label-image"} imgUrl={"../images/field/any_direction.bmp"} />

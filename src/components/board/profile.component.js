@@ -12,9 +12,13 @@ export default class Profile extends Component {
   }
 
   render() {
+    let currentUser = this.state.currentUser;
+    let smallWindow = this.props.smallWindow;
     return (
       <div>
-        <User userId={this.state.currentUser.id} history={this.props.history}></User>
+        <div className="profile">{smallWindow && currentUser &&
+          <div href="/login" className="btn btn-danger delete-button" style={{ backgroundImage: 'url(/images/misc/logout.png)' }} onClick={this.props.onLogout} />}</div>
+        {currentUser && <User userId={this.state.currentUser.id} history={this.props.history} />}
       </div>
     );
   }

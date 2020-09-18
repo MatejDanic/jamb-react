@@ -59,8 +59,6 @@ export default class User extends Component {
         <div className="container-custom-inner">
           <h3>
             <strong>{user.username}</strong>
-            {currentUser && currentUser.username === user.username &&
-              <a href="/login" className="btn btn-danger right" onClick={() => this.logout}>Odjava</a>}
           </h3>
           <p>
             <strong>ID: </strong>

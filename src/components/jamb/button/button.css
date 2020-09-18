@@ -9,7 +9,7 @@
 .form-button {
   width: 100%;
   height: 100%;
-  border-radius: 5px;;
+  border-radius: 5px;
   border: 1px solid black;
   text-align: center;
   vertical-align: middle;
@@ -18,16 +18,24 @@
 }
 
 .menu-button {
+  position: fixed;
   background-size: 8vw;
   background-position: center center;
   background-repeat: no-repeat;
+  border: 1px solid black;
+  border-radius: 5px;
+  width: 16.6vw;
+  height: 4.9vh;
 }
 
-.free-button {
-  position: fixed;
+.menu-button-form {
+  top: calc(19vw + 1vh);
+  left: 1px;
+}
+
+.menu-button-free {
   bottom: 0;
-  width: 16vw;
-  height: 16vw;
+  left: 0;
 }
 
 .rules {
