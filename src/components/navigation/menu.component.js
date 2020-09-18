@@ -9,21 +9,10 @@ export default class Menu extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentUser: undefined,
             showAdmin: false,
             showMenu: false
         };
         this.toggleMenu = this.toggleMenu.bind(this);
-    }
-
-    componentDidMount() {
-        const user = AuthService.getCurrentUser();
-        if (user) {
-            this.setState({
-                currentUser: user,
-                showAdmin: user.roles.includes("ADMIN")
-            });
-        }
     }
 
     toggleMenu() {
@@ -31,7 +20,7 @@ export default class Menu extends Component {
     }
 
     render() {
-        let currentUser = this.state.currentUser;
+        let currentUser = this.props.currentUser;
         let showMenu = this.state.showMenu;
         let history = this.props.history;
         let gameMounted = this.props.gameMounted;

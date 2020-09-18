@@ -67,6 +67,7 @@ class App extends Component {
   logout() {
     AuthService.logout();
     history.push("/login");
+    window.location.reload();
   }
 
   handleGameMounted(mounted) {
@@ -78,13 +79,15 @@ class App extends Component {
   }
 
   render() {
+    let currentUser = this.state.currentUser
     let smallWindow = this.state.smallWindow;
     let showMenu = this.state.showMenu;
     let gameMounted = this.state.gameMounted;
     return (
         <Router history={history}>
           <title>Jamb</title>
-          {smallWindow ? <Menu showMenu={showMenu} history={history} gameMounted={gameMounted} /> : <Bar onLogout={this.logout} history={history} />}
+          {smallWindow ? <Menu currentUser={currentUser} showMenu={showMenu} history={history} gameMounted={gameMounted} /> :
+           <Bar currentUser={currentUser} onLogout={this.logout} history={history} />}
           <Switch>
             <Route exact path="/" component={() => <Game onGameMounted={(mounted) => this.handleGameMounted(mounted)} smallWindow={smallWindow} onToggleMenu={this.toggleMenu} />} />
             <Route exact path="/login" component={Login} />
