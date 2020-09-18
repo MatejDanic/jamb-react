@@ -29,29 +29,32 @@
   background-repeat: no-repeat;
   border: 1px solid black;
   border-radius: 5px;
-  width: 16.6vw;
-  height: 4.9vh;
+  grid-column-start: 1;
+  grid-column-end: 3;
+  width: 100%
 }
 
 
 @media screen and (max-width: 512px) {
   .game {
-    padding: 0px;
-    padding-top: 0.5%;
-    padding-bottom: 0.5%;
     height: 100vh;
+    padding: 0px;
   }
 
   .form {
+    position: fixed;
+    z-index: -1;
+    bottom: 0;
+    left: 0;
     grid-template-columns: repeat(6, 16.6vw);
-    grid-template-rows: repeat(18, 4.9vh);
+    grid-template-rows: repeat(18, 5vh);
     padding: 0px;
   }
 
   .dice-rack {
-    padding: 0px;
-
-    padding-top: 1%;
-    padding-bottom: 1%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 0.5vh;
   }
 }
