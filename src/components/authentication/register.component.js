@@ -168,6 +168,8 @@ export default class Register extends Component {
               }}
             />
           </Form>
+          Imate račun?
+          <button className="btn btn-primary" onClick={() => this.props.history.push("/login")}>Prijava</button>
         </div>
       </div>
     );

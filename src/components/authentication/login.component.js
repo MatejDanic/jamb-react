@@ -133,7 +133,10 @@ export default class Login extends Component {
               }}
             />
           </Form>
+          Nemate račun?
+          <button className="btn btn-primary" onClick={() => this.props.history.push("/register")}>Registracija</button>
         </div>
+        
       </div>
     );
   }
