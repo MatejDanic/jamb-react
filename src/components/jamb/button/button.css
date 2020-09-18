@@ -1,0 +1,75 @@
+.gray-border {
+  border: 1px solid gray;
+}
+
+.red-border {
+  border: 2px solid red;
+}
+
+.form-button {
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  border: 1px solid black;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.menu-button {
+  position: fixed;
+  background-size: 8vw;
+  background-position: center center;
+  background-repeat: no-repeat;
+  border: 1px solid black;
+  border-radius: 5px;
+  width: 16.6vw;
+  height: 4.9vh;
+}
+
+.menu-button-form {
+  top: calc(19vw + 1vh);
+  left: 1px;
+}
+
+.menu-button-free {
+  bottom: 0;
+  left: 0;
+}
+
+.rules {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  /* grid-column-start: 6;
+  grid-row-start: 12;
+  grid-row-end: 17;
+  padding-left: 25px;
+  padding-right: 25px;
+  line-height: 1.1em;
+  font-size: 18px; */
+}
+
+.scoreboard {
+  /* grid-column-start: 3;
+  grid-column-end: 5; */
+  grid-column-start: 6;
+  grid-row-start: 12;
+  grid-row-end: 17;
+  /* grid-column-start: 6;
+  grid-row-start: 1;
+  grid-row-end: 8; */
+  padding-left: 25px;
+  padding-right: 25px;
+  line-height: 1.0em;
+  font-size: 18px;
+}
+
+.restart {
+  grid-column-start: 6;
+  grid-row-start: 9;
+  grid-row-end: 11;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}

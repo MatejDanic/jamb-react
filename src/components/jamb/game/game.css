@@ -1,0 +1,57 @@
+.game {
+  text-align: center;
+  height: 95vh;
+  padding-top: 2px;
+  padding-bottom: 5px;
+}
+
+.form {
+  padding-top: 5px;
+  display: inline-grid;
+  text-align: center;
+  grid-template-columns: repeat(6, 64px);
+  grid-template-rows: repeat(18, 32px);
+}
+
+.form-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dice-rack {
+  padding-top: 5px;
+}
+
+.menu-button-replacement {
+  background-size: 8vw;
+  background-position: center center;
+  background-repeat: no-repeat;
+  border: 1px solid black;
+  border-radius: 5px;
+  width: 16.6vw;
+  height: 4.9vh;
+}
+
+
+@media screen and (max-width: 512px) {
+  .game {
+    padding: 0px;
+    padding-top: 0.5%;
+    padding-bottom: 0.5%;
+    height: 100vh;
+  }
+
+  .form {
+    grid-template-columns: repeat(6, 16.6vw);
+    grid-template-rows: repeat(18, 4.9vh);
+    padding: 0px;
+  }
+
+  .dice-rack {
+    padding: 0px;
+
+    padding-top: 1%;
+    padding-bottom: 1%;
+  }
+}
