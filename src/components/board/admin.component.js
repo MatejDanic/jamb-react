@@ -17,9 +17,7 @@ export default class Admin extends Component {
 
   componentDidMount() {
     const currentUser = AuthService.getCurrentUser();
-    this.setState({ currentUser: currentUser }, () => {
-      console.log("User:", this.state.currentUser.username);
-    });
+    this.setState({ currentUser: currentUser });
   }
 
   render() {

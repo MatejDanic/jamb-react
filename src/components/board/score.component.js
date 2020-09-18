@@ -42,15 +42,13 @@ export default class Score extends Component {
     let currentUser = this.state.currentUser;
     return (
       <div className="container-custom">
-        {currentUser && currentUser.roles.includes("ADMIN") && <div className="container-button">
-          <button className="btn btn-danger button-admin" onClick={() => { if (window.confirm('Jeste li sigurni da izbrisati ovaj rezultat?')) this.deleteScore() }}>Izbriši</button>
-        </div>}
         <div className="container-custom-inner">
           <h3>
-            <strong>{score.value}</strong>
+            <strong>Vrijednost: </strong>
+            {score.value}
           </h3>
-
           <p>
+            <strong>Korisnik: </strong>
             {score.user && <button className="btn btn-primary" onClick={() => { this.props.history.push("/users/" + score.user.id) }}>{score.user.username}</button>}
           </p>
           <p>
@@ -61,6 +59,9 @@ export default class Score extends Component {
             <strong>Datum: </strong>
             {score.date && dateFormatLong.format(DateUtil.getDateFromLocalDateTime(score.date))}
           </p>
+          {currentUser && currentUser.roles.includes("ADMIN") && <div className="container-button">
+            <button className="btn btn-danger button-admin" onClick={() => { if (window.confirm('Jeste li sigurni da izbrisati ovaj rezultat?')) this.deleteScore() }}>Izbriši</button>
+          </div>}
         </div>
       </div>
     );

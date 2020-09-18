@@ -13,7 +13,9 @@ export default class Profile extends Component {
 
   render() {
     return (
-      <User userId={this.state.currentUser.id} history={this.props.history}></User>
+      <div>
+        <User userId={this.state.currentUser.id} history={this.props.history}></User>
+      </div>
     );
   }
 }

@@ -23,6 +23,13 @@
   background-repeat: no-repeat;
 }
 
+.free-button {
+  position: fixed;
+  bottom: 0;
+  width: 16vw;
+  height: 16vw;
+}
+
 .rules {
   grid-column-start: 1;
   grid-column-end: 3;

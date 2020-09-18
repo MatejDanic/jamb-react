@@ -102,9 +102,13 @@ export default class Game extends Component {
         this.getCurrentWeekLeader = this.getCurrentWeekLeader.bind(this);
     }
 
+    setMounted(mounted) {
+        this._isMounted = mounted;
+        this.props.onGameMounted(mounted);
+    }
+
     componentDidMount() {
-        this._isMounted = true;
-        this.toggleMounted();
+        this.setMounted(true);
         this.setState({ currentUser: AuthService.getCurrentUser() }, () => {
             if (this.state.currentUser) {
                 FormService.initializeForm().then(
@@ -120,17 +124,10 @@ export default class Game extends Component {
             }
         });
         this.getCurrentWeekLeader();
-
-    }
-
-    toggleMounted() {
-        console.log("toggleMounted:", this._isMounted);
-        this.props.onToggleMounted();
     }
 
     componentWillUnmount() {
-        this._isMounted = false;
-        this.toggleMounted()
+        this.setMounted(false);
     }
 
     initializeForm(form) {
@@ -377,7 +374,7 @@ export default class Game extends Component {
                 <DiceRack rollDisabled={this.state.rollDisabled} rollsLeft={this.state.rollsLeft} diceDisabled={this.state.diceDisabled} dice={this.state.dice}
                     onToggleDice={this.toggleDice} />
                 <div className="form">
-                    {this.props.smallWindow ? <MenuButton onToggleMenu={this.props.onToggleMenu} /> :
+                    {this.props.smallWindow ? <MenuButton gameMounted={this._isMounted} onToggleMenu={this.props.onToggleMenu} /> :
                         <a className="form-button bg-light-pink" href="https://github.com/MatejDanic">matej</a>}
                     <Label labelClass={"label label-image"} imgUrl={"../images/field/downwards.bmp"} />
                     <Label labelClass={"label label-image"} imgUrl={"../images/field/upwards.bmp"} />
