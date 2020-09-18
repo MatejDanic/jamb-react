@@ -37,17 +37,15 @@
 
 @media screen and (max-width: 512px) {
   .game {
+    position: fixed;
+    bottom: 0;
     height: 100vh;
     padding: 0px;
   }
 
   .form {
-    position: fixed;
-    z-index: -1;
-    bottom: 0;
-    left: 0;
     grid-template-columns: repeat(6, 16.6vw);
-    grid-template-rows: repeat(18, 5vh);
+    grid-template-rows: repeat(18, 4.9vh);
     padding: 0px;
   }
 
@@ -55,6 +53,5 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-top: 0.5vh;
   }
 }
