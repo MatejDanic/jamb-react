@@ -65,7 +65,7 @@
 
 @media screen and (max-width : 512px) {
   .dice-button {
-    width: 18.9vw;
-    height: 18.9vw;
+    width: 18vw;
+    height: 18vw;
   }
 }

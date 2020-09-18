@@ -37,21 +37,22 @@
 
 @media screen and (max-width: 512px) {
   .game {
-    position: fixed;
-    bottom: 0;
     height: 100vh;
+    width: 100vw;
     padding: 0px;
   }
 
   .form {
+    position: fixed;
+    left: 0;
+    bottom: 0;
     grid-template-columns: repeat(6, 16.6vw);
-    grid-template-rows: repeat(18, 4.9vh);
+    grid-template-rows: repeat(18, 5vh);
     padding: 0px;
   }
 
   .dice-rack {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    top: 0;
+    padding: 0px;
   }
 }
