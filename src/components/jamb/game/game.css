@@ -37,22 +37,29 @@
 
 @media screen and (max-width: 512px) {
   .game {
-    height: 100vh;
-    width: 100vw;
+    position: relative;
     padding: 0px;
+    margin: 0px;
+    height: 100vh;
   }
 
   .form {
-    position: fixed;
-    left: 0;
+    position: absolute;
     bottom: 0;
-    grid-template-columns: repeat(6, 16.6vw);
-    grid-template-rows: repeat(18, 5vh);
+    left: 0;
+    grid-template-columns: repeat(6, 16.667vw);
+    grid-template-rows: repeat(18, 4.9vh);
     padding: 0px;
+    margin: 0px;
   }
 
   .dice-rack {
+    position: absolute;
     top: 0;
+    left:0;
+    right: 0;
     padding: 0px;
+    padding-top: 1vw;
+    margin: 0px;
   }
 }

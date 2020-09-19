@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import AuthService from "../../services/auth.service";
 import User from "./user.component";
+import history from "../../history";
 
 export default class Profile extends Component {
   constructor(props) {
@@ -18,7 +19,7 @@ export default class Profile extends Component {
       <div>
         <div className="profile">{smallWindow && currentUser &&
           <div href="/login" className="btn btn-danger delete-button" style={{ backgroundImage: 'url(/images/misc/logout.png)' }} onClick={this.props.onLogout} />}</div>
-        {currentUser && <User userId={this.state.currentUser.id} history={this.props.history} />}
+        {currentUser && <User userId={this.state.currentUser.id} history={history} />}
       </div>
     );
   }

@@ -36,6 +36,7 @@ class App extends Component {
     };
     this.logout = this.logout.bind(this);
     this.updateDimensions = this.updateDimensions.bind(this);
+    this.toggleMenu = this.toggleMenu.bind(this);
   }
 
   updateDimensions() {
@@ -78,6 +79,10 @@ class App extends Component {
     }
   }
 
+  toggleMenu() {
+    this.setState({ showMenu: !this.state.showMenu });
+}
+
   render() {
     let currentUser = this.state.currentUser
     let smallWindow = this.state.smallWindow;
@@ -86,10 +91,10 @@ class App extends Component {
     return (
         <Router history={history}>
           <title>Jamb</title>
-          {smallWindow ? <Menu currentUser={currentUser} showMenu={showMenu} history={history} gameMounted={gameMounted} /> :
+          {smallWindow ? <Menu currentUser={currentUser} showMenu={showMenu} history={history} gameMounted={gameMounted} onToggleMenu={this.toggleMenu}/> :
            <Bar currentUser={currentUser} onLogout={this.logout} history={history} />}
           <Switch>
-            <Route exact path="/" component={() => <Game onGameMounted={(mounted) => this.handleGameMounted(mounted)} smallWindow={smallWindow} onToggleMenu={this.toggleMenu} />} />
+            <Route exact path="/" render={() => <Game onGameMounted={(mounted) => this.handleGameMounted(mounted)} smallWindow={smallWindow} onToggleMenu={this.toggleMenu} />} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/admin" component={Admin} />
