@@ -62,7 +62,7 @@ export default class UserList extends Component {
               <th onClick={() => sortTable(2)}>Najveći rezultat</th>
             </tr>
           </thead>
-          <tbody id="tbody-users">
+          <tbody id="tbody">
             {users.map(user =>
               <tr key={user.id} id={user.id} onClick={() => { this.props.history.push("/users/" + user.id) }}>
                 <td>{user.username}</td>
@@ -79,14 +79,14 @@ export default class UserList extends Component {
 let index;      // cell index
 let toggleBool; // sorting asc, desc 
 function sortTable(idx, order) {
-  if (order != null) toggleBool = order;
   index = idx;
+  if (order != null) toggleBool = order;
   if (toggleBool) {
     toggleBool = false;
   } else {
     toggleBool = true;
   }
-  let tbody = document.getElementById("tbody-users");
+  let tbody = document.getElementById("tbody");
   let datas = [];
   let tbodyLength = tbody.rows.length;
   for (let i = 0; i < tbodyLength; i++) {
@@ -103,6 +103,7 @@ function sortTable(idx, order) {
   }
   pagination();
 }
+
 function compareCells(a, b) {
   let aVal = a.cells[index].innerText;
   let bVal = b.cells[index].innerText;
@@ -115,14 +116,15 @@ function compareCells(a, b) {
     aVal = bVal;
     bVal = temp;
   }
-  
+
   if (index === columnIndexDate) {
     return DateUtil.compareDateStrings(aVal, bVal);
   }
 
   if (aVal.match(/^[0-9]+$/) && bVal.match(/^[0-9]+$/)) {
     return parseFloat(aVal) - parseFloat(bVal);
-  } else {
+  }
+  else {
     aVal = aVal.toLowerCase();
     bVal = bVal.toLowerCase();
     if (aVal < bVal) {
@@ -137,42 +139,75 @@ function compareCells(a, b) {
 
 function pagination() {
   let rowsPerPage = 10;
-  let tbody = document.getElementById("tbody-users");
-  if (tbody.rows.length < rowsPerPage) return;
+  let tbody = document.getElementById("tbody");
+  let tbodyLength = tbody.rows.length;
+  if (tbodyLength < rowsPerPage) return;
   let numOfPages = 0;
-  if (tbody.rows.length % rowsPerPage === 0) {
-    numOfPages = tbody.rows.length / rowsPerPage;
+  if (tbodyLength % rowsPerPage === 0) {
+    numOfPages = tbodyLength / rowsPerPage;
   }
-  if (tbody.rows.length % rowsPerPage >= 1) {
-    numOfPages = tbody.rows.length / rowsPerPage;
+  if (tbodyLength % rowsPerPage >= 1) {
+    numOfPages = tbodyLength / rowsPerPage;
     numOfPages++;
     numOfPages = Math.floor(numOfPages++);
   }
-  if (document.getElementsByClassName("button-pagination").length === 0) {
-    for (let i = 1; i <= numOfPages; i++) {
-      let node = document.createElement("BUTTON");
-      node.className = "button-pagination";
-      node.innerText = i;
-      node.onclick = function (e) {
-        e.preventDefault();
-        for (let i = 0; i < tbody.rows.length; i++) {
-          document.getElementById(tbody.rows[i].id).style.display = "none";
-        }
-        let page = e.target.innerText;
-        let temp = page - 1;
-        let start = temp * rowsPerPage;
-        for (let j = 0; j < rowsPerPage; j++) {
-          let k = start + j;
-          if (k < tbody.rows.length) document.getElementById(tbody.rows[k].id).style.display = "";
-        }
-        window.scrollTo(0, document.body.scrollHeight);
-      }
+  let pageList = [];
+  pageList.push(1);
+
+  let currentPage = parseInt(document.getElementById("current-page").label, 10);
+
+  for (let i = -1; i <= 1; i++) {
+    if (currentPage + i > 1 && currentPage + i < numOfPages)
+      pageList.push(currentPage + i);
+  }
+
+  pageList.push(numOfPages)
+  document.getElementById("pagination").innerHTML = "";
+  pageList.forEach((p) => {
+    // -------------------- BUTTON PREVIOUS --------------------
+    if (p === currentPage - 1 && currentPage > 3) {
+      let node = createPaginationButton(tbody, "<<", currentPage-2, rowsPerPage);
       document.getElementById('pagination').appendChild(node);
     }
-  }
-  for (let i = 0; i < tbody.rows.length; i++) {
-    if (i + 1 > rowsPerPage) {
-      document.getElementById(tbody.rows[i].id).style.display = "none";
+
+    // -------------------- BUTTON WITH PAGE NUMBER --------------------
+    let node = createPaginationButton(tbody, p, p, rowsPerPage);
+    if (p === currentPage) node.style.border = "2px solid red";
+    document.getElementById('pagination').appendChild(node);
+
+
+    // -------------------- BUTTON NEXT --------------------
+    if (p === currentPage + 1 && currentPage < numOfPages - 2) {
+      let node = createPaginationButton(tbody, ">>", currentPage+2, rowsPerPage);
+      document.getElementById('pagination').appendChild(node);
+    }
+  });
+  for (let i = 0; i < tbodyLength; i++) {
+    if (i < (currentPage - 1) * rowsPerPage || i >= currentPage * rowsPerPage) {
+      if (document.getElementById(tbody.rows[i].id)) document.getElementById(tbody.rows[i].id).style.display = "none";
     }
   }
+}
+
+function createPaginationButton(tbody, text, page, rowsPerPage) {
+  let tbodyLength = tbody.rows.length;
+  let node = document.createElement("BUTTON");
+  node.className = "button-pagination";
+  node.innerText = text;
+  node.onclick = function (e) {
+    e.preventDefault();
+    for (let i = 0; i < tbodyLength; i++) {
+      if (document.getElementById(tbody.rows[i].id)) document.getElementById(tbody.rows[i].id).style.display = "none";
+    }
+    let temp = page - 1;
+    let start = temp * rowsPerPage;
+    document.getElementById("current-page").label = page;
+    for (let j = 0; j < rowsPerPage; j++) {
+      let k = start + j;
+      if (k < tbodyLength && document.getElementById(tbody.rows[k].id)) document.getElementById(tbody.rows[k].id).style.display = "";
+    }
+    window.scrollTo(0, document.body.scrollHeight);
+    pagination();
+  }
+  return node;
 }
