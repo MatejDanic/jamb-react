@@ -10,7 +10,7 @@ export default class Score extends Component {
 
     this.state = {
       currentUser: undefined,
-      content: "",
+      score: "",
     };
   }
 
@@ -18,7 +18,7 @@ export default class Score extends Component {
     this.setState({ currentUser: AuthService.getCurrentUser() });
     ScoreService.getScore(this.props.match.params.scoreId).then(
       response => {
-        this.setState({ content: response.data });
+        this.setState({ score: response.data });
       },
       error => {
         console.log(error);
@@ -38,7 +38,7 @@ export default class Score extends Component {
   }
 
   render() {
-    let score = this.state.content;
+    let score = this.state.score;
     let currentUser = this.state.currentUser;
     return (
       <div className="container-custom">

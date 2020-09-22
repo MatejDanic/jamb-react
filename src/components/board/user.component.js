@@ -12,7 +12,7 @@ export default class User extends Component {
 
     this.state = {
       currentUser: undefined,
-      content: "",
+      user: "",
       userIsAdmin: false
     };
   }
@@ -22,12 +22,11 @@ export default class User extends Component {
       let userId = this.props.userId ? this.props.userId : this.props.match.params.userId;
       UserService.getUser(userId).then(
         response => {
-          this.setState(state => {
-            for (let key in response.data.roles) {
-              if (response.data.roles[key].label === "ADMIN") state.userIsAdmin = true;
-            }
-          })
-          this.setState({ content: response.data });
+          let userIsAdmin = false;
+          for (let key in response.data.roles) {
+            if (response.data.roles[key].label === "ADMIN") userIsAdmin = true;
+          }
+          this.setState({ user: response.data, userIsAdmin: userIsAdmin });
         },
         error => {
           console.log(error);
@@ -48,7 +47,7 @@ export default class User extends Component {
   }
 
   render() {
-    let user = this.state.content;
+    let user = this.state.user;
     let currentUser = this.state.currentUser;
     let scores = user.scores;
     let totalScore = ScoreUtil.getTotalScore(scores);
@@ -64,11 +63,6 @@ export default class User extends Component {
             <strong>ID: </strong>
             {user.id}
           </p>
-          {/* <strong>Uloge:</strong>
-          <ul>
-            {user.roles &&
-              user.roles.map((role, id) => <li key={id}>{role.label}</li>)}
-          </ul> */}
           <p><strong>Posljednja igra: </strong>{scores && scores.length === 0 ? "-----" : dateFormatLong.format(DateUtil.getLastScoreDate(scores))}</p>
           <p><strong>Najveći rezultat: </strong>{highScore}</p>
           <p>
@@ -86,7 +80,7 @@ export default class User extends Component {
         </div>
         {user.scores && (user.scores.length > 0 &&
           <div>
-            <ScoreList scores={user.scores} history={this.props.history}></ScoreList>
+            <ScoreList username={user.username} scores={user.scores} history={this.props.history}></ScoreList>
           </div>)}
       </div>
     );

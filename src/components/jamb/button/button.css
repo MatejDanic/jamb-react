@@ -33,19 +33,12 @@
   padding: 0px;
 }
 
-.scoreboard {
-  /* grid-column-start: 3;
-  grid-column-end: 5; */
-  grid-column-start: 6;
-  grid-row-start: 12;
-  grid-row-end: 17;
-  /* grid-column-start: 6;
-  grid-row-start: 1;
-  grid-row-end: 8; */
-  padding-left: 25px;
-  padding-right: 25px;
-  line-height: 1.0em;
-  font-size: 18px;
+.rules {
+  border-radius: 5px;
+  border: 1px solid black;
+  background-size: 50% 90%;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
 .restart {

@@ -8,11 +8,11 @@ import Label from "../label/label.component";
 import DiceRack from "../dice/dice-rack.component";
 import ScoreUtil from "../../../utils/score.util";
 import RollDiceButton from "../button/roll-dice-button.component";
-import ScoreboardButton from "../button/scoreboard-button.component";
 import RulesButton from "../button/rules-button.component";
 import RestartButton from "../button/restart-button.component";
-import "./game.css";
 import MenuButton from "../button/menu-button.component";
+import Scoreboard from "../scoreboard/scoreboard.component";
+import "./game.css";
 
 export default class Game extends Component {
     _isMounted = false;
@@ -448,7 +448,7 @@ export default class Game extends Component {
                     <Box gameInfo={gameInfo} variables={boxes[34]} onBoxClick={this.boxClick} />
                     <Box gameInfo={gameInfo} variables={boxes[47]} onBoxClick={this.boxClick} />
                     {/* <button className="show-button scoreboard" onClick={() => this.showScoreboard()}>Lj e s t v i c a</button> */}
-                    <ScoreboardButton />
+                    <Scoreboard />
                     {/* <button className="show-button rules" onClick={() => this.showRules()}>P r a v i l a</button> */}
                     {/* <div /> */}
                     <Label labelClass={"label"} value={"SKALA"} />
