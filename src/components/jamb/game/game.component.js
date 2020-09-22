@@ -12,6 +12,7 @@ import ScoreboardButton from "../button/scoreboard-button.component";
 import RulesButton from "../button/rules-button.component";
 import RestartButton from "../button/restart-button.component";
 import "./game.css";
+import MenuButton from "../button/menu-button.component";
 
 export default class Game extends Component {
     _isMounted = false;
@@ -368,13 +369,10 @@ export default class Game extends Component {
         let gameInfo = [this.state.announcement, this.state.boxesDisabled, this.state.rollsLeft];
         return (
             <div className="game">
-                {/* <DiceRack  rollDisabled={this.state.rollDisabled} rollsLeft={this.state.rollsLeft} diceDisabled={this.state.diceDisabled} dice={this.state.dice} 
-                onToggleDice={this.toggleDice} /> */}
                 <DiceRack rollDisabled={this.state.rollDisabled} rollsLeft={this.state.rollsLeft} diceDisabled={this.state.diceDisabled} dice={this.state.dice}
                     onToggleDice={this.toggleDice} />
                 <div className="form">
-                    {this.props.smallWindow ? <div className="bg-light-pink menu-button-replacement" style={{ backgroundImage: 'url(../images/misc/cog.png)' }} /> : 
-                    <a className="bg-light-pink form-button" href="https://github.com/MatejDanic">Matej</a>}
+                    <RulesButton />
                     <Label labelClass={"label label-image"} imgUrl={"../images/field/downwards.bmp"} />
                     <Label labelClass={"label label-image"} imgUrl={"../images/field/upwards.bmp"} />
                     <Label labelClass={"label label-image"} imgUrl={"../images/field/any_direction.bmp"} />
@@ -484,7 +482,9 @@ export default class Game extends Component {
                     <Label labelClass={"label number bg-light-sky-blue"} number={sums[13]} id="ANNOUNCEMENT-labelSum" />
                     <Label labelClass={"label number bg-light-sky-blue"} number={sums[14]} id="labelSum" />
                     {/* <button className="show-button rules" onClick={() => this.showRules()}>Pravila</button> */}
-                    <RulesButton />
+                    {this.props.smallWindow ? <MenuButton onToggleMenu={this.props.onToggleMenu}/> : 
+                    <a className="menu-button-replacement bg-light-pink form-button" 
+                        href="https://github.com/MatejDanic">Matej</a>}
                     <Label labelClass={"label leader"} value={"1. " + this.state.currentWeekLeader} />
                     {/* <RollDiceButton rollsLeft={this.state.rollsLeft} disabled={this.state.rollDisabled} onRollDice={this.rollDice} /> */}
                     {/* <button className="show-button rules" onClick={showRules}>Pravila</button>

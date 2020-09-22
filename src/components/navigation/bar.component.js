@@ -1,28 +1,16 @@
 import React, { Component } from "react";
-import AuthService from "../../services/auth.service";
 
 export default class Bar extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            currentUser: undefined,
             showAdmin: false
         };
     }
 
-    componentDidMount() {
-        const user = AuthService.getCurrentUser();
-        if (user) {
-            this.setState({
-                currentUser: user,
-                showAdmin: user.roles.includes("ADMIN")
-            });
-        }
-    }
-
     render() {
-        const { currentUser } = this.state;
+        let currentUser = this.props.currentUser;
         let history = this.props.history;
         return (
             <div>
