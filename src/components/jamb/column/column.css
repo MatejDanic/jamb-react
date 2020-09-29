@@ -1,0 +1,5 @@
+.column {
+    display: inline-grid;
+    text-align: center;
+    grid-template-rows: repeat(18, 32px);
+}

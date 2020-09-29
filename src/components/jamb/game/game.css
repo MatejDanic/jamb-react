@@ -10,7 +10,17 @@
   display: inline-grid;
   text-align: center;
   grid-template-columns: repeat(6, 64px);
-  grid-template-rows: repeat(18, 32px);
+  grid-template-rows: 544px, 32px;
+  /* grid-template-rows: repeat(18, 32px); */
+}
+
+.label-column {
+  padding: 0px;
+  margin: 0px;
+  height: 544px;
+  display: inline-grid;
+  text-align: center;
+  grid-template-rows: repeat(17, 32px);
 }
 
 .form-button {
@@ -22,18 +32,6 @@
 .dice-rack {
   padding-top: 5px;
 }
-
-.menu-button-replacement {
-  background-size: 8vw;
-  background-position: center center;
-  background-repeat: no-repeat;
-  border: 1px solid black;
-  border-radius: 5px;
-  grid-column-start: 1;
-  grid-column-end: 3;
-  width: 100%
-}
-
 
 @media screen and (max-width: 512px) {
   .game {
@@ -48,7 +46,8 @@
     bottom: 0;
     left: 0;
     grid-template-columns: repeat(6, 16.667vw);
-    grid-template-rows: repeat(18, 4.9vh);
+    grid-template-rows: 83.3vh, 4.9vh;
+    /* grid-template-rows: repeat(18, 4.9vh); */
     padding: 0px;
     margin: 0px;
   }
@@ -56,7 +55,7 @@
   .dice-rack {
     position: absolute;
     top: 0;
-    left:0;
+    left: 0;
     right: 0;
     padding: 0px;
     padding-top: 1vw;

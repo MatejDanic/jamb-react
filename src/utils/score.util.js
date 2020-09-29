@@ -1,5 +1,5 @@
 class ScoreUtil {
-    checkScore(box, dice) {
+    checkScore(dice, box) {
         var score = 0;
         var i, j, num, result;
         if (box <= 5) {
