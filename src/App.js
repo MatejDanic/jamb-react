@@ -10,7 +10,7 @@ import AuthService from "./services/auth.service";
 import Login from "./components/authentication/login.component";
 import Register from "./components/authentication/register.component";
 import Admin from "./components/board/admin.component";
-import Game from "./components/jamb/game/game.component";
+import Game from "./components/game/form/form.component";
 import Profile from "./components/board/profile.component";
 import UserList from "./components/board/user-list.component";
 import User from "./components/board/user.component";

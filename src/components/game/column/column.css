@@ -1,0 +1,7 @@
+.column {
+  display: inline-grid;
+  grid-row-start: 1;
+  grid-row-end: 18;
+  grid-template-rows: repeat(17, 32px);
+  grid-template-columns: 64px;
+}

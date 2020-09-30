@@ -1,0 +1,21 @@
+.scoreboard-button {
+    grid-row-start: 12;
+    grid-row-end: 17;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.scoreboard {
+    text-align: center;
+    vertical-align: middle;
+    list-style-type: none;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+
+@media screen and (max-width: 512px) {
+    .scoreboard-button {
+        height: 24.5vh;
+    }
+}

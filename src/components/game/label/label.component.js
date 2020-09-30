@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import "../../../constants/colors.css";
 import "./label.css";
 
 export default class Label extends Component {

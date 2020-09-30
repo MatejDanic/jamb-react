@@ -1,5 +1,4 @@
 .label {
-  height: 32px;
   border-radius: 5px;
   border: 1px solid black;
   line-height: normal;
@@ -8,7 +7,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: white;
 }
 
 .label-image {
@@ -27,28 +25,32 @@
 
 .final {
   font-size: 25px;
-  grid-column-start: 5;
-  grid-column-end: 7;
-  width: auto;
 }
 
 .leader {
   font-size: 20px;
-  grid-column-start: 3;
-  grid-column-end: 5;
 }
 
 .info {
   font-size: 16px;
 }
 
+.row-start-8 {
+  grid-row-start: 8;
+}
+
+.row-start-11 {
+  grid-row-start: 11;
+}
+
+.row-start-17 {
+  grid-row-start: 17;
+}
 
 @media screen and (max-width : 512px) {
   .label {
     width: auto;
     height: auto;
-    padding: 0px;
-    margin: 0px;
   }
 
   .info {
