@@ -31,7 +31,7 @@ export default class UserList extends Component {
         });
       },
       error => {
-        console.log(error);
+        // console.log(error);
       }
     );
   }

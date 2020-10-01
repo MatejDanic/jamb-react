@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import AuthService from "../../services/auth.service";
 
 import "./admin.css";
 
@@ -9,15 +8,9 @@ export default class Admin extends Component {
     super(props);
 
     this.state = {
-      currentUser: undefined,
       content: "",
       users: []
     };
-  }
-
-  componentDidMount() {
-    const currentUser = AuthService.getCurrentUser();
-    this.setState({ currentUser: currentUser });
   }
 
   render() {

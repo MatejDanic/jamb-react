@@ -1,5 +1,8 @@
 import React, { Component } from "react";
+// services
+import AuthService from "../../../services/auth.service";
 import FormService from "../../../services/form.service";
+// stylesheets
 import "./button.css";
 import "../../../constants/colors.css";
 
@@ -12,14 +15,15 @@ export default class RestartButton extends Component {
   }
 
   handleClick() {
-    if (this.props.currentUser) {
+    let currentUser = AuthService.getCurrentUser();
+    if (currentUser) {
       FormService.deleteForm(this.props.formId).then(
         () => {
           window.location.reload();
         },
         error => {
           window.location.reload();
-          console.log(error);
+          // console.log(error);
         }
       );
     } else {

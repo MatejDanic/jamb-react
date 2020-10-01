@@ -1,23 +1,23 @@
-
 import React, { Component } from "react";
 // components
-import RollDiceButton from "../button/roll-dice-button.component";
-import RestartButton from "../button/restart-button.component";
-import Scoreboard from "../scoreboard/scoreboard.component";
-import RulesButton from "../button/rules-button.component";
-import MenuButton from "../button/menu-button.component";
 import DiceRack from "../dice/dice-rack.component";
 import Column from "../column/column.component";
 import Label from "../label/label.component";
+import MenuButton from "../button/menu-button.component";
+import Scoreboard from "../scoreboard/scoreboard.component";
+import RollDiceButton from "../button/roll-dice-button.component";
+import RestartButton from "../button/restart-button.component";
+import RulesButton from "../button/rules-button.component";
 // services
-import ScoreService from "../../../services/score.service";
 import AuthService from "../../../services/auth.service";
 import FormService from "../../../services/form.service";
-// stylesheets
-import "./form.css";
+import ScoreService from "../../../services/score.service";
 // utilities
 import ScoreUtil from "../../../utils/score.util";
+// constants
 import { NUMBERSUM_BONUS, NUMBERSUM_BONUS_THRESHOLD } from "../../../constants/game-constants";
+// stylesheets
+import "./form.css";
 
 export default class Form extends Component {
     _isMounted = false;
@@ -25,24 +25,21 @@ export default class Form extends Component {
     constructor() {
         super();
         this.state = {
+            form: {},
+            filledBoxCount: 0,
             announcementRequired: false,
-            currentUser: undefined,
-            currentWeekLeader: "",
             rollDisabled: false,
             diceDisabled: true,
-            annoucement: null,
-            filledBoxCount: 0,
-            formId: null,
             sums: {},
-            form: {},
+            currentWeekLeader: "",
         }
-        this.getCurrentWeekLeader = this.getCurrentWeekLeader.bind(this);
-        this.startRollAnimation = this.startRollAnimation.bind(this);
-        this.handleToggleDice = this.handleToggleDice.bind(this);
         this.initializeForm = this.initializeForm.bind(this);
         this.handleBoxClick = this.handleBoxClick.bind(this);
-        this.handleRollDice = this.handleRollDice.bind(this);
         this.fillBox = this.fillBox.bind(this);
+        this.handleRollDice = this.handleRollDice.bind(this);
+        this.handleToggleDice = this.handleToggleDice.bind(this);
+        this.startRollAnimation = this.startRollAnimation.bind(this);
+        this.getCurrentWeekLeader = this.getCurrentWeekLeader.bind(this);
     }
 
     setMounted(mounted) {
@@ -53,26 +50,39 @@ export default class Form extends Component {
     componentDidMount() {
         this.setMounted(true);
         let currentUser = AuthService.getCurrentUser();
-        this.setState({ currentUser }, () => {
-            if (currentUser) {
-                FormService.initializeForm().then(
-                    response => {
-                        var form = response.data;
-                        this.initializeForm(form);
-                    },
-                    error => {
-                        console.log(error);
-                    }
-                );
-            } else {
-                this.initializeForm(null);
-            }
-        });
+        if (currentUser) {
+            FormService.initializeForm().then(
+                response => {
+                    var form = response.data;
+                    console.log(form);
+                    this.initializeForm(form);
+                },
+                error => {
+                    // console.log(error);
+                }
+            );
+        } else {
+            this.initializeForm(null);
+        }
         this.getCurrentWeekLeader();
     }
 
     componentWillUnmount() {
         this.setMounted(false);
+    }
+
+    initializeSums(form) {
+        let sums = {};
+        let sumLabels = ["numberSum", "diffSum", "labelSum"]
+        for (let key in sumLabels) {
+            sums[sumLabels[key]] = 0;
+            for (let i in form.columns) {
+                let column = form.columns[i];
+                sums[column.columnType.label + "-" + sumLabels[key]] = 0;
+            }
+        }
+        sums["finalSum"] = 0;
+        return sums;
     }
 
     initializeForm(form) {
@@ -82,10 +92,9 @@ export default class Form extends Component {
                 let rollDisabled = form.rollCount === 3 || (announcementRequired && form.announcement == null);
                 let diceDisabled = form.rollCount === 0 || form.rollCount === 3;
                 let filledBoxCount = this.getFilledBoxCount(form);
-                this.setState({ form, announcementRequired, rollDisabled, diceDisabled, filledBoxCount }, () => {
-                    console.log(this.state.form);
-                    this.updateSums();
-                });
+                let sums = this.initializeSums(form);
+                sums = this.updateSums(form, sums);
+                this.setState({ form, sums, announcementRequired, rollDisabled, diceDisabled, filledBoxCount });
             } else {
                 let form = {};
                 form.columns = [];
@@ -123,20 +132,9 @@ export default class Form extends Component {
                 form.announcement = null;
                 form.rollCount = 0;
                 form.id = null;
-
-                let sums = {};
-                let sumLabels = ["numberSum", "diffSum", "labelSum"]
-                for (let key in sumLabels) {
-                    sums[sumLabels[key]] = 0;
-                    for (let i in form.columns) {
-                        let column = form.columns[i];
-                        sums[column.columnType.label + "-" + sumLabels[key]] = 0;
-                    }
-                }
-                sums["finalSum"] = 0;
-                this.setState({ form, sums, filledBoxCount: this.getFilledBoxCount() }, () => {
-                    console.log(this.state.form);
-                });
+                let sums = this.initializeSums(form);
+                let filledBoxCount = 0;
+                this.setState({ form, sums, filledBoxCount });
             }
         }
     }
@@ -154,41 +152,41 @@ export default class Form extends Component {
             FormService.rollDice(form.id, diceToRoll).then(
                 response => {
                     let dice = response.data
-                    form.rollCount++;
-                    for (let key in form.dice) {
-                        if (!form.dice[key].hold) {
-                            form.dice[key].value = dice[key].value;
-                        }
-                    }
-                    let announcementRequired = this.isAnnouncementRequired(form);
-                    let rollDisabled = form.rollCount === 3 || (announcementRequired && form.announcement == null);
-                    let diceDisabled = form.rollCount === 0 || form.rollCount === 3;
-                    this.setState({ form, announcementRequired, rollDisabled, diceDisabled }, () => {
-                        this.startRollAnimation();
-                    });
+                    this.updateDice(form, dice);
+
                 },
                 error => {
-                    console.log(error);
+                    // console.log(error);
                 }
             );
         } else {
-            for (let key in form.dice) {
-                if (!form.dice[key].hold) {
-                    form.dice[key].value = Math.round(1 + Math.random() * 5);
+            let dice = form.dice;
+            for (let key in dice) {
+                if (!dice[key].hold) {
+                    dice[key].value = Math.round(1 + Math.random() * 5);
                 }
             }
-            form.rollCount++;
-            let announcementRequired = this.isAnnouncementRequired(form);
-            let rollDisabled = form.rollCount === 3 || (announcementRequired && form.annoucement == null);
-            let diceDisabled = form.rollCount === 0 || form.rollCount === 3;
-            this.setState({ form, announcementRequired, rollDisabled, diceDisabled }, () => {
-                this.startRollAnimation();
-            });
+            this.updateDice(form, dice);
         }
     }
 
+    updateDice(form, dice) {
+        form.rollCount++;
+        for (let key in form.dice) {
+            if (!form.dice[key].hold) {
+                form.dice[key].value = dice[key].value;
+            }
+        }
+        let announcementRequired = this.isAnnouncementRequired(form);
+        let rollDisabled = form.rollCount === 3 || (announcementRequired && form.announcement == null);
+        let diceDisabled = form.rollCount === 0 || form.rollCount === 3;
+        this.setState({ form, announcementRequired, rollDisabled, diceDisabled }, () => {
+            this.startRollAnimation();
+        });
+    }
+
     isAnnouncementRequired(form) {
-        let announcementRequired = form.announcement == null;
+        let announcementRequired = true;
         for (let i in form.columns) {
             let column = form.columns[i];
             if (column.columnType.label !== "ANNOUNCEMENT") {
@@ -232,12 +230,12 @@ export default class Form extends Component {
     }
 
     handleBoxClick(columnType, boxType) {
-        let announcement = this.state.announcement;
+        let announcement = this.state.form.announcement;
         let announced = false;
         if (columnType.label === "ANNOUNCEMENT") {
             if (announcement == null) {
                 announced = true;
-                this.announce(boxType);
+                this.announce(boxType.id);
             }
         }
         if (!announced) {
@@ -245,21 +243,25 @@ export default class Form extends Component {
         }
     }
 
-    announce(boxType) {
+    announce(boxTypeId) {
         let form = this.state.form;
         if (form.id != null) {
-            FormService.announce(form.id, boxType.id).then(
+            FormService.announce(form.id, boxTypeId).then(
                 response => {
-                    form.annoucement = response.data;
-                    this.setState({ form, boxesDisabled: true, rollDisabled: false });
+                    form.announcement = response.data;
+                    let boxesDisabled = true;
+                    let rollDisabled = false;
+                    this.setState({ form, boxesDisabled, rollDisabled });
                 },
                 error => {
-                    console.log(error);
+                    // console.log(error);
                 }
             );
         } else {
-            form.annoucement = boxType.label;
-            this.setState({ form, boxesDisabled: true, rollDisabled: false });
+            form.announcement = boxTypeId;
+            let boxesDisabled = true;
+            let rollDisabled = false;
+            this.setState({ form, boxesDisabled, rollDisabled });
         }
     }
 
@@ -269,42 +271,18 @@ export default class Form extends Component {
             FormService.fillBox(form.id, columnType.id, boxType.id).then(
                 response => {
                     let score = response.data;
-                    form = this.state.form;
-                    form = this.fill(form, columnType, boxType, score);
-                    this.setState({ form }, () => {
-                        this.updateSums();
-                    });
+                    this.fill(form, columnType, boxType, score);
                 },
                 error => {
-                    console.log(error);
+                    // console.log(typeof error);
+                    // console.log(error);
                 }
             );
         } else {
             let dice = this.state.form.dice;
             let score = ScoreUtil.calculateScore(dice, boxType);
-            form = this.state.form;
             this.fill(form, columnType, boxType, score);
-            this.setState({ form }, () => {
-                this.updateSums();
-            });
         }
-        form = this.state.form;
-        for (let key in form.dice) {
-            form.dice[key].hold = false;
-        }
-        form.rollCount = 0;
-        this.setState({
-            form, rollDisabled: false, diceDisabled: true,
-            filledBoxCount: this.state.filledBoxCount + 1, announcement: null
-        }, () => {
-            if (this.state.filledBoxCount === form.columns.length * form.columns[0].boxes.length) {
-                setTimeout(
-                    () => {
-                        this.endGame();
-                    }, 500
-                );
-            }
-        });
     }
 
     fill(form, columnType, boxType, score) {
@@ -326,6 +304,25 @@ export default class Form extends Component {
                 }
             }
         }
+        for (let key in form.dice) {
+            form.dice[key].hold = false;
+        }
+        form.rollCount = 0;
+        form.announcement = null;
+        let rollDisabled = false;
+        let diceDisabled = true;
+        let filledBoxCount = this.state.filledBoxCount + 1;
+        let sums = this.state.sums;
+        sums = this.updateSums(form, sums);
+        this.setState({ form, sums, rollDisabled, diceDisabled, filledBoxCount }, () => {
+            if (this.state.filledBoxCount === form.columns.length * form.columns[0].boxes.length) {
+                setTimeout(
+                    () => {
+                        this.endGame();
+                    }, 500
+                );
+            }
+        });
         return form;
     }
 
@@ -342,9 +339,7 @@ export default class Form extends Component {
         return filledBoxCount;
     }
 
-    updateSums() {
-        let form = this.state.form;
-        let sums = this.state.sums;
+    updateSums(form, sums) {
         for (let sum in sums) {
             sums[sum] = 0;
         }
@@ -381,19 +376,20 @@ export default class Form extends Component {
             sums["diffSum"] += sums[column.columnType.label + "-diffSum"];
         }
         sums["finalSum"] = sums["numberSum"] + sums["diffSum"] + sums["labelSum"];
-        this.setState({ sums });
+        return sums;
     }
 
     render() {
+        let currentUser = AuthService.getCurrentUser();
         let form = this.state.form;
+        let rollCount = form.rollCount;
+        let announcement = form.announcement;
         let diceDisabled = this.state.diceDisabled;
         let rollDisabled = this.state.rollDisabled;
-        let currentUser = this.state.currentUser;
+        let boxesDisabled = this.state.boxesDisabled;
+        let sums = this.state.sums;
+        let gameInfo = { announcement, boxesDisabled, rollCount, sums };
         let currentWeekLeader = this.state.currentWeekLeader;
-        let gameInfo = {
-            announcement: this.state.announcement, boxesDisabled: this.state.boxesDisabled,
-            rollCount: form.rollCount, sums: this.state.sums
-        };
         return (
             <div className="center">
                 {form.dice && <DiceRack rollDisabled={rollDisabled} rollCount={form.rollCount} dice={form.dice}
@@ -423,7 +419,7 @@ export default class Form extends Component {
                     <Column gameInfo={gameInfo} column={form.columns[2]} onBoxClick={this.handleBoxClick} />
                     <Column gameInfo={gameInfo} column={form.columns[3]} onBoxClick={this.handleBoxClick} />
                     <div className="game-column">
-                        <RollDiceButton rollCount={form.rollCount} disabled={rollDisabled} onRollDice={this.handleRollDice} />
+                        <RollDiceButton rollCount={form.rollCount} rollDisabled={rollDisabled} onRollDice={this.handleRollDice} />
                         <Label labelClass={"label number bg-light-sky-blue row-start-8"} number={gameInfo.sums["numberSum"]} id="numberSum" />
                         <RestartButton currentUser={currentUser} formId={form.id} />
                         <Label labelClass={"label number bg-light-sky-blue row-start-11"} number={gameInfo.sums["diffSum"]} id="diffSum" />
@@ -457,7 +453,7 @@ export default class Form extends Component {
                 if (this._isMounted) this.setState({ currentWeekLeader: response.data });
             },
             error => {
-                console.log(error);
+                // console.log(error);
             }
         );
     }

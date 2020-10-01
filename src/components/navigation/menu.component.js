@@ -1,11 +1,12 @@
 import React, { Component } from "react";
+// services
+import AuthService from "../../services/auth.service";
+// stylesheets
 import "./navigation.css";
 
-
-export default class Menu extends Component {
-
+export default class Menu extends Component {  
     render() {
-        let currentUser = this.props.currentUser;
+        let currentUser = AuthService.getCurrentUser();
         let showMenu = this.props.showMenu;
         let history = this.props.history;
         let gameMounted = this.props.gameMounted;

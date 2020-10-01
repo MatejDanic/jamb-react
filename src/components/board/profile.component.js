@@ -1,19 +1,14 @@
 import React, { Component } from "react";
-import AuthService from "../../services/auth.service";
+// history
+import history from "../../history/history";
+// components
 import User from "./user.component";
-import history from "../../history";
+// services
+import AuthService from "../../services/auth.service";
 
 export default class Profile extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      currentUser: AuthService.getCurrentUser()
-    };
-  }
-
   render() {
-    let currentUser = this.state.currentUser;
+    let currentUser = AuthService.getCurrentUser();
     let smallWindow = this.props.smallWindow;
     return (
       <div>

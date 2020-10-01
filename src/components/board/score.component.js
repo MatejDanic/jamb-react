@@ -1,27 +1,29 @@
 import React, { Component } from "react";
-import ScoreService from "../../services/score.service";
+// services
 import AuthService from "../../services/auth.service";
-import { dateFormatLong } from "../../constants/date-format";
+import ScoreService from "../../services/score.service";
+// utils
 import DateUtil from "../../utils/date.util";
+// constants
+import { dateFormatLong } from "../../constants/date-format";
 
 export default class Score extends Component {
+
   constructor(props) {
     super(props);
 
     this.state = {
-      currentUser: undefined,
       score: "",
     };
   }
 
   componentDidMount() {
-    this.setState({ currentUser: AuthService.getCurrentUser() });
     ScoreService.getScore(this.props.match.params.scoreId).then(
       response => {
         this.setState({ score: response.data });
       },
       error => {
-        console.log(error);
+        // console.log(error);
       }
     );
   }
@@ -32,14 +34,14 @@ export default class Score extends Component {
         this.props.history.push("/scores");
       },
       error => {
-        console.log(error);
+        // console.log(error);
       }
     );
   }
 
   render() {
+    let currentUser = AuthService.getCurrentUser();
     let score = this.state.score;
-    let currentUser = this.state.currentUser;
     return (
       <div className="container-custom">
         <div className="container-custom-inner">

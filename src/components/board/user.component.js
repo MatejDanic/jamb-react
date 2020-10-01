@@ -1,38 +1,41 @@
 import React, { Component } from "react";
-import UserService from "../../services/user.service";
+// components
+import ScoreList from "./score-list.component";
+// services
 import AuthService from "../../services/auth.service";
-import { dateFormatLong } from "../../constants/date-format";
+import UserService from "../../services/user.service";
+// utils
 import DateUtil from "../../utils/date.util";
 import ScoreUtil from "../../utils/score.util";
-import ScoreList from "./score-list.component";
+// constants
+import { dateFormatLong } from "../../constants/date-format";
 
 export default class User extends Component {
+  
   constructor(props) {
     super(props);
 
     this.state = {
-      currentUser: undefined,
       user: "",
       userIsAdmin: false
     };
   }
 
   componentDidMount() {
-    this.setState({ currentUser: AuthService.getCurrentUser() }, () => {
-      let userId = this.props.userId ? this.props.userId : this.props.match.params.userId;
-      UserService.getUser(userId).then(
-        response => {
-          let userIsAdmin = false;
-          for (let key in response.data.roles) {
-            if (response.data.roles[key].label === "ADMIN") userIsAdmin = true;
-          }
-          this.setState({ user: response.data, userIsAdmin: userIsAdmin });
-        },
-        error => {
-          console.log(error);
+    let userId = this.props.userId ? this.props.userId : this.props.match.params.userId;
+    UserService.getUser(userId).then(
+      response => {
+        let user = response.data;
+        let userIsAdmin = false;
+        for (let key in user.roles) {
+          if (user.roles[key].label === "ADMIN") userIsAdmin = true;
         }
-      );
-    });
+        this.setState({ user, userIsAdmin });
+      },
+      error => {
+        // console.log(error);
+      }
+    );
   }
 
   deleteUser() {
@@ -41,14 +44,14 @@ export default class User extends Component {
         this.props.history.push("/users");
       },
       error => {
-        console.log(error);
+        // console.log(error);
       }
     );
   }
 
   render() {
+    let currentUser = AuthService.getCurrentUser();
     let user = this.state.user;
-    let currentUser = this.state.currentUser;
     let scores = user.scores;
     let totalScore = ScoreUtil.getTotalScore(scores);
     let highScore = ScoreUtil.getHighScore(scores);

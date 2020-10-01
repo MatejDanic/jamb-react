@@ -5,7 +5,7 @@ export default class DiceRack extends Component {
 
     render() {
         let dice = this.props.dice;
-        let diceDisabled = this.props.diceDisabled;
+        let diceDisabled = this.props.diceDisabled || this.props.rollDisabled;
         return (
             <div>
                 <Dice diceDisabled={diceDisabled} dice={dice[0]} onToggleDice={this.props.onToggleDice} />

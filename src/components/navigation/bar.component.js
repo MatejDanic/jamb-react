@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+// services
+import AuthService from "../../services/auth.service";
 
 export default class Bar extends Component {
 
@@ -10,7 +12,7 @@ export default class Bar extends Component {
     }
 
     render() {
-        let currentUser = this.props.currentUser;
+        let currentUser = AuthService.getCurrentUser();
         let history = this.props.history;
         return (
             <div>

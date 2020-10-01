@@ -5,8 +5,7 @@ export default class Box extends Component {
 
     render() {
         let box = this.props.box;
-        let gameInfo = this.props.gameInfo;
-        let disabled = this.getDisabled(box, gameInfo);
+        let disabled = this.getDisabled();
         let btnClass = this.getBtnClass(disabled);
         let value = box.filled ? box.value : "";
         return (
@@ -14,25 +13,31 @@ export default class Box extends Component {
         )
     }
 
-    getDisabled(box, gameInfo) {
-        let disabled = gameInfo.rollCount === 0;
+    getDisabled() {
+        let gameInfo = this.props.gameInfo;
+        let box = this.props.box;
         let annCol = this.props.annCol;
-        if (!disabled) {
+        let disabled = gameInfo.rollCount === 0;
+        if (gameInfo.rollCount >= 1) {
             if (gameInfo.announcement != null) {
-                disabled = gameInfo.announcement !== box.boxType.label;
+                disabled = gameInfo.announcement !== box.boxType.id || !annCol;
             } else {
                 disabled = (gameInfo.rollCount >= 2 || gameInfo.announcementRequired) && annCol;
             }
         }
-        disabled = disabled || !box.available;
+        disabled = disabled || !box.available || box.filled;
         return disabled;
     }
 
     getBtnClass(disabled) {
         let btnClass = "";
-        let box = this.props.box;
-        btnClass = this.props.gameInfo[0] === box.filled ? "red-border" : "";
-        if (disabled) btnClass += "gray-border";
+        let gameInfo = this.props.gameInfo;
+        let box = this.props.box;     
+        let annCol = this.props.annCol;
+        if (gameInfo.announcement === box.boxType.id && annCol) {
+            btnClass = "red-border";
+        }
+        if (disabled || !box.available || box.filled) btnClass = "gray-border";
         return btnClass;
     }
 }

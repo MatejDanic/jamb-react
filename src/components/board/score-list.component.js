@@ -32,7 +32,7 @@ export default class ScoreList extends Component {
 
         },
         error => {
-          console.log(error);
+          // console.log(error);
         }
       );
     } else {

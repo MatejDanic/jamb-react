@@ -36,6 +36,7 @@ class AuthService {
 }
 
 export default new AuthService();
+
 export function authHeader() {
   const user = JSON.parse(localStorage.getItem('user'));
 
