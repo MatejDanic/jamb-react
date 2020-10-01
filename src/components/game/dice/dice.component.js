@@ -3,6 +3,7 @@ import "./dice.css";
 import "./dice-animation.css";
 
 export default class Dice extends Component {
+
     render() {
         let dice = this.props.dice;
         let diceDisabled = this.props.diceDisabled;

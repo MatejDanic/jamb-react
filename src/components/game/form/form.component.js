@@ -17,6 +17,7 @@ import FormService from "../../../services/form.service";
 import "./form.css";
 // utilities
 import ScoreUtil from "../../../utils/score.util";
+import { NUMBERSUM_BONUS, NUMBERSUM_BONUS_THRESHOLD } from "../../../constants/game-constants";
 
 export default class Form extends Component {
     _isMounted = false;
@@ -74,10 +75,6 @@ export default class Form extends Component {
         this.setMounted(false);
     }
 
-    componentDidUpdate() {
-        console.log(this.state.form);
-    }
-
     initializeForm(form) {
         if (this._isMounted) {
             if (form != null) {
@@ -86,6 +83,7 @@ export default class Form extends Component {
                 let diceDisabled = form.rollCount === 0 || form.rollCount === 3;
                 let filledBoxCount = this.getFilledBoxCount(form);
                 this.setState({ form, announcementRequired, rollDisabled, diceDisabled, filledBoxCount }, () => {
+                    console.log(this.state.form);
                     this.updateSums();
                 });
             } else {
@@ -104,9 +102,9 @@ export default class Form extends Component {
                         box.boxType.label = j === 1 ? "ONES" : j === 2 ? "TWOS" : j === 3 ? "THREES" : j === 4 ? "FOURS" : j === 5 ? "FIVES" :
                             j === 6 ? "SIXES" : j === 7 ? "MAX" : j === 8 ? "MIN" : j === 9 ? "TRIPS" : j === 10 ? "STRAIGHT" :
                                 j === 11 ? "FULL" : j === 12 ? "POKER" : "JAMB";
-                        box.available = (box.boxType.label === "ONES" && column.columnType.label === "DOWNWARDS") || 
-                                        (box.boxType.label === "JAMB" && column.columnType.label === "UPWARDS") || 
-                                        column.columnType.label === "ANY_DIRECTION" || column.columnType.label === "ANNOUNCEMENT";
+                        box.available = (box.boxType.label === "ONES" && column.columnType.label === "DOWNWARDS") ||
+                            (box.boxType.label === "JAMB" && column.columnType.label === "UPWARDS") ||
+                            column.columnType.label === "ANY_DIRECTION" || column.columnType.label === "ANNOUNCEMENT";
                         box.filled = false;
                         box.value = 0;
                         column.boxes.push(box);
@@ -125,7 +123,6 @@ export default class Form extends Component {
                 form.announcement = null;
                 form.rollCount = 0;
                 form.id = null;
-                console.log(form);
 
                 let sums = {};
                 let sumLabels = ["numberSum", "diffSum", "labelSum"]
@@ -137,7 +134,9 @@ export default class Form extends Component {
                     }
                 }
                 sums["finalSum"] = 0;
-                this.setState({ form, sums, filledBoxCount: this.getFilledBoxCount() });
+                this.setState({ form, sums, filledBoxCount: this.getFilledBoxCount() }, () => {
+                    console.log(this.state.form);
+                });
             }
         }
     }
@@ -162,7 +161,7 @@ export default class Form extends Component {
                         }
                     }
                     let announcementRequired = this.isAnnouncementRequired(form);
-                    let rollDisabled = form.rollCount === 3 || announcementRequired;
+                    let rollDisabled = form.rollCount === 3 || (announcementRequired && form.announcement == null);
                     let diceDisabled = form.rollCount === 0 || form.rollCount === 3;
                     this.setState({ form, announcementRequired, rollDisabled, diceDisabled }, () => {
                         this.startRollAnimation();
@@ -180,7 +179,7 @@ export default class Form extends Component {
             }
             form.rollCount++;
             let announcementRequired = this.isAnnouncementRequired(form);
-            let rollDisabled = form.rollCount === 3 || announcementRequired;
+            let rollDisabled = form.rollCount === 3 || (announcementRequired && form.annoucement == null);
             let diceDisabled = form.rollCount === 0 || form.rollCount === 3;
             this.setState({ form, announcementRequired, rollDisabled, diceDisabled }, () => {
                 this.startRollAnimation();
@@ -192,11 +191,13 @@ export default class Form extends Component {
         let announcementRequired = form.announcement == null;
         for (let i in form.columns) {
             let column = form.columns[i];
-            for (let j in column.boxes) {
-                let box = column.boxes[j];
-                if (!box.filled) {
-                    announcementRequired = false;
-                    break;
+            if (column.columnType.label !== "ANNOUNCEMENT") {
+                for (let j in column.boxes) {
+                    let box = column.boxes[j];
+                    if (!box.filled) {
+                        announcementRequired = false;
+                        break;
+                    }
                 }
             }
         }
@@ -214,7 +215,7 @@ export default class Form extends Component {
                     setTimeout(function () {
                         document.getElementById('dice' + local_i).classList.remove('roll');
                     }, 1000);
-                }) (key);
+                })(key);
             }
         }
     }
@@ -230,61 +231,46 @@ export default class Form extends Component {
         }
     }
 
-    handleBoxClick(columnTypeId, boxTypeId) {
-        console.log(columnTypeId, boxTypeId);
-        // let announced = false;
-        // if (columnTypeId === 4) {
-        //     if (this.state.announcement == null) {
-        //         announced = true;
-        //         this.announce(boxTypeId);
-        //     }
-        // }
-        // if (!announced) {
-        //     this.fillBox(columnTypeId, boxTypeId);
-        // }
+    handleBoxClick(columnType, boxType) {
+        let announcement = this.state.announcement;
+        let announced = false;
+        if (columnType.label === "ANNOUNCEMENT") {
+            if (announcement == null) {
+                announced = true;
+                this.announce(boxType);
+            }
+        }
+        if (!announced) {
+            this.fillBox(columnType, boxType);
+        }
     }
 
-    announce(boxTypeId) {
+    announce(boxType) {
         let form = this.state.form;
         if (form.id != null) {
-            FormService.announce(form.id, boxTypeId).then(
+            FormService.announce(form.id, boxType.id).then(
                 response => {
-                    this.setState({ boxesDisabled: true, announcement: response.data, rollDisabled: false });
+                    form.annoucement = response.data;
+                    this.setState({ form, boxesDisabled: true, rollDisabled: false });
                 },
                 error => {
                     console.log(error);
                 }
             );
         } else {
-            this.setState({ boxesDisabled: true, announcement: boxTypeId, rollDisabled: false });
+            form.annoucement = boxType.label;
+            this.setState({ form, boxesDisabled: true, rollDisabled: false });
         }
     }
 
-    fillBox(columnTypeId, boxTypeId) {
+    fillBox(columnType, boxType) {
         let form = this.state.form;
         if (form.id != null) {
-            FormService.fillBox(form.id, columnTypeId, boxTypeId).then(
+            FormService.fillBox(form.id, columnType.id, boxType.id).then(
                 response => {
-                    let value = response.data;
+                    let score = response.data;
                     form = this.state.form;
-                    for (let i in form.columns) {
-                        let column = form.columns[i];
-                        if (column.columnType.id === columnTypeId) {
-                            for (let j in column.boxes) {
-                                let box = column.boxes[j];
-                                if (box.boxType.id === boxTypeId) {
-                                    box.value = value;
-                                    box.available = false;
-                                    box.filled = true;
-                                }
-                                if (columnTypeId === 1 && boxTypeId <= 12 && box.boxType.id === boxTypeId + 1) {
-                                    box.available = true;
-                                } else if (columnTypeId === 2 && boxTypeId >= 1 && box.boxType.id === boxTypeId - 1) {
-                                    box.available = true;
-                                }
-                            }
-                        }
-                    }
+                    form = this.fill(form, columnType, boxType, score);
                     this.setState({ form }, () => {
                         this.updateSums();
                     });
@@ -294,26 +280,10 @@ export default class Form extends Component {
                 }
             );
         } else {
-            let score = ScoreUtil.checkScore(this.state.form.dice, boxTypeId);
+            let dice = this.state.form.dice;
+            let score = ScoreUtil.calculateScore(dice, boxType);
             form = this.state.form;
-            for (let i in form.columns) {
-                let column = form.columns[i];
-                if (column.columnType.id === columnTypeId) {
-                    for (let j in column.boxes) {
-                        let box = column.boxes[j];
-                        if (box.boxType.id === boxTypeId) {
-                            box.value = score;
-                            box.available = false;
-                            box.filled = true;
-                        }
-                        if (columnTypeId === 1 && boxTypeId <= 12 && box.boxType.id === boxTypeId + 1) {
-                            box.available = true;
-                        } else if (columnTypeId === 2 && boxTypeId >= 1 && box.boxType.id === boxTypeId - 1) {
-                            box.available = true;
-                        }
-                    }
-                }
-            }
+            this.fill(form, columnType, boxType, score);
             this.setState({ form }, () => {
                 this.updateSums();
             });
@@ -323,10 +293,11 @@ export default class Form extends Component {
             form.dice[key].hold = false;
         }
         form.rollCount = 0;
-        this.setState({ form, rollDisabled: false, diceDisabled: true,
-            filledBoxCount: this.state.filledBoxCount+1, announcement: null }, () => {
-            this.updateSums();
-            if (this.state.filledBoxCount === form.columns.length*form.column[0].boxes.length) {
+        this.setState({
+            form, rollDisabled: false, diceDisabled: true,
+            filledBoxCount: this.state.filledBoxCount + 1, announcement: null
+        }, () => {
+            if (this.state.filledBoxCount === form.columns.length * form.columns[0].boxes.length) {
                 setTimeout(
                     () => {
                         this.endGame();
@@ -334,6 +305,28 @@ export default class Form extends Component {
                 );
             }
         });
+    }
+
+    fill(form, columnType, boxType, score) {
+        for (let i in form.columns) {
+            let column = form.columns[i];
+            if (column.columnType.id === columnType.id) {
+                for (let j in column.boxes) {
+                    let box = column.boxes[j];
+                    if (box.boxType.id === boxType.id) {
+                        box.value = score;
+                        box.available = false;
+                        box.filled = true;
+                    }
+                    if (columnType.label === "DOWNWARDS" && box.boxType.id === boxType.id + 1) {
+                        box.available = true;
+                    } else if (columnType.label === "UPWARDS" && box.boxType.id === boxType.id - 1) {
+                        box.available = true;
+                    }
+                }
+            }
+        }
+        return form;
     }
 
     getFilledBoxCount() {
@@ -352,16 +345,18 @@ export default class Form extends Component {
     updateSums() {
         let form = this.state.form;
         let sums = this.state.sums;
+        for (let sum in sums) {
+            sums[sum] = 0;
+        }
         for (let i in form.columns) {
             let column = form.columns[i];
-            for (let sum in sums) {
-                sums[sum] = 0;
-            }
             for (let j in column.boxes) {
                 let box = column.boxes[j];
-                if (box.boxType.id <= 6) sums[column.columnType.label + "-numberSum"] += box.value;
+                if (box.boxType.id <= 6 && box.filled) {
+                    sums[column.columnType.label + "-numberSum"] += box.value;
+                }
             }
-            if (sums[column.columnType.label + "-numberSum"] >= 60) sums[column.columnType.label + "-numberSum"] += 30;
+            if (sums[column.columnType.label + "-numberSum"] >= NUMBERSUM_BONUS_THRESHOLD) sums[column.columnType.label + "-numberSum"] += NUMBERSUM_BONUS;
 
             sums["numberSum"] += sums[column.columnType.label + "-numberSum"]
 
@@ -372,15 +367,15 @@ export default class Form extends Component {
 
             sums["labelSum"] += sums[column.columnType.label + "-labelSum"];
 
-            let diffReady = true;
+            let boxOnes, boxMax, boxMin;
             for (let j in column.boxes) {
                 let box = column.boxes[j];
-                if ((box.boxType.id === 1 && !box.filled) || (box.boxType.id === 7 && !box.filled) || (box.boxType.id === 8 && !box.filled)) {
-                    diffReady = false;
-                }
+                if (box.boxType.label === "ONES") boxOnes = box;
+                else if (box.boxType.label === "MAX") boxMax = box;
+                else if (box.boxType.label === "MIN") boxMin = box;
             }
-            if (diffReady) {
-                sums[column.columnType.label + "-diffSum"] = column.boxes[0] * (column.boxes[6].value - column.boxes[7].value);
+            if (boxOnes.filled && boxMax.filled && boxMin.filled) {
+                sums[column.columnType.label + "-diffSum"] = boxOnes.value * (boxMax.value - boxMin.value);
             }
 
             sums["diffSum"] += sums[column.columnType.label + "-diffSum"];
@@ -395,8 +390,10 @@ export default class Form extends Component {
         let rollDisabled = this.state.rollDisabled;
         let currentUser = this.state.currentUser;
         let currentWeekLeader = this.state.currentWeekLeader;
-        let gameInfo = {announcement: this.state.annoucement, boxesDisabled: this.state.boxesDisabled, 
-                        rollCount: form.rollCount, sums: this.state.sums};
+        let gameInfo = {
+            announcement: this.state.announcement, boxesDisabled: this.state.boxesDisabled,
+            rollCount: form.rollCount, sums: this.state.sums
+        };
         return (
             <div className="center">
                 {form.dice && <DiceRack rollDisabled={rollDisabled} rollCount={form.rollCount} dice={form.dice}
@@ -440,7 +437,7 @@ export default class Form extends Component {
                             <a className="bg-light-pink form-button"
                                 href="https://github.com/MatejDanic">Matej</a>}
                         <Label labelClass={"label leader"} value={currentWeekLeader ? "1. " + currentWeekLeader : ""} />
-                        <Label labelClass={"label final bg-light-sky-blue"} number={gameInfo.sums["finalSum"]} id="labelSum" /> 
+                        <Label labelClass={"label final bg-light-sky-blue"} number={gameInfo.sums["finalSum"]} id="labelSum" />
 
                     </div>
                 </ div>}

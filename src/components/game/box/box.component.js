@@ -10,7 +10,7 @@ export default class Box extends Component {
         let btnClass = this.getBtnClass(disabled);
         let value = box.filled ? box.value : "";
         return (
-            <button disabled={disabled} className={"box " + btnClass} onClick={() => this.props.onBoxClick(box.boxType.id)}>{value}</button>
+            <button disabled={disabled} className={"box " + btnClass} onClick={() => this.props.onBoxClick(box.boxType)}>{value}</button>
         )
     }
 
@@ -19,9 +19,9 @@ export default class Box extends Component {
         let annCol = this.props.annCol;
         if (!disabled) {
             if (gameInfo.announcement != null) {
-                disabled = gameInfo.announcement !== box.boxType.Id;
+                disabled = gameInfo.announcement !== box.boxType.label;
             } else {
-                disabled = gameInfo.rollCount >= 2 && annCol;
+                disabled = (gameInfo.rollCount >= 2 || gameInfo.announcementRequired) && annCol;
             }
         }
         disabled = disabled || !box.available;
