@@ -5,23 +5,23 @@ export default class RollDiceButton extends Component {
 
   render() {
     let rollDisabled = this.props.rollDisabled;
-    let btnClass = this.getBtnClass(this.props.rollsLeft);
+    let btnClass = this.getBtnClass(this.props.rollCount);
     return (
       <button disabled={rollDisabled} className={"bg-light-pink roll-dice-button " + btnClass} onClick={this.props.onRollDice}>K O C K I C E</button>
     )
   }
 
-  getBtnClass(rollsLeft) {
+  getBtnClass(rollCount) {
     var btnClass;
-    switch (rollsLeft) {
-      case 0:
-        btnClass = 'none-left';
-        break;
+    switch (rollCount) {
       case 1:
-        btnClass = 'one-left';
+        btnClass = 'one-roll';
         break;
       case 2:
-        btnClass = 'two-left';
+        btnClass = 'two-rolls';
+        break;
+      case 3:
+        btnClass = 'three-rolls';
         break;
       default:
         btnClass = "";

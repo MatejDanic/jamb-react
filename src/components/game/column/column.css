@@ -5,3 +5,10 @@
   grid-template-rows: repeat(17, 32px);
   grid-template-columns: 64px;
 }
+
+@media screen and (max-width: 512px) {
+  .column {
+    grid-template-rows: repeat(17, 4.9vh);
+    grid-template-columns: 16.666vw;
+  }
+}

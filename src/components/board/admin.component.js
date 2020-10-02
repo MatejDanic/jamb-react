@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import "./admin.css";
+import "./board.css";
 
 export default class Admin extends Component {
 

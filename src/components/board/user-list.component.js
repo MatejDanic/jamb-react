@@ -7,7 +7,7 @@ import ScoreUtil from "../../utils/score.util";
 import DateUtil from "../../utils/date.util";
 import { pagination } from "../../utils/pagination.util";
 import { sortTable } from "../../utils/sort.util";
-import "./admin.css";
+import "./board.css";
 
 export default class UserList extends Component {
   constructor(props) {
@@ -39,7 +39,7 @@ export default class UserList extends Component {
   render() {
     let users = this.state.users;
     return (
-      <div className="container-custom">
+      <div className="container-custom container-custom-table">
         <table style={{ width: '100%' }}>
           <thead>
             <tr>

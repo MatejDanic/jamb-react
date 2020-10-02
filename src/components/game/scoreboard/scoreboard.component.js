@@ -16,14 +16,15 @@ export default class Scoreboard extends Component {
   componentDidMount() {
     ScoreService.getScoreboard().then(
       response => {
-        let scores = [];
+        let scores = response.data;
+        let scoresToDisplay = [];
         let i = 1;
         for (let score in response.data) {
-          scores.push(response.data[score].username + ' ' + response.data[score].value)
+          scoresToDisplay.push(response.data[score].username + ' ' + response.data[score].value)
           if (i === 3) break;
           else i += 1;
         }
-        this.setState({ scores: response.data, scoresToDisplay: scores })
+        this.setState({ scores, scoresToDisplay })
       },
       error => {
         // console.log(error);
@@ -36,9 +37,9 @@ export default class Scoreboard extends Component {
     return (
       <button className="scoreboard-button bg-light-pink" onClick={() => this.handleClick()}>
         <ul className="scoreboard">
-            {scores && scores.map(score =>
-              <li key={score}>{score}</li>)}
-          </ul>
+          {scores && scores.map(score =>
+            <li key={score}>{score}</li>)}
+        </ul>
       </button>
     )
   }

@@ -13,11 +13,15 @@ export default class Score extends Component {
     super(props);
 
     this.state = {
-      score: "",
+      currentUser: undefined,
+      score: ""
     };
   }
 
   componentDidMount() {
+    let currentUser = AuthService.getCurrentUser();
+    if (currentUser) this.setState({ currentUser });
+    
     ScoreService.getScore(this.props.match.params.scoreId).then(
       response => {
         this.setState({ score: response.data });
@@ -40,11 +44,10 @@ export default class Score extends Component {
   }
 
   render() {
-    let currentUser = AuthService.getCurrentUser();
+    let currentUser = this.state.currentUser;
     let score = this.state.score;
     return (
       <div className="container-custom">
-        <div className="container-custom-inner">
           <h3>
             <strong>Vrijednost: </strong>
             {score.value}
@@ -65,7 +68,6 @@ export default class Score extends Component {
             <button className="btn btn-danger button-admin" onClick={() => { if (window.confirm('Jeste li sigurni da izbrisati ovaj rezultat?')) this.deleteScore() }}>Izbriši</button>
           </div>}
         </div>
-      </div>
     );
   }
 }

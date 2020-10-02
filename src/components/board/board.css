@@ -1,21 +1,18 @@
-.admin {
-    width: 100%;
-    padding: 5%;
-    text-align: center;
-}
-
 .container-custom {
-    width: 100%;
-    padding: 5%;
+    padding: 1vw;
+    padding-top: 2vh;
 }
 
-.container-custom-inner {
-    padding: 5%;
-    padding-top: 0px;
+.container-custom-table {
+    text-align: center
 }
 
-.container-button {
+.conatiner-pagination {
     text-align: center;
+    width: 100%;
+}
+
+table {
     width: 100%;
 }
 
@@ -29,13 +26,12 @@ table th:last-child {
 
 th {
     background-color: lightskyblue;
-    text-align: center;
     cursor: pointer;
 }
 
 tr {
-    cursor: pointer;
     height: 4vh;
+    cursor: pointer;
 }
 
 tr:nth-child(odd) {
@@ -56,7 +52,6 @@ td {
 }
 
 .roles {
-    padding-left: 0px;
     text-align: left;
 }
 
@@ -72,36 +67,11 @@ td {
     content: "";
 }
 
-.pagination {
-    display: block;
-    text-align: center;
-}
-
-.button-admin {
-    text-align: center;
-    width: 30%;
-    font-size: 100%;
-    margin: 5px;
-}
-
 .button-pagination {
     background-color: lightskyblue;
     width: 4vw;
     border-radius: 4px;
-    margin-top: 5px;
-    margin-left: 2px;
-    margin-right: 2px;
-}
-
-.hidden {
-    display: none;
-}
-
-.profile {
-    text-align: center;
-    position: fixed;
-    right: 10%;
-    top: 1%;
+    margin: 1vw;
 }
 
 .delete-button {
@@ -113,35 +83,11 @@ td {
 }
 
 @media screen and (max-width: 512px) {
-
-    .admin {
-        padding: 0px;
-    }
-
-    .container-button {
-        padding-top: 5px;
-    }
-
     tr {
         height: 6vh;
     }
 
-    .container-custom {
-        height: 90vh;
-        padding: 0px;
-    }
-
-    .button-admin {
-        margin-bottom: 5px;
-        width: 80%;
-        font-size: 100%;
-    }
-
     .button-pagination {
         width: 10vw;
-        border-radius: 4px;
-        margin-top: 5px;
-        margin-left: 2px;
-        margin-right: 2px;
     }
 }

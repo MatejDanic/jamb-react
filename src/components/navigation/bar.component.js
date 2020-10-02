@@ -7,12 +7,18 @@ export default class Bar extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            currentUser: undefined,
             showAdmin: false
         };
     }
 
-    render() {
+    componentDidMount() {
         let currentUser = AuthService.getCurrentUser();
+        if (currentUser) this.setState({ currentUser });
+    }
+
+    render() {
+        let currentUser = this.state.currentUser;
         let history = this.props.history;
         return (
             <div>

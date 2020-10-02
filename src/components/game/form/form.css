@@ -26,13 +26,16 @@
 
 @media screen and (max-width: 512px) {
   .form {
-    grid-template-columns: repeat(6, 16.667vw);
-    grid-template-rows: 83.3vh, 4.9vh;
-    /* grid-template-rows: repeat(18, 4.9vh); */
+    grid-template-columns: repeat(6, 16.666vw);
+    grid-template-rows: repeat(18, 4.9vh);
   }
 
   .game-column {
-    height: 83.3vh;
     grid-template-rows: repeat(17, 4.9vh);
+    grid-template-columns: 16.666vw;
+  }
+
+  .bottom-row {
+    grid-template-columns: repeat(3, 33.333vw);
   }
 }

@@ -5,8 +5,21 @@ import AuthService from "../../services/auth.service";
 import "./navigation.css";
 
 export default class Menu extends Component {  
-    render() {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            currentUser: undefined
+        };
+    }
+
+    componentDidMount() {
         let currentUser = AuthService.getCurrentUser();
+        if (currentUser) this.setState({ currentUser });
+    }
+
+    render() {
+        let currentUser = this.state.currentUser;
         let showMenu = this.props.showMenu;
         let history = this.props.history;
         let gameMounted = this.props.gameMounted;

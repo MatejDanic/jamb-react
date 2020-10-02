@@ -11,31 +11,38 @@ import ScoreUtil from "../../utils/score.util";
 import { dateFormatLong } from "../../constants/date-format";
 
 export default class User extends Component {
-  
   constructor(props) {
     super(props);
 
     this.state = {
+      currentuser: undefined,
+      userIsAdmin: false,
       user: "",
-      userIsAdmin: false
+      totalScore: 0,
+      highScore: 0
     };
   }
 
   componentDidMount() {
+    let currentUser = AuthService.getCurrentUser();
+    this.setState({ currentUser });
+
     let userId = this.props.userId ? this.props.userId : this.props.match.params.userId;
-    UserService.getUser(userId).then(
-      response => {
-        let user = response.data;
-        let userIsAdmin = false;
-        for (let key in user.roles) {
-          if (user.roles[key].label === "ADMIN") userIsAdmin = true;
+      UserService.getUser(userId).then(
+        response => {
+          let user = response.data;
+          let userIsAdmin = false;
+          for (let key in user.roles) {
+            if (user.roles[key].label === "ADMIN") userIsAdmin = true;
+          }
+          let totalScore = ScoreUtil.getTotalScore(user.scores);
+          let highScore = ScoreUtil.getHighScore(user.scores);
+          this.setState({ user, totalScore, highScore, userIsAdmin });
+        },
+        error => {
+          // console.log(error);
         }
-        this.setState({ user, userIsAdmin });
-      },
-      error => {
-        // console.log(error);
-      }
-    );
+      );
   }
 
   deleteUser() {
@@ -50,15 +57,16 @@ export default class User extends Component {
   }
 
   render() {
-    let currentUser = AuthService.getCurrentUser();
+    let history = this.props.history;
+    let currentUser = this.state.currentuser;
+    let userIsAdmin = this.state.userIsAdmin;
+    let totalScore = this.state.totalScore;
+    let highScore = this.state.highScore;
     let user = this.state.user;
     let scores = user.scores;
-    let totalScore = ScoreUtil.getTotalScore(scores);
-    let highScore = ScoreUtil.getHighScore(scores);
 
     return (
       <div className="container-custom">
-        <div className="container-custom-inner">
           <h3>
             <strong>{user.username}</strong>
           </h3>
@@ -77,13 +85,12 @@ export default class User extends Component {
           <p>
             <strong>Prosjek: </strong>{scores && (scores.length === 0 ? "0" : Math.round(totalScore / scores.length * 100) / 100)}
           </p>
-          {currentUser && currentUser.roles.includes("ADMIN") && !this.state.userIsAdmin && <div className="container-button">
+          {currentUser && currentUser.roles.includes("ADMIN") && !userIsAdmin && <div className="container-button">
             <button className="btn btn-danger button-admin" onClick={() => { if (window.confirm('Jeste li sigurni da izbrisati ovog korisnika?')) this.deleteUser() }}>Izbriši</button>
           </div>}
-        </div>
         {user.scores && (user.scores.length > 0 &&
           <div>
-            <ScoreList username={user.username} scores={user.scores} history={this.props.history}></ScoreList>
+            <ScoreList username={user.username} scores={user.scores} history={history}></ScoreList>
           </div>)}
       </div>
     );

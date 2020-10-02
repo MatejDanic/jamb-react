@@ -20,7 +20,7 @@ export default class Box extends Component {
         let disabled = gameInfo.rollCount === 0;
         if (gameInfo.rollCount >= 1) {
             if (gameInfo.announcement != null) {
-                disabled = gameInfo.announcement !== box.boxType.id || !annCol;
+                disabled = gameInfo.announcement.id !== box.boxType.id || !annCol;
             } else {
                 disabled = (gameInfo.rollCount >= 2 || gameInfo.announcementRequired) && annCol;
             }
@@ -34,10 +34,10 @@ export default class Box extends Component {
         let gameInfo = this.props.gameInfo;
         let box = this.props.box;     
         let annCol = this.props.annCol;
-        if (gameInfo.announcement === box.boxType.id && annCol) {
-            btnClass = "red-border";
+        if (gameInfo.announcement != null && gameInfo.announcement.id === box.boxType.id && annCol) {
+            btnClass = "box-red-border";
         }
-        if (disabled || !box.available || box.filled) btnClass = "gray-border";
+        if (disabled || !box.available || box.filled) btnClass = "box-gray-border";
         return btnClass;
     }
 }

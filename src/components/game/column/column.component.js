@@ -12,7 +12,7 @@ export default class Column extends Component {
         let gameInfo = this.props.gameInfo;
         return (
             <div className="column">
-                <Label labelClass={"label label-image bg-white"} imgUrl={"../images/field/" + column.columnType.label + ".bmp"} />
+                <Label labelClass={"label label-image bg-white"} imgUrl={"../images/column/" + column.columnType.label + ".png"} />
                 <Box gameInfo={gameInfo} annCol={annCol} box={column.boxes[0]}
                     onBoxClick={(boxType) => this.props.onBoxClick(column.columnType, boxType)} />
                 <Box gameInfo={gameInfo} annCol={annCol} box={column.boxes[1]}

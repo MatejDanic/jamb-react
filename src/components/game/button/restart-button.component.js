@@ -8,6 +8,18 @@ import "../../../constants/colors.css";
 
 export default class RestartButton extends Component {
 
+  constructor() {
+    super();
+    this.state = {
+      currentUser: undefined
+    }
+  }
+
+  componentDidMount() {
+    let currentUser = AuthService.getCurrentUser();
+    if (currentUser) this.setState({ currentUser });
+  }
+
   render() {
     return (
       <button className="form-button bg-light-pink restart" style={{ backgroundImage: 'url(/images/misc/restart.png)' }} onClick={() => { if (window.confirm('Jeste li sigurni da želite početi ispočetka?')) this.handleClick() }}></button>
@@ -15,7 +27,7 @@ export default class RestartButton extends Component {
   }
 
   handleClick() {
-    let currentUser = AuthService.getCurrentUser();
+    let currentUser = this.state.currentUser;
     if (currentUser) {
       FormService.deleteForm(this.props.formId).then(
         () => {

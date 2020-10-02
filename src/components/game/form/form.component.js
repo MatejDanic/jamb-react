@@ -25,6 +25,7 @@ export default class Form extends Component {
     constructor() {
         super();
         this.state = {
+            currentUser: undefined,
             form: {},
             filledBoxCount: 0,
             announcementRequired: false,
@@ -39,7 +40,6 @@ export default class Form extends Component {
         this.handleRollDice = this.handleRollDice.bind(this);
         this.handleToggleDice = this.handleToggleDice.bind(this);
         this.startRollAnimation = this.startRollAnimation.bind(this);
-        this.getCurrentWeekLeader = this.getCurrentWeekLeader.bind(this);
     }
 
     setMounted(mounted) {
@@ -54,7 +54,7 @@ export default class Form extends Component {
             FormService.initializeForm().then(
                 response => {
                     var form = response.data;
-                    console.log(form);
+                    console.log(form)
                     this.initializeForm(form);
                 },
                 error => {
@@ -64,7 +64,6 @@ export default class Form extends Component {
         } else {
             this.initializeForm(null);
         }
-        this.getCurrentWeekLeader();
     }
 
     componentWillUnmount() {
@@ -86,6 +85,7 @@ export default class Form extends Component {
     }
 
     initializeForm(form) {
+        let currentWeekLeader = this.getCurrentWeekLeader();
         if (this._isMounted) {
             if (form != null) {
                 let announcementRequired = this.isAnnouncementRequired(form);
@@ -94,7 +94,7 @@ export default class Form extends Component {
                 let filledBoxCount = this.getFilledBoxCount(form);
                 let sums = this.initializeSums(form);
                 sums = this.updateSums(form, sums);
-                this.setState({ form, sums, announcementRequired, rollDisabled, diceDisabled, filledBoxCount });
+                this.setState({ form, sums, announcementRequired, rollDisabled, diceDisabled, filledBoxCount, currentWeekLeader });
             } else {
                 let form = {};
                 form.columns = [];
@@ -134,7 +134,7 @@ export default class Form extends Component {
                 form.id = null;
                 let sums = this.initializeSums(form);
                 let filledBoxCount = 0;
-                this.setState({ form, sums, filledBoxCount });
+                this.setState({ form, sums, filledBoxCount, currentWeekLeader });
             }
         }
     }
@@ -235,7 +235,7 @@ export default class Form extends Component {
         if (columnType.label === "ANNOUNCEMENT") {
             if (announcement == null) {
                 announced = true;
-                this.announce(boxType.id);
+                this.announce(boxType);
             }
         }
         if (!announced) {
@@ -243,10 +243,10 @@ export default class Form extends Component {
         }
     }
 
-    announce(boxTypeId) {
+    announce(boxType) {
         let form = this.state.form;
         if (form.id != null) {
-            FormService.announce(form.id, boxTypeId).then(
+            FormService.announce(form.id, boxType).then(
                 response => {
                     form.announcement = response.data;
                     let boxesDisabled = true;
@@ -258,7 +258,7 @@ export default class Form extends Component {
                 }
             );
         } else {
-            form.announcement = boxTypeId;
+            form.announcement = boxType;
             let boxesDisabled = true;
             let rollDisabled = false;
             this.setState({ form, boxesDisabled, rollDisabled });
@@ -380,7 +380,7 @@ export default class Form extends Component {
     }
 
     render() {
-        let currentUser = AuthService.getCurrentUser();
+        let currentUser = this.state.currentUser;
         let form = this.state.form;
         let rollCount = form.rollCount;
         let announcement = form.announcement;
@@ -397,12 +397,12 @@ export default class Form extends Component {
                 {form.columns && <div className="form">
                     <div className="game-column">
                         <RulesButton />
-                        <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/1.bmp"} />
-                        <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/2.bmp"} />
-                        <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/3.bmp"} />
-                        <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/4.bmp"} />
-                        <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/5.bmp"} />
-                        <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/6.bmp"} />
+                        <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/1.png"} />
+                        <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/2.png"} />
+                        <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/3.png"} />
+                        <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/4.png"} />
+                        <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/5.png"} />
+                        <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/6.png"} />
                         <Label labelClass={"label sum bg-light-sky-blue"} value={"zbroj (1-6) + 30 ako >= 60"} />
                         <Label labelClass={"label bg-white"} value={"MAX"} />
                         <Label labelClass={"label bg-white"} value={"MIN"} />
@@ -432,7 +432,7 @@ export default class Form extends Component {
                             <MenuButton onToggleMenu={this.props.onToggleMenu} /> :
                             <a className="bg-light-pink form-button"
                                 href="https://github.com/MatejDanic">Matej</a>}
-                        <Label labelClass={"label leader"} value={currentWeekLeader ? "1. " + currentWeekLeader : ""} />
+                        <Label labelClass={"label leader"} value={"1. " + currentWeekLeader} />
                         <Label labelClass={"label final bg-light-sky-blue"} number={gameInfo.sums["finalSum"]} id="labelSum" />
 
                     </div>
@@ -450,11 +450,12 @@ export default class Form extends Component {
     getCurrentWeekLeader() {
         ScoreService.getCurrentWeekLeader().then(
             response => {
-                if (this._isMounted) this.setState({ currentWeekLeader: response.data });
+                return response.data;
             },
             error => {
                 // console.log(error);
             }
         );
+        return "";
     }
 }

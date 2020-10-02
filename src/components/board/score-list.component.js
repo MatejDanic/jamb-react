@@ -6,7 +6,7 @@ import ScoreService from "../../services/score.service";
 import DateUtil from "../../utils/date.util";
 import { pagination } from "../../utils/pagination.util";
 import { sortTable } from "../../utils/sort.util";
-import "./admin.css";
+import "./board.css";
 
 export default class ScoreList extends Component {
   constructor(props) {
@@ -51,8 +51,8 @@ export default class ScoreList extends Component {
   render() {
     let scores = this.state.scores;
     return (
-      <div className="container-custom">
-        <table style={{ width: '100%' }}>
+      <div className="container-custom container-custom-table">
+        <table>
           <thead>
             <tr>
               <th onClick={() => sortTable(0)}>Datum</th>
@@ -64,12 +64,14 @@ export default class ScoreList extends Component {
             {scores && scores.map(score =>
               <tr className={"tr"} key={score.id} id={score.id} onClick={() => { this.props.history.push("/scores/" + score.id) }}>
                 <td>{dateFormatMedium.format(DateUtil.getDateFromLocalDateTime(score.date))}</td>
-                <td>{this.props.username ? this.props.username : score.user.username }</td>
+                <td>{this.props.username ? this.props.username : score.user.username}</td>
                 <td>{score.value}</td>
               </tr>)}
           </tbody>
         </table>
-        <div className="pagination" id="pagination" />
+        <div className="container-pagination">
+          <div id="pagination" />
+        </div>
         <div id="current-page" />
       </div>
     );
