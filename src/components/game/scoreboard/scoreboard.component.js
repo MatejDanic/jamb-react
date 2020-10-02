@@ -37,8 +37,9 @@ export default class Scoreboard extends Component {
     return (
       <button className="scoreboard-button bg-light-pink" onClick={() => this.handleClick()}>
         <ul className="scoreboard">
-          {scores && scores.map(score =>
-            <li key={score}>{score}</li>)}
+          {scores.length > 0 ? scores.map(score =>
+            <li key={score}>{score}</li>):
+            <div className="scoreboard-empty">Lj<br />e<br />s<br />t<br />v<br />i<br />c<br />a</div>}
         </ul>
       </button>
     )

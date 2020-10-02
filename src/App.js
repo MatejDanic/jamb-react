@@ -59,7 +59,7 @@ class App extends Component {
   }
 
   handleKeyPress(e, formComponent) {
-    if (e.code === "Space") {
+    if (e.code === "Space" && !this.state.currentUser) {
       let form = formComponent.state.form;
       for (let i in form.columns) {
         let column = form.columns[i];
@@ -103,16 +103,16 @@ class App extends Component {
     return (
         <Router history={history}>
           <title>Jamb</title>
-          {smallWindow ? <Menu showMenu={showMenu} history={history} gameMounted={gameMounted} onToggleMenu={this.toggleMenu} /> :
+          {smallWindow ? <Menu onLogout={this.logout} history={history} showMenu={showMenu} gameMounted={gameMounted} onToggleMenu={this.toggleMenu} /> :
             <Bar onLogout={this.logout} history={history} />}
           <Switch>
-            <Route exact path="/" render={() => <Form ref={this._form} onGameMounted={(mounted) => this.handleGameMounted(mounted)} smallWindow={smallWindow} onToggleMenu={this.toggleMenu} />} />
+            <Route exact path="/" render={() => <Form ref={this._form} history={history} onGameMounted={(mounted) => this.handleGameMounted(mounted)} smallWindow={smallWindow} onToggleMenu={this.toggleMenu} />} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/admin" component={Admin} />
             <Route exact path="/users" component={UserList} />
             <Route exact path="/users/:userId" component={User} />
-            <Route exact path="/profile" component={() => <Profile  smallWindow={smallWindow} onLogout={this.logout} />} />
+            <Route exact path="/profile" component={() => <Profile  history={this.props.history} smallWindow={smallWindow} />} />
             <Route exact path="/scores" component={ScoreList} />
             <Route exact path="/scores/:scoreId" component={Score} />
           </Switch>

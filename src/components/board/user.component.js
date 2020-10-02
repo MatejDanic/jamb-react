@@ -67,31 +67,33 @@ export default class User extends Component {
 
     return (
       <div className="container-custom">
-          <h3>
-            <strong>{user.username}</strong>
-          </h3>
-          <p>
-            <strong>ID: </strong>
-            {user.id}
-          </p>
-          <p><strong>Posljednja igra: </strong>{scores && scores.length === 0 ? "-----" : dateFormatLong.format(DateUtil.getLastScoreDate(scores))}</p>
-          <p><strong>Najveći rezultat: </strong>{highScore}</p>
-          <p>
-            <strong>Ukupni rezultat: </strong>{totalScore}
-          </p>
-          <p>
-            <strong>Broj igara: </strong>{scores && scores.length}
-          </p>
-          <p>
-            <strong>Prosjek: </strong>{scores && (scores.length === 0 ? "0" : Math.round(totalScore / scores.length * 100) / 100)}
-          </p>
-          {currentUser && currentUser.roles.includes("ADMIN") && !userIsAdmin && <div className="container-button">
-            <button className="btn btn-danger button-admin" onClick={() => { if (window.confirm('Jeste li sigurni da izbrisati ovog korisnika?')) this.deleteUser() }}>Izbriši</button>
-          </div>}
-        {user.scores && (user.scores.length > 0 &&
-          <div>
-            <ScoreList username={user.username} scores={user.scores} history={history}></ScoreList>
-          </div>)}
+          <div className="container-custom-inner">
+            <h3>
+              <strong>{user.username}</strong>
+            </h3>
+            <p>
+              <strong>ID: </strong>
+              {user.id}
+            </p>
+            <p><strong>Posljednja igra: </strong>{scores && scores.length === 0 ? "-----" : dateFormatLong.format(DateUtil.getLastScoreDate(scores))}</p>
+            <p><strong>Najveći rezultat: </strong>{highScore}</p>
+            <p>
+              <strong>Ukupni rezultat: </strong>{totalScore}
+            </p>
+            <p>
+              <strong>Broj igara: </strong>{scores && scores.length}
+            </p>
+            <p>
+              <strong>Prosjek: </strong>{scores && (scores.length === 0 ? "0" : Math.round(totalScore / scores.length * 100) / 100)}
+            </p>
+          </div>
+            {currentUser && currentUser.roles.includes("ADMIN") && !userIsAdmin && <div className="container-button">
+              <button className="btn btn-danger button-admin" onClick={() => { if (window.confirm('Jeste li sigurni da izbrisati ovog korisnika?')) this.deleteUser() }}>Izbriši</button>
+            </div>}
+          {user.scores && (user.scores.length > 0 &&
+            <div>
+              <ScoreList username={user.username} scores={user.scores} history={history}></ScoreList>
+            </div>)}
       </div>
     );
   }

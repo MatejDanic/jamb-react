@@ -1,16 +1,23 @@
 .scoreboard {
     padding: 0px;
-    text-align: center;
-    vertical-align: middle;
+    margin: 0px;
     list-style-type: none;
     font-size: 14px;
 }
 
 .scoreboard-button {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
     grid-row-start: 12;
     grid-row-end: 17;
     border: 1px solid black;
     border-radius: 5px;
+}
+
+.scoreboard-empty {
+    line-height: 0.9em;
+    font-size: 18px;
 }
 
 li {

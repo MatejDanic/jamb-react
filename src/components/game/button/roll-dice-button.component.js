@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./roll-dice-button.css"
+import "./button.css"
 
 export default class RollDiceButton extends Component {
 
@@ -7,7 +7,7 @@ export default class RollDiceButton extends Component {
     let rollDisabled = this.props.rollDisabled;
     let btnClass = this.getBtnClass(this.props.rollCount);
     return (
-      <button disabled={rollDisabled} className={"bg-light-pink roll-dice-button " + btnClass} onClick={this.props.onRollDice}>K O C K I C E</button>
+      <button disabled={rollDisabled} className={"bg-light-pink roll-dice-button " + btnClass} onClick={this.props.onRollDice}>K<br />O<br />C<br />K<br />I<br />C<br />E<br /></button>
     )
   }
 

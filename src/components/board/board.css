@@ -3,6 +3,13 @@
     padding-top: 2vh;
 }
 
+.container-custom-inner {
+    padding: 5vw;
+    margin: 5vw;
+    border-radius: 16px;
+    border: 4px solid silver;
+}
+
 .container-custom-table {
     text-align: center
 }

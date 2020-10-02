@@ -18,6 +18,7 @@ import ScoreUtil from "../../../utils/score.util";
 import { NUMBERSUM_BONUS, NUMBERSUM_BONUS_THRESHOLD } from "../../../constants/game-constants";
 // stylesheets
 import "./form.css";
+import ProfileButton from "../button/profile-button.component";
 
 export default class Form extends Component {
     _isMounted = false;
@@ -27,11 +28,11 @@ export default class Form extends Component {
         this.state = {
             currentUser: undefined,
             form: {},
+            sums: {},
             filledBoxCount: 0,
             announcementRequired: false,
             rollDisabled: false,
             diceDisabled: true,
-            sums: {},
             currentWeekLeader: "",
         }
         this.initializeForm = this.initializeForm.bind(this);
@@ -53,7 +54,7 @@ export default class Form extends Component {
         if (currentUser) {
             FormService.initializeForm().then(
                 response => {
-                    var form = response.data;
+                    let form = response.data;
                     console.log(form)
                     this.initializeForm(form);
                 },
@@ -382,19 +383,18 @@ export default class Form extends Component {
     render() {
         let currentUser = this.state.currentUser;
         let form = this.state.form;
-        let rollCount = form.rollCount;
-        let announcement = form.announcement;
+        let rollCount = form ? form.rollCount : null;
+        let announcement = form ? form.announcement : null;
         let diceDisabled = this.state.diceDisabled;
         let rollDisabled = this.state.rollDisabled;
         let boxesDisabled = this.state.boxesDisabled;
         let sums = this.state.sums;
         let gameInfo = { announcement, boxesDisabled, rollCount, sums };
-        let currentWeekLeader = this.state.currentWeekLeader;
         return (
             <div className="center">
-                {form.dice && <DiceRack rollDisabled={rollDisabled} rollCount={form.rollCount} dice={form.dice}
+                {form && form.dice && <DiceRack rollDisabled={rollDisabled} rollCount={form.rollCount} dice={form.dice}
                     diceDisabled={diceDisabled} onToggleDice={this.handleToggleDice} />}
-                {form.columns && <div className="form">
+                {form && form.columns && <div className="form">
                     <div className="game-column">
                         <RulesButton />
                         <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/1.png"} />
@@ -428,13 +428,9 @@ export default class Form extends Component {
                     </div>
                     <div />
                     <div className="bottom-row">
-                        {this.props.smallWindow ?
-                            <MenuButton onToggleMenu={this.props.onToggleMenu} /> :
-                            <a className="bg-light-pink form-button"
-                                href="https://github.com/MatejDanic">Matej</a>}
-                        <Label labelClass={"label leader"} value={"1. " + currentWeekLeader} />
+                        <MenuButton onToggleMenu={this.props.onToggleMenu} history={this.props.history} smallWindow={this.props.smallWindow} />
+                        <ProfileButton history={this.props.history} />
                         <Label labelClass={"label final bg-light-sky-blue"} number={gameInfo.sums["finalSum"]} id="labelSum" />
-
                     </div>
                 </ div>}
             </div>

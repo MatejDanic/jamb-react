@@ -34,7 +34,7 @@ export default class Menu extends Component {
                             <div className="menu-element" onClick={() => history.push("/users")} style={{ backgroundImage: 'url(/images/misc/users.png)' }}><div className="menu-element-text">Korisnici</div></div>
                             <div className="menu-element" onClick={() => history.push("/scores")} style={{ backgroundImage: 'url(/images/misc/scores.png)' }}><div className="menu-element-text">Rezultati</div></div>
                             {currentUser ?
-                                (<div className="menu-element" onClick={() => history.push("/profile")} style={{ backgroundImage: 'url(/images/misc/profile.png)' }}><div className="menu-element-text">{currentUser && currentUser.username}</div></div>) :
+                                (<div className="menu-element" onClick={this.props.onLogout} href="/login" style={{ backgroundImage: 'url(/images/misc/logout.png)' }}><div className="menu-element-text">Odjava</div></div>) :
                                 (<div className="menu-element" onClick={() => history.push("/login")} style={{ backgroundImage: 'url(/images/misc/login.png)' }}><div className="menu-element-text">Prijava</div></div>)}
                         </div>
                     </div>}

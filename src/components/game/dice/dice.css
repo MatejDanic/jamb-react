@@ -6,6 +6,11 @@
   background-position: center center;
   background-repeat: no-repeat;
   background-color: white;
+  margin: 5px;
+}
+
+.dice-rack {
+  text-align: center;
 }
 
 .dice-gray-border {
@@ -22,7 +27,11 @@
 
 @media screen and (max-width : 512px) {
   .dice-button {
-    width: 18vw;
-    height: 18vw;
+    width: 19vw;
+    height: 19vw;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-left: 0.5vw;
+    margin-right: 0.5vw;
   }
 }

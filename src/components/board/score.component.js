@@ -48,6 +48,7 @@ export default class Score extends Component {
     let score = this.state.score;
     return (
       <div className="container-custom">
+        <div className="container-custom-inner">
           <h3>
             <strong>Vrijednost: </strong>
             {score.value}
@@ -64,6 +65,7 @@ export default class Score extends Component {
             <strong>Datum: </strong>
             {score.date && dateFormatLong.format(DateUtil.getDateFromLocalDateTime(score.date))}
           </p>
+        </div>
           {currentUser && currentUser.roles.includes("ADMIN") && <div className="container-button">
             <button className="btn btn-danger button-admin" onClick={() => { if (window.confirm('Jeste li sigurni da izbrisati ovaj rezultat?')) this.deleteScore() }}>Izbriši</button>
           </div>}
