@@ -48,7 +48,7 @@
   grid-row-start: 17;
 }
 
-@media screen and (max-width : 512px) {
+@media screen and (max-width: 576px) {
   .label-image {
     background-size: 98%;
   }
