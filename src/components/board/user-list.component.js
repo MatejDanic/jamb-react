@@ -30,7 +30,7 @@ export default class UserList extends Component {
         });
       },
       error => {
-        console.log(error.response.data);
+        console.log(error.response && error.response.data);
       }
     );
   }

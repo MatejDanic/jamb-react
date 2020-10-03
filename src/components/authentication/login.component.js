@@ -60,8 +60,8 @@ export default class Login extends Component {
         error => {
           const resMessage =
             (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
+              error.response && error.response.data &&
+              error.response && error.response.data.message) ||
             error.message ||
             error.toString();
 

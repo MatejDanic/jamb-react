@@ -35,7 +35,7 @@ export default class RestartButton extends Component {
         },
         error => {
           window.location.reload();
-          console.log(error.response.data);
+          console.log(error.response && error.response.data);
         }
       );
     } else {

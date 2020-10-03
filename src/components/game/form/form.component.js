@@ -59,7 +59,7 @@ export default class Form extends Component {
                     this.initializeForm(form);
                 },
                 error => {
-                    console.log(error.response.data);
+                    console.log(error.response && error.response.data);
                 }
             );
         } else {
@@ -149,7 +149,7 @@ export default class Form extends Component {
                     this.updateDice(form, dice);
                 },
                 error => {
-                    console.log(error.response.data);
+                    console.log(error.response && error.response.data);
                 }
             );
         } else {
@@ -247,7 +247,7 @@ export default class Form extends Component {
                     this.setState({ form, boxesDisabled, rollDisabled });
                 },
                 error => {
-                    console.log(error.response.data);
+                    console.log(error.response && error.response.data);
                 }
             );
         } else {
@@ -268,7 +268,7 @@ export default class Form extends Component {
                 },
                 error => {
                     // console.log(typeof error);
-                    console.log(error.response.data);
+                    console.log(error.response && error.response.data);
                 }
             );
         } else {
@@ -441,7 +441,7 @@ export default class Form extends Component {
                 return response.data;
             },
             error => {
-                console.log(error.response.data);
+                console.log(error.response && error.response.data);
             }
         );
         return "";
