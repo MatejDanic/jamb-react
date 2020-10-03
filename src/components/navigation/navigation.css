@@ -50,8 +50,42 @@
     font-family: Arial, Helvetica, sans-serif;
 }
 
-.bar-element-text {
-    font-family: Arial, Helvetica, sans-serif;
-    color: white;
+.bar {
+    background-color: lightgray;;
+    display: inline-flex;
+    align-items: center;
+    height: 6vh;
+    width: 100vw;
+    border-bottom: 1px solid gray;
 }
 
+.bar-left {
+    text-align: left;
+    width: 50vw;
+}
+
+.bar-right {
+    text-align: right;
+    width: 50vw;
+}
+
+.bar-element {
+    color: darkslategray;
+    background-color: lightgray;
+    border: none;
+    height: 6vh;
+    width: 15vw;
+    border-bottom: 1px solid gray;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.bar-left .bar-element {
+    border-right: 1px solid gray;
+    border-bottom-right-radius: 10px;
+}
+
+.bar-right .bar-element {
+    border-left: 1px solid gray;
+    border-bottom-left-radius: 10px;
+}

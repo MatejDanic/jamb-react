@@ -47,9 +47,10 @@ export default class Scoreboard extends Component {
 
   handleClick() {
     let scoreboard = "Najbolji rezultati ovaj tjedan:";
+    let scores = this.state.scores;
     let i = 1;
-    for (let score in this.state.scores) {
-      scoreboard += "\n" + i + ". " + this.state.scores[score].username + ' - ' + this.state.scores[score].value;
+    for (let key in scores) {
+      scoreboard += "\n" + i + ". " + scores[key].username + ' - ' + scores[key].value;
       if (i === 10) break;
       else i += 1;
     }

@@ -3,7 +3,6 @@
 import React, { Component } from "react";
 import UserService from "../../services/user.service";
 import { dateFormatShort } from "../../constants/date-format";
-import ScoreUtil from "../../utils/score.util";
 import DateUtil from "../../utils/date.util";
 import { pagination } from "../../utils/pagination.util";
 import { sortTable } from "../../utils/sort.util";
