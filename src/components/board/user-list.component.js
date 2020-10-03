@@ -31,7 +31,7 @@ export default class UserList extends Component {
         });
       },
       error => {
-        // console.log(error);
+        console.log(error.response.data);
       }
     );
   }
@@ -43,9 +43,9 @@ export default class UserList extends Component {
         <table style={{ width: '100%' }}>
           <thead>
             <tr>
-              <th onClick={() => sortTable(0)}>Korisničko ime</th>
-              <th onClick={() => sortTable(1)}>Posljednja igra</th>
-              <th onClick={() => sortTable(2)}>Najveći rezultat</th>
+              <th onClick={() => sortTable(0)}>Ime</th>
+              <th onClick={() => sortTable(1)}>Zadnja igra</th>
+              <th onClick={() => sortTable(2)}>Odigrano</th>
             </tr>
           </thead>
           <tbody id="tbody">
@@ -53,7 +53,7 @@ export default class UserList extends Component {
               <tr key={user.id} id={user.id} onClick={() => { this.props.history.push("/users/" + user.id) }}>
                 <td>{user.username}</td>
                 <td>{user.scores.length === 0 ? "-----" : dateFormatShort.format(DateUtil.getLastScoreDate(user.scores))}</td>
-                <td>{ScoreUtil.getHighScore(user.scores)}</td>
+                <td>{/*ScoreUtil.getTotalScore(user.scores)*/user.scores.length}</td>
               </tr>)}
           </tbody>
         </table>

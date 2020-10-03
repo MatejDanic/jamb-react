@@ -32,7 +32,7 @@ export default class ScoreList extends Component {
 
         },
         error => {
-          // console.log(error);
+          console.log(error.response.data);
         }
       );
     } else {
@@ -56,7 +56,7 @@ export default class ScoreList extends Component {
           <thead>
             <tr>
               <th onClick={() => sortTable(0)}>Datum</th>
-              <th onClick={() => sortTable(1)}>Korisnik</th>
+              <th onClick={() => sortTable(1)}>Ime</th>
               <th onClick={() => sortTable(2)}>Vrijednost</th>
             </tr>
           </thead>

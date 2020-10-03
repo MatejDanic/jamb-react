@@ -11,7 +11,14 @@ class FormService {
             null, { headers: authHeader() });
     }
 
-    rollDice(formId, diceToRoll) {
+    rollDice(formId, dice) {
+        let diceToRoll = '{';
+        for (let key in dice) {
+            diceToRoll += '"' + dice[key].ordinalNumber + '" : "';
+            diceToRoll += !dice[key].hold;
+            diceToRoll += '",';
+        }
+        diceToRoll = diceToRoll.substring(0, diceToRoll.length - 1) + '}';
         return axios.put(apiURL + "/" + formId + "/roll",
             diceToRoll, {
             headers: {

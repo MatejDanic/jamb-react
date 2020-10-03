@@ -59,18 +59,8 @@ class App extends Component {
   }
 
   handleKeyPress(e, formComponent) {
-    if (e.code === "Space" && !this.state.currentUser) {
-      let form = formComponent.state.form;
-      for (let i in form.columns) {
-        let column = form.columns[i];
-        if (column.columnType.label !== "ANNOUNCEMENT") {
-          for (let j in column.boxes) {
-            let box = column.boxes[j];
-            formComponent.handleRollDice();
-            formComponent.fillBox(column.columnType, box.boxType);
-          }
-        }
-      }
+    if (e.code === "Space") {
+      formComponent.handleRollDice();
     }
   }
 

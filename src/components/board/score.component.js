@@ -27,7 +27,7 @@ export default class Score extends Component {
         this.setState({ score: response.data });
       },
       error => {
-        // console.log(error);
+        console.log(error.response.data);
       }
     );
   }
@@ -38,7 +38,7 @@ export default class Score extends Component {
         this.props.history.push("/scores");
       },
       error => {
-        // console.log(error);
+        console.log(error.response.data);
       }
     );
   }
@@ -54,7 +54,7 @@ export default class Score extends Component {
             {score.value}
           </h3>
           <p>
-            <strong>Korisnik: </strong>
+            <strong>Ime: </strong>
             {score.user && <button className="btn btn-primary" onClick={() => { this.props.history.push("/users/" + score.user.id) }}>{score.user.username}</button>}
           </p>
           <p>

@@ -59,7 +59,7 @@ export default class Form extends Component {
                     this.initializeForm(form);
                 },
                 error => {
-                    // console.log(error);
+                    console.log(error.response.data);
                 }
             );
         } else {
@@ -143,21 +143,13 @@ export default class Form extends Component {
     handleRollDice() {
         let form = this.state.form
         if (form.id != null) {
-            let diceToRoll = '{';
-            for (let key in form.dice) {
-                diceToRoll += '"' + form.dice[key].ordinalNumber + '" : "';
-                diceToRoll += !form.dice[key].hold;
-                diceToRoll += '",';
-            }
-            diceToRoll = diceToRoll.substring(0, diceToRoll.length - 1) + '}';
-            FormService.rollDice(form.id, diceToRoll).then(
+            FormService.rollDice(form.id, form.dice).then(
                 response => {
                     let dice = response.data
                     this.updateDice(form, dice);
-
                 },
                 error => {
-                    // console.log(error);
+                    console.log(error.response.data);
                 }
             );
         } else {
@@ -255,7 +247,7 @@ export default class Form extends Component {
                     this.setState({ form, boxesDisabled, rollDisabled });
                 },
                 error => {
-                    // console.log(error);
+                    console.log(error.response.data);
                 }
             );
         } else {
@@ -276,7 +268,7 @@ export default class Form extends Component {
                 },
                 error => {
                     // console.log(typeof error);
-                    // console.log(error);
+                    console.log(error.response.data);
                 }
             );
         } else {
@@ -316,7 +308,7 @@ export default class Form extends Component {
         let sums = this.state.sums;
         sums = this.updateSums(form, sums);
         this.setState({ form, sums, rollDisabled, diceDisabled, filledBoxCount }, () => {
-            if (this.state.filledBoxCount === form.columns.length * form.columns[0].boxes.length) {
+            if (filledBoxCount === form.columns.length * form.columns[0].boxes.length) {
                 setTimeout(
                     () => {
                         this.endGame();
@@ -439,7 +431,7 @@ export default class Form extends Component {
 
     endGame() {
         this.setState({ rollDisabled: true }, () => {
-            alert("Čestitamo, vaš ukupni rezultat je " + this.state.sums[15]);
+            alert("Čestitamo, vaš ukupni rezultat je " + this.state.sums["finalSum"]);
         })
     }
 
@@ -449,7 +441,7 @@ export default class Form extends Component {
                 return response.data;
             },
             error => {
-                // console.log(error);
+                console.log(error.response.data);
             }
         );
         return "";

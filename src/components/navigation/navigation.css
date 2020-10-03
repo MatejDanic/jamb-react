@@ -8,6 +8,7 @@
 .menu {
     display: inline-flex;
     background-color: lightgray;
+    border-top-right-radius: 10px;
     height: 16vh;
 }
 
