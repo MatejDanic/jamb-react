@@ -27,7 +27,7 @@ export default class Scoreboard extends Component {
         this.setState({ scores, scoresToDisplay })
       },
       error => {
-        console.log(error.response.data);
+        console.log(error.response && error.response.data);
       }
     );
   }

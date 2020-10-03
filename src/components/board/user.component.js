@@ -40,7 +40,7 @@ export default class User extends Component {
           this.setState({ user, totalScore, highScore, userIsAdmin });
         },
         error => {
-          console.log(error.response.data);
+          console.log(error.response && error.response.data);
         }
       );
   }
@@ -51,7 +51,7 @@ export default class User extends Component {
         this.props.history.push("/users");
       },
       error => {
-        console.log(error.response.data);
+        console.log(error.response && error.response.data);
       }
     );
   }

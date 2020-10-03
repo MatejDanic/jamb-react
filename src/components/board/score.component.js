@@ -27,7 +27,7 @@ export default class Score extends Component {
         this.setState({ score: response.data });
       },
       error => {
-        console.log(error.response.data);
+        console.log(error.response && error.response.data);
       }
     );
   }
@@ -38,7 +38,7 @@ export default class Score extends Component {
         this.props.history.push("/scores");
       },
       error => {
-        console.log(error.response.data);
+        console.log(error.response && error.response.data);
       }
     );
   }
