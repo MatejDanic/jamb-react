@@ -1,0 +1,100 @@
+.container-custom {
+    padding: 1vw;
+    padding-top: 2vh;
+}
+
+.container-custom-inner {
+    padding: 5vw;
+    margin: 5vw;
+    border-radius: 16px;
+    border: 4px solid silver;
+}
+
+.container-custom-table {
+    text-align: center
+}
+
+.conatiner-pagination {
+    text-align: center;
+    width: 100%;
+}
+
+table {
+    width: 100%;
+}
+
+table th:first-child {
+    border-top-left-radius: 16px;
+}
+
+table th:last-child {
+    border-top-right-radius: 16px;
+}
+
+th {
+    background-color: lightskyblue;
+    cursor: pointer;
+}
+
+tr {
+    height: 4vh;
+    cursor: pointer;
+}
+
+tr:nth-child(odd) {
+    background-color: whitesmoke;
+}
+
+tr:nth-child(even) {
+    background-color: white;
+}
+
+tr:hover {
+    background-color: silver;
+}
+
+td {
+    border-bottom: 1px solid black;
+    text-align: center;
+}
+
+.roles {
+    text-align: left;
+}
+
+.roles li {
+    display: inline;
+}
+
+.roles li:after {
+    content: ", ";
+}
+
+.roles li:last-child:after {
+    content: "";
+}
+
+.button-pagination {
+    background-color: lightskyblue;
+    width: 4vw;
+    border-radius: 4px;
+    margin: 1vw;
+}
+
+.delete-button {
+    height: 15vw;
+    width: 15vw;
+    background-size: 100% 100%;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+@media screen and (max-width: 576px) {
+    tr {
+        height: 6vh;
+    }
+
+    .button-pagination {
+        width: 10vw;
+    }
+}

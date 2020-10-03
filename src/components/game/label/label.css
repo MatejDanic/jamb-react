@@ -1,0 +1,55 @@
+.label {
+  border-radius: 5px;
+  border: 1px solid black;
+  line-height: normal;
+  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  text-align: center;
+}
+
+.label-image {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.sum {
+  font-size: 10px;
+}
+
+.number {
+  font-size: 25px;
+}
+
+.final {
+  font-size: 25px;
+}
+
+.leader {
+  font-size: 20px;
+}
+
+.info {
+  font-size: 16px;
+}
+
+.row-start-8 {
+  grid-row-start: 8;
+}
+
+.row-start-11 {
+  grid-row-start: 11;
+}
+
+.row-start-17 {
+  grid-row-start: 17;
+}
+
+@media screen and (max-width: 576px) {
+  .label-image {
+    background-size: 98%;
+  }
+}

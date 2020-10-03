@@ -1,115 +1,53 @@
+import { BONUS_TRIPS, BONUS_STRAIGHT_SMALL, BONUS_STRAIGHT_BIG, BONUS_FULL, BONUS_POKER, BONUS_JAMB } from "../constants/game-constants";
+
 class ScoreUtil {
-    checkScore(box, dice) {
-        var score = 0;
-        var i, j, num, result;
-        if (box <= 5) {
-            box = box + 1;
-            for (i = 0; i < dice.length; i++) {
-                if (box === dice[i].value) {
-                    score += dice[i].value;
-                }
-            }
-        } else if (box === 6 || box === 7) {
-            for (i = 0; i < dice.length; i++) {
-                score += dice[i].value;
-            }
-        } else if (box === 8) {
-            for (i = 0; i < dice.length; i++) {
-                num = 1;
-                result = dice[i].value;
-                for (j = 0; j < dice.length; j++) {
-                    if (dice[i].label !== dice[j].label && dice[i].value === dice[j].value) {
-                        num++;
-                        if (num <= 3) result += dice[j].value;
-                    }
-                }
-                if (num >= 3) {
-                    score = result + 10;
-                    break;
-                }
-            }
-        } else if (box === 9) {
-            var straight = [2, 3, 4, 5];
-            var hasStraight = true;
-            var diceResults = [];
-            for (i = 0; i < dice.length; i++) {
-                diceResults.push(dice[i].value);
-            }
-
-            for (i = 0; i < straight.length; i++) {
-                if (!diceResults.includes(straight[i])) {
-                    hasStraight = false;
-                }
-            }
-            if (hasStraight) {
-                if (diceResults.includes(1)) {
-                    score = 35;
-                } else if (diceResults.includes(6)) {
-                    score = 45;
-                } else {
-                    score = 0;
-                }
-            }
-        } else if (box === 10) {
-            var hasPair = false;
-            var hasTrips = false;
-            for (i = 0; i < dice.length; i++) {
-                num = 1;
-                result = dice[i].value;
-                for (j = 0; j < dice.length; j++) {
-                    if (dice[i].label !== dice[j].label && dice[i].value === dice[j].value) {
-                        num++;
-                        if (num <= 3) result += dice[j].value;
-                    }
-                }
-                if (num === 2 && !hasPair) {
-                    hasPair = true;
-                    score += result
-                } else if (num === 3 && !hasTrips) {
-                    hasTrips = true;
-                    score += result
-                }
-            }
-
-            if (hasPair && hasTrips) {
-                score += 30;
-            } else {
-                score = 0;
-            }
-
-        } else if (box === 11) {
-            for (i = 0; i < dice.length; i++) {
-                num = 1;
-                result = dice[i].value;
-                for (j = 0; j < dice.length; j++) {
-                    if (dice[i].label !== dice[j].label && dice[i].value === dice[j].value) {
-                        num++;
-                        if (num <= 4) result += dice[j].value;
-                    }
-                }
-                if (num >= 4) {
-                    score = result + 40;
-                    break;
-                }
-            }
-        } else if (box === 12) {
-            for (i = 0; i < dice.length; i++) {
-                num = 1;
-                result = dice[i].value;
-                for (j = 0; j < dice.length; j++) {
-                    if (dice[i].label !== dice[j].label && dice[i].value === dice[j].value) {
-                        num++;
-                        result += dice[j].value;
-                    }
-                }
-                if (num === 5) {
-                    score = result + 50;
-                    break;
-                }
-            }
+    calculateScore(dice, boxType) {
+        let result;
+        let diceValues = [];
+        for (let key in dice) {
+            diceValues.push(dice[key].value);
         }
-        return score;
-    }
+        switch(boxType.label) {
+            case "ONES":                
+                /* falls through */
+            case "TWOS":                
+                /* falls through */
+            case "THREES":                
+                /* falls through */
+            case "FOURS":                
+                /* falls through */
+            case "FIVES":                
+                /* falls through */
+            case "SIXES":                
+                /* falls through */
+                result = calculateSumByType(diceValues, boxType.id);
+                break;
+            case "MAX":        
+                /* falls through */
+            case "MIN":
+                result = calculateSum(diceValues);
+                break;
+            case "TRIPS":
+                result = calculateSumOfRepeatingValue(diceValues, 3, BONUS_TRIPS);
+                break;
+            case "STRAIGHT":
+                result = calculateStraight(diceValues);
+                break;
+            case "FULL":
+                result = calculateFull(diceValues, BONUS_FULL);
+                break;
+            case "POKER":
+                result = calculateSumOfRepeatingValue(diceValues, 4, BONUS_POKER);
+                break;
+            case "JAMB":
+                result = calculateSumOfRepeatingValue(diceValues, 5, BONUS_JAMB);
+                break;
+            default:
+                result = 0;
+        }
+        return result;
+    }    
+
     getHighScore(scores) {
         let highScore = 0;
         for (let key in scores) {
@@ -117,6 +55,7 @@ class ScoreUtil {
         }
         return highScore;
     }
+
     getTotalScore(scores) {
         let totalScore = 0;
         for (let key in scores) {
@@ -124,6 +63,65 @@ class ScoreUtil {
         }
         return totalScore;
     }
+}
+
+const countOccurrences = (arr, val) => arr.reduce((a, v) => (v === val ? a + 1 : a), 0);
+
+function calculateSum(diceValues) {
+    let sum = 0;
+    sum = diceValues.reduce((a, b) => a + b, 0)
+    return sum;
+}
+
+function calculateSumByType(diceValues, boxTypeId) {
+    let sum = 0;
+    for (let key in diceValues) {
+        if (diceValues[key] === boxTypeId) {
+            sum += diceValues[key];
+        }
+    }
+    return sum;
+}
+
+function calculateSumOfRepeatingValue(diceValues, repeatNumber, bonus) {
+    let sum = 0
+    for (let i = 1; i <= 6; i++) {
+        let count = countOccurrences(diceValues, i);
+        if (count >= repeatNumber) { 
+            sum = i * repeatNumber + bonus;
+        }
+    }
+    return sum;
+}
+
+function calculateStraight(diceValues) {
+    let result = 0;
+    let straight = [2, 3, 4, 5];
+    if (straight.every(i => diceValues.includes(i))) {
+        if (diceValues.includes(1)) {
+            result = BONUS_STRAIGHT_SMALL;
+        } else if (diceValues.includes(6))
+            result = BONUS_STRAIGHT_BIG;
+    }
+    return result;
+}
+
+function calculateFull(diceValues, bonus) {
+    let result = 0
+    let valueOfPair = 0;
+    let valueOfTrips = 0;
+    for (let i = 1; i <= 6; i++) {
+        let count = countOccurrences(diceValues, i);
+        if (count === 2) {
+            valueOfPair = i * count;
+        } else if (count === 3) {
+            valueOfTrips = i * count;
+        }
+    }
+    if (valueOfPair > 0 && valueOfTrips > 0) {
+        result = valueOfPair + valueOfTrips + bonus;
+    }
+    return result;
 }
 
 export default new ScoreUtil();

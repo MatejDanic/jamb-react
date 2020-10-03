@@ -1,11 +1,25 @@
 import React, { Component } from "react";
+// services
+import AuthService from "../../services/auth.service";
+// stylesheets
 import "./navigation.css";
 
+export default class Menu extends Component {  
 
-export default class Menu extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            currentUser: undefined
+        };
+    }
+
+    componentDidMount() {
+        let currentUser = AuthService.getCurrentUser();
+        if (currentUser) this.setState({ currentUser });
+    }
 
     render() {
-        let currentUser = this.props.currentUser;
+        let currentUser = this.state.currentUser;
         let showMenu = this.props.showMenu;
         let history = this.props.history;
         let gameMounted = this.props.gameMounted;
@@ -20,7 +34,7 @@ export default class Menu extends Component {
                             <div className="menu-element" onClick={() => history.push("/users")} style={{ backgroundImage: 'url(/images/misc/users.png)' }}><div className="menu-element-text">Korisnici</div></div>
                             <div className="menu-element" onClick={() => history.push("/scores")} style={{ backgroundImage: 'url(/images/misc/scores.png)' }}><div className="menu-element-text">Rezultati</div></div>
                             {currentUser ?
-                                (<div className="menu-element" onClick={() => history.push("/profile")} style={{ backgroundImage: 'url(/images/misc/profile.png)' }}><div className="menu-element-text">{currentUser && currentUser.username}</div></div>) :
+                                (<div className="menu-element" onClick={this.props.onLogout} href="/login" style={{ backgroundImage: 'url(/images/misc/logout.png)' }}><div className="menu-element-text">Odjava</div></div>) :
                                 (<div className="menu-element" onClick={() => history.push("/login")} style={{ backgroundImage: 'url(/images/misc/login.png)' }}><div className="menu-element-text">Prijava</div></div>)}
                         </div>
                     </div>}
