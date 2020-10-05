@@ -1,7 +1,9 @@
 import React, { Component } from "react";
+// validation
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
+// services
 import AuthService from "../../services/auth.service";
 
 const required = value => {
@@ -37,9 +39,6 @@ const vpassword = value => {
 export default class Register extends Component {
   constructor(props) {
     super(props);
-    this.handleRegister = this.handleRegister.bind(this);
-    this.onChangeUsername = this.onChangeUsername.bind(this);
-    this.onChangePassword = this.onChangePassword.bind(this);
 
     this.state = {
       username: "",
@@ -47,6 +46,10 @@ export default class Register extends Component {
       successful: false,
       message: ""
     };
+    
+    this.handleRegister = this.handleRegister.bind(this);
+    this.onChangeUsername = this.onChangeUsername.bind(this);
+    this.onChangePassword = this.onChangePassword.bind(this);
   }
 
   onChangeUsername(e) {
@@ -118,7 +121,7 @@ export default class Register extends Component {
             {!this.state.successful && (
               <div>
                 <div className="form-group">
-                  <label htmlFor="username">Korisnicko ime</label>
+                  <label htmlFor="username">Korisničko ime</label>
                   <Input
                     type="text"
                     className="form-control"

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+// styles
 import "./board.css";
 
 export default class Admin extends Component {
