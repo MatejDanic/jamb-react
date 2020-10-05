@@ -16,7 +16,7 @@ import Menu from "./components/navigation/menu.component";
 import Bar from "./components/navigation/bar.component";
 // services
 import AuthService from "./services/auth.service";
-// stylesheets
+// styles
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./components/navigation/navigation.css";
 import "./constants/colors.css";

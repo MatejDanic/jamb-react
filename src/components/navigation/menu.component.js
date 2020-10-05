@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 // services
 import AuthService from "../../services/auth.service";
-// stylesheets
+// styles
 import "./navigation.css";
 
 export default class Menu extends Component {  

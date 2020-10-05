@@ -2,7 +2,7 @@ import React, { Component } from "react";
 // services
 import AuthService from "../../../services/auth.service";
 import FormService from "../../../services/form.service";
-// stylesheets
+// styles
 import "./button.css";
 import "../../../constants/colors.css";
 

@@ -16,7 +16,7 @@ import ScoreService from "../../../services/score.service";
 import ScoreUtil from "../../../utils/score.util";
 // constants
 import { NUMBERSUM_BONUS, NUMBERSUM_BONUS_THRESHOLD } from "../../../constants/game-constants";
-// stylesheets
+// styles
 import "./form.css";
 import ProfileButton from "../button/profile-button.component";
 

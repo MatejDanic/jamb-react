@@ -1,11 +1,15 @@
 
 
 import React, { Component } from "react";
-import { dateFormatMedium } from "../../constants/date-format";
+// services
 import ScoreService from "../../services/score.service";
+// utils
 import DateUtil from "../../utils/date.util";
 import { pagination } from "../../utils/pagination.util";
 import { sortTable } from "../../utils/sort.util";
+// constants
+import { dateFormatMedium } from "../../constants/date-format";
+// styles
 import "./board.css";
 
 export default class ScoreList extends Component {
@@ -25,7 +29,7 @@ export default class ScoreList extends Component {
           for (let key in response.data) {
             scores.push(response.data[key]);
           }
-          this.setState({ scores: scores }, () => {
+          this.setState({ scores }, () => {
             sortTable(0, false);
             pagination();
           });
@@ -40,7 +44,7 @@ export default class ScoreList extends Component {
       for (let key in this.props.scores) {
         scores.push(this.props.scores[key]);
       }
-      this.setState({ scores: scores }, () => {
+      this.setState({ scores }, () => {
         sortTable(0, false);
         pagination();
       });

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 // services
 import AuthService from "../../../services/auth.service";
-// stylesheets
+// styles
 import "../../../constants/colors.css";
 import "./button.css";
 
