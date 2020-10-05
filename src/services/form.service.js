@@ -41,12 +41,17 @@ class FormService {
     fillBox(formId, columnTypeId, boxTypeId) {
         return axios.put(apiURL + "/" + formId +
             "/columns/" + columnTypeId +
-            "/boxes/" + boxTypeId + "/fill",
-            null, { headers: authHeader() });
+            "/boxes/" + boxTypeId + "/fill", null, 
+            { headers: authHeader() });
     }
 
     deleteForm(formId) {
         return axios.delete(apiURL + "/" + formId,
+            { headers: authHeader() });
+    }
+
+    restartForm(formId) {
+        return axios.put(apiURL + "/" + formId + "/restart", null, 
             { headers: authHeader() });
     }
 }

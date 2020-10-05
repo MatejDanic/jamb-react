@@ -29,7 +29,7 @@ export default class RestartButton extends Component {
   handleClick() {
     let currentUser = this.state.currentUser;
     if (currentUser) {
-      FormService.deleteForm(this.props.formId).then(
+      FormService.restartForm(this.props.formId).then(
         () => {
           window.location.reload();
         },
