@@ -53,6 +53,7 @@ export default class ScoreList extends Component {
   }
 
   render() {
+    let username = this.props.username;
     let scores = this.state.scores;
     return (
       <div className="container-custom container-custom-table">
@@ -60,7 +61,7 @@ export default class ScoreList extends Component {
           <thead>
             <tr>
               <th onClick={() => sortTable(0)}>Datum</th>
-              <th onClick={() => sortTable(1)}>Ime</th>
+              {!username && <th onClick={() => sortTable(1)}>Ime</th>}
               <th onClick={() => sortTable(2)}>Vrijednost</th>
             </tr>
           </thead>
@@ -68,7 +69,7 @@ export default class ScoreList extends Component {
             {scores && scores.map(score =>
               <tr className={"tr"} key={score.id} id={score.id} onClick={() => { this.props.history.push("/scores/" + score.id) }}>
                 <td>{dateFormatMedium.format(DateUtil.getDateFromLocalDateTime(score.date))}</td>
-                <td>{this.props.username ? this.props.username : score.user.username}</td>
+                {!username && <td>{score.user.username}</td>}
                 <td>{score.value}</td>
               </tr>)}
           </tbody>
