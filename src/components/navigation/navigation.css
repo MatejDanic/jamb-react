@@ -51,11 +51,11 @@
 }
 
 .bar {
-    background-color: lightgray;;
     display: inline-flex;
     align-items: center;
     height: 6vh;
     width: 100vw;
+    background-color: lightpink;
     border-bottom: 1px solid gray;
 }
 
@@ -70,14 +70,13 @@
 }
 
 .bar-element {
-    color: darkslategray;
-    background-color: lightgray;
+    color: black;
+    background-color: lightpink;
     border: none;
     height: 6vh;
     width: 15vw;
-    border-bottom: 1px solid gray;
-    font-weight: bold;
-    font-size: 20px;
+    border-bottom: 1px solid black;
+    font-size: 24px;
 }
 
 .bar-left .bar-element {
