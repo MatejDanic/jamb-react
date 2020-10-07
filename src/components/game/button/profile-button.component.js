@@ -23,8 +23,8 @@ export default class ProfileButton extends Component {
         let currentUser = this.state.currentUser;
         return (
             <div>
-                {currentUser ? <button className="form-button profile" onClick={() => this.props.history.push("/profile")}>{currentUser.username}</button> :
-                    <div className="form-button profile">Gost</div>}
+                {currentUser ? <button className="button form-button profile" onClick={() => this.props.history.push("/profile")}>{currentUser.username}</button> :
+                    <div className="button form-button profile">Gost</div>}
             </div>
         )
     }

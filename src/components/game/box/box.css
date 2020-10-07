@@ -29,6 +29,10 @@
 	border: 1px solid gray;
 }
 
+.box:focus {
+	outline: none;
+}
+
 @media screen and (max-width : 576px) {
 	.box {
 		font-size: 22px;

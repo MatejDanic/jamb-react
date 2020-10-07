@@ -203,7 +203,7 @@ export default class Form extends Component {
                     let time = Math.round(800 + Math.random() * 1000);
                     let diceElement = document.getElementById('dice' + local_i);
                     let sound = new Audio("/sounds/dice/dice_0" + (Math.round(Math.random() * 9)) + ".mp3");
-                    sound.volume = 0.2;
+                    sound.volume = 0.4;
                     setTimeout(function () {
                         diceElement.style.animationDuration = time + "ms";
                         diceElement.style.animationIterationCount = Math.round(1 + Math.random() * 2);
@@ -297,7 +297,7 @@ export default class Form extends Component {
                     let box = column.boxes[j];
                     if (box.boxType.id === boxType.id) {
                         let sound = new Audio("/sounds/box/fill_box.mp3");
-                        sound.volume = 0.2;
+                        sound.volume = 0.4;
                         sound.play();
                         box.value = score;
                         box.available = false;

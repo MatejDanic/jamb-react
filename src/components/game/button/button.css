@@ -9,6 +9,10 @@
   color: darkslategray;
 }
 
+.button:focus {
+  outline: none;
+}
+
 .menu-button {
   background-size: 8vw;
   background-position: center center;
@@ -80,7 +84,7 @@
   border: 2px solid darkslategray;
 }
 
-.roll-dice-button {
+.roll-dice {
   color: black;
   border-radius: 5px;
   border: 1px solid darkslategray;
@@ -91,7 +95,7 @@
   font-size: 18px;
 }
 
-.roll-dice-button:hover {
+.roll-dice:hover {
   color: black;
   background-color: #ff8a9c;
   border: 2px solid darkslategray;

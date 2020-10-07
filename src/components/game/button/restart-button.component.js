@@ -22,7 +22,7 @@ export default class RestartButton extends Component {
 
   render() {
     return (
-      <button className="form-button bg-light-pink restart" style={{ backgroundImage: 'url(/images/misc/restart.png)' }} onClick={() => { if (window.confirm('Jeste li sigurni da želite početi ispočetka?')) this.handleClick() }}></button>
+      <button className="button form-button bg-light-pink restart" style={{ backgroundImage: 'url(/images/misc/restart.png)' }} onClick={() => { if (window.confirm('Jeste li sigurni da želite početi ispočetka?')) this.handleClick() }}></button>
     )
   }
 
