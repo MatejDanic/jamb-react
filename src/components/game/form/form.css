@@ -5,6 +5,16 @@
   justify-content: center;
 }
 
+.form-container {
+  height: 100%
+}
+
+.dice-rack-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .form {
   display: inline-grid;
   grid-template-columns: repeat(6, 64px);
@@ -25,25 +35,43 @@
   grid-column-start: 1;
   grid-column-end: 7;
   grid-template-columns: repeat(3, 128px);
+  grid-template-rows: 32px;
 }
 
 @media screen and (max-width: 576px) {
 
   .center {
-    height: 99vh;
+    height: 100vh;
+    justify-content: unset;
+    align-items: unset;
+    padding: 0px;
+    margin: 0px;
+  }
+
+  .form-container {
+    height: 88.2vh;
+    padding: 0px;
+    margin: 0px;
+  }
+
+  .dice-rack-container {
+    padding: 0px;
+    margin: 0px;
+    height: 11.8vh;
   }
 
   .form {
-    grid-template-columns: repeat(6, 16.666vw);
+    grid-template-columns: repeat(6, 16.66vw);
     grid-template-rows: repeat(18, 4.9vh);
   }
 
   .game-column {
     grid-template-rows: repeat(17, 4.9vh);
-    grid-template-columns: 16.666vw;
+    grid-template-columns: 16.66vw;
   }
 
   .bottom-row {
-    grid-template-columns: repeat(3, 33.333vw);
+    grid-template-columns: repeat(3, 33.33vw);
+    grid-template-rows: 4.9vh;
   }
 }

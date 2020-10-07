@@ -24,7 +24,7 @@ export default class ProfileButton extends Component {
         return (
             <div>
                 {currentUser ? <button className="form-button profile" onClick={() => this.props.history.push("/profile")}>{currentUser.username}</button> :
-                    <div className="form-button">Gost</div>}
+                    <div className="form-button profile">Gost</div>}
             </div>
         )
     }

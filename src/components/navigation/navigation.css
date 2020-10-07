@@ -55,8 +55,7 @@
     align-items: center;
     height: 6vh;
     width: 100vw;
-    background-color: lightpink;
-    border-bottom: 1px solid gray;
+    background-color: lightgray;
 }
 
 .bar-left {
@@ -70,21 +69,26 @@
 }
 
 .bar-element {
-    color: black;
-    background-color: lightpink;
+    background-color: lightgray;
+    color: darkslategray;
     border: none;
     height: 6vh;
     width: 15vw;
-    border-bottom: 1px solid black;
+    font-weight: 400;
     font-size: 24px;
 }
 
-.bar-left .bar-element {
+/* .bar-left .bar-element {
     border-right: 1px solid gray;
     border-bottom-right-radius: 10px;
+} */
+
+.bar-element:hover {
+    background-color: darkslategray;
+    color: white;
 }
 
-.bar-right .bar-element {
+/* .bar-right .bar-element {
     border-left: 1px solid gray;
     border-bottom-left-radius: 10px;
-}
+} */

@@ -1,17 +1,24 @@
 .box {
 	border-radius: 5px;
-	border: 1px solid black;
+	border: 1px solid darkslategray;
 	font-size: 25px;
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: "Comic Sans MS", cursive, sans-serif;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	border-radius: 5px;
 	background-color: white;
+	color: darkslategray;
+}
+
+.box:hover:not([disabled]) {
+	border: 1px solid black;
+	background-color: lightgray;
 }
 
 .box:disabled {
-	color: black;
+	background-color: whitesmoke;
+	color: darkslategray;
 }
 
 .box-red-border {
@@ -24,8 +31,6 @@
 
 @media screen and (max-width : 576px) {
 	.box {
-		width: auto;
-		height: auto;
 		font-size: 22px;
 	}
 }

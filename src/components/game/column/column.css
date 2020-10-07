@@ -9,6 +9,6 @@
 @media screen and (max-width: 576px) {
   .column {
     grid-template-rows: repeat(17, 4.9vh);
-    grid-template-columns: 16.666vw;
+    grid-template-columns: 16.66vw;
   }
 }

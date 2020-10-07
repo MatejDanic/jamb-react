@@ -1,32 +1,51 @@
 .form-button {
-  width: 100%;
-  height: 100%;
   border-radius: 5px;
-  border: 1px solid black;
+  border: 1px solid darkslategray;
   display: flex;
   justify-content: center;
   align-items: center; 
   font-size: 16px;
   font-family: Arial, Helvetica, sans-serif;
+  color: darkslategray;
 }
 
 .menu-button {
   background-size: 8vw;
   background-position: center center;
   background-repeat: no-repeat;
-  border: 1px solid black;
+  border: 1px solid darkslategray;
   border-radius: 5px;
+  color: darkslategray;
+  font-style: normal;
+  font-size: 20px;
+  width: 100%;
+  height: 100%;
 }
 
-.rules {
+.menu-button:hover {
+  border: 2px solid darkslategray;
+  color: black;
+  background-color: #ff8a9c;
+  text-decoration: none;
+}
+
+.rules { 
+  color: darkslategray;
   border-radius: 5px;
-  border: 1px solid black;
+  border: 1px solid darkslategray;
   background-size: 50% 90%;
   background-position: center center;
   background-repeat: no-repeat;
 }
 
+.rules:hover {
+  background-color: #ff8a9c;
+  border: 2px solid darkslategray;
+  color: black;
+}
+
 .restart {
+  color: darkslategray;
   grid-row-start: 9;
   grid-row-end: 11;
   background-size: cover;
@@ -34,19 +53,48 @@
   background-repeat: no-repeat;
 }
 
+.restart:hover {
+  color: black;
+  background-color: #ff8a9c;
+  border: 2px solid darkslategray;
+}
+
 .profile {
+  border: 1px solid darkslategray;
+  border-radius: 5px;
+  width: 100%;
+  height: 100%;
+  font-weight: 500;
   font-size: 20px;
-  background-color: white;
+  background-color: white;  
+  color: darkslategray;
+}
+
+.profile:not([button]) {
+  color: black;
+}
+
+.profile:hover button {
+  color: black;
+  background-color: silver;
+  border: 2px solid darkslategray;
 }
 
 .roll-dice-button {
+  color: black;
   border-radius: 5px;
-  border: 1px solid black;
+  border: 1px solid darkslategray;
   font-family: Arial, Helvetica, sans-serif;
   grid-row-start: 1;
   grid-row-end: 8;
   line-height: 1.3em;
   font-size: 18px;
+}
+
+.roll-dice-button:hover {
+  color: black;
+  background-color: #ff8a9c;
+  border: 2px solid darkslategray;
 }
 
 .two-rolls {
