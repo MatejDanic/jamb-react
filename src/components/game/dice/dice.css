@@ -8,6 +8,7 @@
   background-color: white;
   margin: 5px;
 }
+
 @media screen and (min-width: 577px) {
   
   .dice-button:hover:not([disabled]) {

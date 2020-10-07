@@ -11,10 +11,13 @@
 	color: darkslategray;
 }
 
-.box:hover:not([disabled]) {
-	border: 1px solid black;
-	background-color: lightgray;
+@media screen and (min-width: 577px) {
+	.box:hover:not([disabled]) {
+		border: 1px solid black;
+		background-color: lightgray;
+	}
 }
+
 
 .box:disabled {
 	background-color: whitesmoke;
