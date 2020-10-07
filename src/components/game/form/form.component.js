@@ -200,13 +200,24 @@ export default class Form extends Component {
         for (let key in dice) {
             if (!dice[key].hold) {
                 (function (local_i) {
+                    let time = Math.round(800 + Math.random() * 1000);
+                    let diceElement = document.getElementById('dice' + local_i);
+                    let sound = new Audio("/sounds/dice/dice_0" + (Math.round(Math.random() * 9)) + ".mp3");
+                    sound.volume = 0.2;
                     setTimeout(function () {
-                        document.getElementById('dice' + local_i).classList.add('roll');
+                        diceElement.style.animationDuration = time + "ms";
+                        diceElement.style.animationIterationCount = Math.round(1 + Math.random() * 2);
+                        diceElement.classList.add("roll");
+                        sound.play();
+                        Math.random() > 0.5 ? diceElement.classList.add("clockwise") : diceElement.classList.add("counterclockwise");
+                        // diceElement.classList.add('roll');
                     }, 0);
                     setTimeout(function () {
-                        document.getElementById('dice' + local_i).classList.remove('roll');
-                    }, 1000);
-                })(key);
+                        diceElement.classList.remove('roll');
+                        diceElement.classList.remove('clockwise');
+                        diceElement.classList.remove('counterclockwise');
+                    }, time);
+                }) (key);
             }
         }
     }
@@ -285,6 +296,9 @@ export default class Form extends Component {
                 for (let j in column.boxes) {
                     let box = column.boxes[j];
                     if (box.boxType.id === boxType.id) {
+                        let sound = new Audio("/sounds/box/fill_box.mp3");
+                        sound.volume = 0.2;
+                        sound.play();
                         box.value = score;
                         box.available = false;
                         box.filled = true;
@@ -384,47 +398,53 @@ export default class Form extends Component {
         let gameInfo = { announcement, boxesDisabled, rollCount, sums };
         return (
             <div className="center">
-                {form && form.dice && <DiceRack rollDisabled={rollDisabled} rollCount={form.rollCount} dice={form.dice}
-                    diceDisabled={diceDisabled} onToggleDice={this.handleToggleDice} />}
-                {form && form.columns && <div className="form">
-                    <div className="game-column">
-                        <RulesButton />
-                        <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/1.png"} />
-                        <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/2.png"} />
-                        <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/3.png"} />
-                        <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/4.png"} />
-                        <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/5.png"} />
-                        <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/6.png"} />
-                        <Label labelClass={"label sum bg-light-sky-blue"} value={"zbroj (1-6) + 30 ako >= 60"} />
-                        <Label labelClass={"label bg-white"} value={"MAX"} />
-                        <Label labelClass={"label bg-white"} value={"MIN"} />
-                        <Label labelClass={"label sum bg-light-sky-blue"} value={"(max-min) x jedinice"} />
-                        <Label labelClass={"label bg-white"} value={"TRIS"} />
-                        <Label labelClass={"label bg-white"} value={"SKALA"} />
-                        <Label labelClass={"label bg-white"} value={"FULL"} />
-                        <Label labelClass={"label bg-white"} value={"POKER"} />
-                        <Label labelClass={"label bg-white"} value={"JAMB"} />
-                        <Label labelClass={"label sum bg-light-sky-blue"} value={"zbroj (tris‑jamb)"} /> {/* unicode hyphen! */}
-                    </div>
-                    <Column gameInfo={gameInfo} column={form.columns[0]} onBoxClick={this.handleBoxClick} />
-                    <Column gameInfo={gameInfo} column={form.columns[1]} onBoxClick={this.handleBoxClick} />
-                    <Column gameInfo={gameInfo} column={form.columns[2]} onBoxClick={this.handleBoxClick} />
-                    <Column gameInfo={gameInfo} column={form.columns[3]} onBoxClick={this.handleBoxClick} />
-                    <div className="game-column">
-                        <RollDiceButton rollCount={form.rollCount} rollDisabled={rollDisabled} onRollDice={this.handleRollDice} />
-                        <Label labelClass={"label number bg-light-sky-blue row-start-8"} number={gameInfo.sums["numberSum"]} id="numberSum" />
-                        <RestartButton currentUser={currentUser} formId={form.id} />
-                        <Label labelClass={"label number bg-light-sky-blue row-start-11"} number={gameInfo.sums["diffSum"]} id="diffSum" />
-                        <Scoreboard />
-                        <Label labelClass={"label number bg-light-sky-blue row-start-17"} number={gameInfo.sums["labelSum"]} id="labelSum" />
-                    </div>
-                    <div />
-                    <div className="bottom-row">
-                        <MenuButton onToggleMenu={this.props.onToggleMenu} history={this.props.history} smallWindow={this.props.smallWindow} />
-                        <ProfileButton history={this.props.history} />
-                        <Label labelClass={"label final bg-light-sky-blue"} number={gameInfo.sums["finalSum"]} id="labelSum" />
-                    </div>
-                </ div>}
+
+                {form && form.dice && <div className="dice-rack-container">
+                    <DiceRack rollDisabled={rollDisabled} rollCount={form.rollCount} dice={form.dice}
+                    diceDisabled={diceDisabled} onToggleDice={this.handleToggleDice} />
+                </div>}
+
+                {form && form.columns && <div className="form-container">
+                    <div className="form">
+                        <div className="game-column">
+                            <RulesButton />
+                            <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/1.png"} />
+                            <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/2.png"} />
+                            <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/3.png"} />
+                            <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/4.png"} />
+                            <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/5.png"} />
+                            <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/6.png"} />
+                            <Label labelClass={"label sum bg-light-sky-blue"} value={"zbroj (1-6) + 30 ako >= 60"} />
+                            <Label labelClass={"label bg-white"} value={"MAX"} />
+                            <Label labelClass={"label bg-white"} value={"MIN"} />
+                            <Label labelClass={"label sum bg-light-sky-blue"} value={"(max-min) x jedinice"} />
+                            <Label labelClass={"label bg-white"} value={"TRIS"} />
+                            <Label labelClass={"label bg-white"} value={"SKALA"} />
+                            <Label labelClass={"label bg-white"} value={"FULL"} />
+                            <Label labelClass={"label bg-white"} value={"POKER"} />
+                            <Label labelClass={"label bg-white"} value={"JAMB"} />
+                            <Label labelClass={"label sum bg-light-sky-blue"} value={"zbroj (tris‑jamb)"} />
+                        </div>
+                        <Column gameInfo={gameInfo} column={form.columns[0]} onBoxClick={this.handleBoxClick} />
+                        <Column gameInfo={gameInfo} column={form.columns[1]} onBoxClick={this.handleBoxClick} />
+                        <Column gameInfo={gameInfo} column={form.columns[2]} onBoxClick={this.handleBoxClick} />
+                        <Column gameInfo={gameInfo} column={form.columns[3]} onBoxClick={this.handleBoxClick} />
+                        <div className="game-column">
+                            <RollDiceButton rollCount={form.rollCount} rollDisabled={rollDisabled} onRollDice={this.handleRollDice} />
+                            <Label labelClass={"label number bg-light-sky-blue row-start-8"} number={gameInfo.sums["numberSum"]} id="numberSum" />
+                            <RestartButton currentUser={currentUser} formId={form.id} />
+                            <Label labelClass={"label number bg-light-sky-blue row-start-11"} number={gameInfo.sums["diffSum"]} id="diffSum" />
+                            <Scoreboard />
+                            <Label labelClass={"label number bg-light-sky-blue row-start-17"} number={gameInfo.sums["labelSum"]} id="labelSum" />
+                        </div>
+                        <div />
+                        <div className="bottom-row">
+                            <MenuButton onToggleMenu={this.props.onToggleMenu} history={this.props.history} smallWindow={this.props.smallWindow} />
+                            <ProfileButton history={this.props.history} />
+                            <Label labelClass={"label number final-sum bg-light-sky-blue"} number={gameInfo.sums["finalSum"]} id="labelSum" />
+                        </div>
+                    </ div>
+                </div>}
             </div>
         )
     }

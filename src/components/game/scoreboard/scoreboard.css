@@ -3,6 +3,7 @@
     margin: 0px;
     list-style-type: none;
     font-size: 14px;
+    font-weight: 500;
 }
 
 .scoreboard-button {
@@ -11,8 +12,15 @@
     align-items: center; 
     grid-row-start: 12;
     grid-row-end: 17;
-    border: 1px solid black;
+    border: 1px solid darkslategray;
+    color: black;
     border-radius: 5px;
+}
+
+.scoreboard-button:hover {
+    background-color: #ff8a9c;
+    color: black;
+    border: 2px solid darkslategray;;
 }
 
 .scoreboard-empty {

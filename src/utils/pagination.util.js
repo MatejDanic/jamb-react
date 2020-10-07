@@ -33,7 +33,9 @@ function pagination() {
 
             // -------------------- BUTTON WITH PAGE NUMBER --------------------
             let node = createPaginationButton(tbody, p, p, rowsPerPage);
-            if (p === currentPage) node.style.backgroundColor = "lightpink";
+            if (p === currentPage) {
+                node.disabled = true;
+            }
             document.getElementById('pagination').appendChild(node);
 
             // -------------------- BUTTON NEXT --------------------

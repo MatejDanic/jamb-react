@@ -8,7 +8,7 @@ export default class MenuButton extends Component {
         return (
             <div>
                 {this.props.smallWindow ? <button className="form-button menu-button bg-light-pink" style={{ backgroundImage: 'url(/images/misc/cog.png)' }} onClick={this.props.onToggleMenu}></button> : 
-                <div className="form-button bg-light-pink"><a href="https://github.com/MatejDanic">PROJEKT</a></div>}
+                <a className="form-button menu-button bg-light-pink" href="https://github.com/MatejDanic">Projekt</a>}
             </div>
         );
     }
