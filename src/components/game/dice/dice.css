@@ -8,10 +8,16 @@
   background-color: white;
   margin: 5px;
 }
-
-.dice-button:hover:not([disabled]) {
+@media screen and (min-width: 577px) {
+  
+  .dice-button:hover:not([disabled]) {
   background-color: silver;
   border: 4px solid indianred;
+  }
+}
+
+.dice-button:focus {
+  outline: none;
 }
 
 .dice-button:disabled {

@@ -17,6 +17,10 @@
     border-radius: 5px;
 }
 
+.scoreboard-button:focus {
+    outline: none;
+}
+
 .scoreboard-button:hover {
     background-color: #ff8a9c;
     color: black;

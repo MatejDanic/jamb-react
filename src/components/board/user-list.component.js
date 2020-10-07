@@ -39,7 +39,7 @@ export default class UserList extends Component {
     let users = this.state.users;
     return (
       <div className="container-custom container-custom-table">
-        <table>
+        <table style={{ width: '100%' }}>
           <thead>
             <tr>
               <th onClick={() => sortTable(0)}>Ime</th>
