@@ -101,6 +101,10 @@
   border: 2px solid darkslategray;
 }
 
+.roll-dice:disabled {
+  background-color: whitesmoke;
+}
+
 .two-rolls {
   background-image: linear-gradient(rgba(255, 255, 255, 1) 66.6%,
       rgba(255, 255, 255, 0) 66.6%,

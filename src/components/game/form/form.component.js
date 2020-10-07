@@ -452,6 +452,7 @@ export default class Form extends Component {
     endGame() {
         this.setState({ rollDisabled: true }, () => {
             alert("Čestitamo, vaš ukupni rezultat je " + this.state.sums["finalSum"]);
+            window.location.reload();
         })
     }
 
