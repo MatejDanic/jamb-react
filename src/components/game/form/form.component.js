@@ -27,6 +27,7 @@ export default class Form extends Component {
         super();
         this.state = {
             currentUser: undefined,
+            sounds: {},
             form: {},
             sums: {},
             filledBoxCount: 0,
@@ -65,6 +66,7 @@ export default class Form extends Component {
         } else {
             this.initializeForm(null);
         }
+        
     }
 
     componentWillUnmount() {
@@ -87,6 +89,13 @@ export default class Form extends Component {
 
     initializeForm(form) {
         let currentWeekLeader = this.getCurrentWeekLeader();
+        let sounds = {};
+        sounds.dice = [];
+        for (let i = 0; i <= 9; i++) {
+            sounds.dice.push(new Audio("/sounds/dice/dice_0" + i + ".mp3"));
+        }
+        sounds.box = new Audio("/sounds/box/fill_box.mp3");
+        console.log(sounds);
         if (this._isMounted) {
             if (form != null) {
                 let announcementRequired = this.isAnnouncementRequired(form);
@@ -95,7 +104,7 @@ export default class Form extends Component {
                 let filledBoxCount = this.getFilledBoxCount(form);
                 let sums = this.initializeSums(form);
                 sums = this.updateSums(form, sums);
-                this.setState({ form, sums, announcementRequired, rollDisabled, diceDisabled, filledBoxCount, currentWeekLeader });
+                this.setState({ form, sums, announcementRequired, rollDisabled, diceDisabled, filledBoxCount, currentWeekLeader, sounds });
             } else {
                 let form = {};
                 form.columns = [];
@@ -135,7 +144,7 @@ export default class Form extends Component {
                 form.id = null;
                 let sums = this.initializeSums(form);
                 let filledBoxCount = 0;
-                this.setState({ form, sums, filledBoxCount, currentWeekLeader });
+                this.setState({ form, sums, filledBoxCount, currentWeekLeader, sounds  });
             }
         }
     }
@@ -195,18 +204,31 @@ export default class Form extends Component {
         return announcementRequired;
     }
 
+    getRandom(array, numberOfElements) {
+        var result = new Array(numberOfElements),
+            arrayLength = array.length,
+            taken = new Array(arrayLength);
+        while (numberOfElements--) {
+            var x = Math.floor(Math.random() * arrayLength);
+            result[numberOfElements] = array[x in taken ? taken[x] : x];
+            taken[x] = --arrayLength in taken ? taken[arrayLength] : arrayLength;
+        }
+        return result;
+    }
+
     startRollAnimation() {
         let dice = this.state.form.dice;
+        let sounds = this.getRandom(this.state.sounds.dice, 5);
         for (let key in dice) {
             if (!dice[key].hold) {
+                let sound = sounds.pop();
+                sound.volume = 0.4;
                 (function (local_i) {
                     let time = Math.round(800 + Math.random() * 1000);
                     let diceElement = document.getElementById('dice' + local_i);
-                    let sound = new Audio("/sounds/dice/dice_0" + (Math.round(Math.random() * 9)) + ".mp3");
-                    sound.volume = 0.4;
                     setTimeout(function () {
                         diceElement.style.animationDuration = time + "ms";
-                        diceElement.style.animationIterationCount = Math.round(1 + Math.random() * 2);
+                        diceElement.style.animationIterationCount = Math.round(1 + Math.random() * 3);
                         diceElement.classList.add("roll");
                         sound.play();
                         Math.random() > 0.5 ? diceElement.classList.add("clockwise") : diceElement.classList.add("counterclockwise");
@@ -296,7 +318,7 @@ export default class Form extends Component {
                 for (let j in column.boxes) {
                     let box = column.boxes[j];
                     if (box.boxType.id === boxType.id) {
-                        let sound = new Audio("/sounds/box/fill_box.mp3");
+                        let sound = this.state.sounds.box;
                         sound.volume = 0.4;
                         sound.play();
                         box.value = score;
