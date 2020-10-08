@@ -30,8 +30,8 @@ export default class Menu extends Component {
                     <div className="front">
                         {gameMounted && <div className="mask" onClick={this.props.onToggleMenu} />}
                         <div className={"menu " + menuClass}>
-                            <div className="menu-element" onClick={() => history.push("/")} style={{ backgroundImage: 'url(/images/misc/logo.png)' }}><div className="menu-element-text">Jamb</div></div>
-                            <div className="menu-element" onClick={() => history.push("/users")} style={{ backgroundImage: 'url(/images/misc/users.png)' }}><div className="menu-element-text">Korisnici</div></div>
+                            <div className="menu-element" onClick={() => history.push("/")} style={{ backgroundImage: 'url(/images/misc/dice.png)' }}><div className="menu-element-text">Jamb</div></div>
+                            <div className="menu-element" onClick={() => history.push("/users")} style={{ backgroundImage: 'url(/images/misc/users.png)' }}><div className="menu-element-text">Igrači</div></div>
                             <div className="menu-element" onClick={() => history.push("/scores")} style={{ backgroundImage: 'url(/images/misc/scores.png)' }}><div className="menu-element-text">Rezultati</div></div>
                             {currentUser ?
                                 (<div className="menu-element" onClick={this.props.onLogout} href="/login" style={{ backgroundImage: 'url(/images/misc/logout.png)' }}><div className="menu-element-text">Odjava</div></div>) :

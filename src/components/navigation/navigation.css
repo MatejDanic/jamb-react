@@ -6,10 +6,13 @@
 }
 
 .menu {
+    background-color: silver;
+    height: 17vh;
+    width: 100vw;
     display: inline-flex;
-    background-color: lightgray;
-    border-top-right-radius: 10px;
-    height: 16vh;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
 }
 
 .menu-relative {
@@ -24,29 +27,40 @@
 .mask {
     position: relative;
     background-color: dimgray;
-    height: 84vh;
+    height: 83vh;
     opacity: 0.6;
 }
 
-.menu-element {
-    background-size: 75%;
-    background-position: center 1vh;
-    background-repeat: no-repeat;
-    width: 25vw;
-    margin: 0 auto;
-    text-align: center;
-    color: darkslategray;
-    border-right: 1px solid gray;
-    border-radius: 10px;
-    position: relative;
+.menu .menu-element:first-child {
+    margin-left: 0;
+    border-top-left-radius: unset;
+    border-bottom-left-radius: unset;
 }
 
+.menu .menu-element:last-child {
+    margin-right: 0;
+    border-top-right-radius: unset;
+    border-bottom-right-radius: unset;
+}
+
+.menu-element {
+    margin: auto;
+    background-size: 75%;
+    width: 25vw;
+    height: 15vh;
+    text-align: center;
+    background-position: center 1vh;
+    background-repeat: no-repeat;
+    color: darkslategray;
+    border-radius: 16px;
+    position: relative;
+}
 .menu-element-text {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    font-weight: bold;
+    font-size: 20px;
     font-family: Arial, Helvetica, sans-serif;
 }
 
