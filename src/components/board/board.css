@@ -6,7 +6,7 @@
     padding: 5vw;
     margin: 5vw;
     border-radius: 16px;
-    border: 4px solid lightpink;
+    border: 4px solid lightskyblue;
 }
 
 .container-custom-table {
@@ -105,12 +105,39 @@ td {
     color: black;
 }
 
+.user-button {
+    width: 100px;
+    height: 50px;
+    background-color: lightskyblue;
+    border: 2px solid darkslategray;
+    border-radius: 6px;
+    color: darkslategray;
+}
+
+.user-button:hover {
+    color: black;
+    background-color: deepskyblue;
+    border: 2px solid black;
+}
+
 .delete-button {
-    height: 15vw;
-    width: 15vw;
-    background-size: 100% 100%;
+    background-color: lightpink;
+    height: 15px;
+    width: 50px;
+    height: 50px;
+    border: 2px solid darkslategray;
+    border-radius: 6px;
+    background-image: url(/images/misc/trash_closed.png);
+    background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
+}
+
+.delete-button:hover {
+    background-image: url(/images/misc/trash_open.png);
+    background-color: indianred;
+    color: black;
+    border: 2px solid black;
 }
 
 @media screen and (max-width: 576px) {

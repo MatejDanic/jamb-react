@@ -15,8 +15,8 @@ export default class User extends Component {
     super(props);
 
     this.state = {
-      currentuser: undefined,
-      userIsAdmin: false,
+      currentUser: undefined,
+      userIsAdmin: true,
       user: "",
       totalScore: 0,
       highScore: 0
@@ -32,9 +32,15 @@ export default class User extends Component {
         response => {
           let user = response.data;
           let userIsAdmin = false;
-          for (let key in user.roles) {
-            if (user.roles[key].label === "ADMIN") userIsAdmin = true;
+          if (user) {
+            for (let key in user.roles) {
+              if (user.roles[key].label === "ADMIN"){
+                userIsAdmin = true;
+                break;
+              }
+            }
           }
+          console.log(user);
           let totalScore = ScoreUtil.getTotalScore(user.scores);
           let highScore = ScoreUtil.getHighScore(user.scores);
           this.setState({ user, totalScore, highScore, userIsAdmin });
@@ -58,12 +64,12 @@ export default class User extends Component {
 
   render() {
     let history = this.props.history;
-    let currentUser = this.state.currentuser;
-    let userIsAdmin = this.state.userIsAdmin;
+    let currentUser = this.state.currentUser;
+    let user = this.state.user;
     let totalScore = this.state.totalScore;
     let highScore = this.state.highScore;
-    let user = this.state.user;
     let scores = user.scores;
+    let userIsAdmin = this.state.userIsAdmin;
 
     return (
       <div className="container-custom">
@@ -86,10 +92,11 @@ export default class User extends Component {
             <p>
               <strong>Prosjek: </strong>{scores && (scores.length === 0 ? "0" : Math.round(totalScore / scores.length * 100) / 100)}
             </p>
+            {currentUser && currentUser.roles.includes("ADMIN") && !userIsAdmin &&
+              <button className="delete-button" 
+              onClick={() => { if (window.confirm('Jeste li sigurni da izbrisati ovog korisnika?')) this.deleteUser() }} />}
           </div>
-            {currentUser && currentUser.roles.includes("ADMIN") && !userIsAdmin && <div className="container-button">
-              <button className="btn btn-danger button-admin" onClick={() => { if (window.confirm('Jeste li sigurni da izbrisati ovog korisnika?')) this.deleteUser() }}>Izbriši</button>
-            </div>}
+            
           {user.scores && (user.scores.length > 0 &&
             <div>
               <ScoreList username={user.username} scores={user.scores} history={history}></ScoreList>
