@@ -40,7 +40,6 @@ export default class User extends Component {
               }
             }
           }
-          console.log(user);
           let totalScore = ScoreUtil.getTotalScore(user.scores);
           let highScore = ScoreUtil.getHighScore(user.scores);
           this.setState({ user, totalScore, highScore, userIsAdmin });
