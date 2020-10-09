@@ -21,6 +21,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./components/navigation/navigation.css";
 import "./constants/colors.css";
 import "./App.css";
+import { smallWindowThreshold } from "./constants/screen-constants";
 
 class App extends Component {
 
@@ -52,8 +53,8 @@ class App extends Component {
   updateDimensions() {
     let windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
     let windowHeight = typeof window !== "undefined" ? window.innerHeight : 0;
-    let smallWindow = windowWidth <= 512 && this.state.smallWindow === false;
-    if ((windowWidth > 512 && this.state.smallWindow === true) || (windowWidth <= 512 && this.state.smallWindow === false)) {
+    let smallWindow = windowWidth <= smallWindowThreshold && this.state.smallWindow === false;
+    if ((windowWidth > smallWindowThreshold && this.state.smallWindow === true) || (windowWidth <= smallWindowThreshold && this.state.smallWindow === false)) {
       this.setState({ windowWidth, windowHeight, smallWindow });
     }
   }

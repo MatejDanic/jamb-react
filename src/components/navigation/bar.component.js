@@ -27,7 +27,7 @@ export default class Bar extends Component {
                 <div className="bar-left">
                     <button className="bar-element" onClick={() => history.push("/")}>Jamb</button>
 
-                    <button className="bar-element" onClick={() => history.push("/users")}>Korisnici</button>
+                    <button className="bar-element" onClick={() => history.push("/users")}>Igrači</button>
 
                     <button className="bar-element" onClick={() => history.push("/scores")}>Rezultati</button>
 

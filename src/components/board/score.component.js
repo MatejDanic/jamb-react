@@ -6,6 +6,8 @@ import ScoreService from "../../services/score.service";
 import DateUtil from "../../utils/date.util";
 // constants
 import { dateFormatLong } from "../../constants/date-format";
+// styles
+import "./board.css";
 
 export default class Score extends Component {
 
@@ -49,14 +51,13 @@ export default class Score extends Component {
     return (
       <div className="container-custom">
         <div className="container-custom-inner">
+          <p>
+            {score.user && <button className="user-button" onClick={() => { this.props.history.push("/users/" + score.user.id) }}>{score.user.username}</button>}
+          </p>
           <h3>
             <strong>Vrijednost: </strong>
             {score.value}
           </h3>
-          <p>
-            <strong>Ime: </strong>
-            {score.user && <button className="btn btn-primary" onClick={() => { this.props.history.push("/users/" + score.user.id) }}>{score.user.username}</button>}
-          </p>
           <p>
             <strong>ID: </strong>
             {score.id}
@@ -65,9 +66,9 @@ export default class Score extends Component {
             <strong>Datum: </strong>
             {score.date && dateFormatLong.format(DateUtil.getDateFromLocalDateTime(score.date))}
           </p>
+          <button className="delete-button" onClick={() => { if (window.confirm('Jeste li sigurni da izbrisati ovaj rezultat?')) this.deleteScore() }} />
         </div>
           {currentUser && currentUser.roles.includes("ADMIN") && <div className="container-button">
-            <button className="btn btn-danger button-admin" onClick={() => { if (window.confirm('Jeste li sigurni da izbrisati ovaj rezultat?')) this.deleteScore() }}>Izbriši</button>
           </div>}
         </div>
     );
