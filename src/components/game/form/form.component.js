@@ -353,8 +353,7 @@ export default class Form extends Component {
         return form;
     }
 
-    getFilledBoxCount() {
-        let form = this.state.form;
+    getFilledBoxCount(form) {
         let filledBoxCount = 0;
         for (let i in form.columns) {
             let column = form.columns[i];
