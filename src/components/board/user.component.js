@@ -40,7 +40,6 @@ export default class User extends Component {
               }
             }
           }
-          console.log(user);
           let totalScore = ScoreUtil.getTotalScore(user.scores);
           let highScore = ScoreUtil.getHighScore(user.scores);
           this.setState({ user, totalScore, highScore, userIsAdmin });
@@ -96,11 +95,12 @@ export default class User extends Component {
               <button className="delete-button" 
               onClick={() => { if (window.confirm('Jeste li sigurni da izbrisati ovog korisnika?')) this.deleteUser() }} />}
           </div>
-            
-          {user.scores && (user.scores.length > 0 &&
-            <div>
-              <ScoreList username={user.username} scores={user.scores} history={history}></ScoreList>
-            </div>)}
+          <div className="container-custom-second">
+            {user.scores && (user.scores.length > 0 &&
+              <div>
+                <ScoreList username={user.username} scores={user.scores} history={history}></ScoreList>
+              </div>)}
+            </div>
       </div>
     );
   }

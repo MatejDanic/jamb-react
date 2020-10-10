@@ -38,26 +38,28 @@ export default class UserList extends Component {
   render() {
     let users = this.state.users;
     return (
-      <div className="container-custom container-custom-table">
-        <table style={{ width: '100%' }}>
-          <thead>
-            <tr>
-              <th onClick={() => sortTable(0)}>Ime</th>
-              <th onClick={() => sortTable(1)}>Zadnja igra</th>
-              <th onClick={() => sortTable(2)}>Odigrano</th>
-            </tr>
-          </thead>
-          <tbody id="tbody">
-            {users.map(user =>
-              <tr key={user.id} id={user.id} onClick={() => { this.props.history.push("/users/" + user.id) }}>
-                <td>{user.username}</td>
-                <td>{user.scores.length === 0 ? "-----" : dateFormatShort.format(DateUtil.getLastScoreDate(user.scores))}</td>
-                <td>{/*ScoreUtil.getTotalScore(user.scores)*/user.scores.length}</td>
-              </tr>)}
-          </tbody>
-        </table>
-        <div className="pagination" id="pagination" />
-        <div id="current-page" />
+      <div className="container-custom">
+        <div className="container-custom-table">
+          <table className="custom-table">
+            <thead>
+              <tr>
+                <th onClick={() => sortTable(0)}>Ime</th>
+                <th onClick={() => sortTable(1)}>Zadnja igra</th>
+                <th onClick={() => sortTable(2)}>Odigrano</th>
+              </tr>
+            </thead>
+            <tbody id="tbody">
+              {users.map(user =>
+                <tr key={user.id} id={user.id} onClick={() => { this.props.history.push("/users/" + user.id) }}>
+                  <td>{user.username}</td>
+                  <td>{user.scores.length === 0 ? "-----" : dateFormatShort.format(DateUtil.getLastScoreDate(user.scores))}</td>
+                  <td>{/*ScoreUtil.getTotalScore(user.scores)*/user.scores.length}</td>
+                </tr>)}
+            </tbody>
+          </table>
+          <div className="pagination" id="pagination" />
+          <div id="current-page" />
+        </div>
       </div>
     );
   }

@@ -95,7 +95,6 @@ export default class Form extends Component {
             sounds.dice.push(new Audio("/sounds/dice/dice_0" + i + ".mp3"));
         }
         sounds.box = new Audio("/sounds/box/fill_box.mp3");
-        console.log(sounds);
         if (this._isMounted) {
             if (form != null) {
                 let announcementRequired = this.isAnnouncementRequired(form);
@@ -300,7 +299,6 @@ export default class Form extends Component {
                     this.fill(form, columnType, boxType, score);
                 },
                 error => {
-                    // console.log(typeof error);
                     console.log(error.response && error.response.data);
                 }
             );
