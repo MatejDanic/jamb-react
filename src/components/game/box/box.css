@@ -2,7 +2,7 @@
 	border-radius: 5px;
 	border: 1px solid darkslategray;
 	font-size: 25px;
-	font-family: "Comic Sans MS", cursive, sans-serif;
+	font-family: "Comic Sans MS", "Comic Sans", cursive;
 	display: flex;
 	align-items: center;
 	justify-content: center;
