@@ -93,7 +93,7 @@ export default class User extends Component {
             </p>
             {currentUser && currentUser.roles.includes("ADMIN") && !userIsAdmin &&
               <button className="delete-button" 
-              onClick={() => { if (window.confirm('Jeste li sigurni da izbrisati ovog korisnika?')) this.deleteUser() }} />}
+              onClick={() => { if (window.confirm('Jeste li sigurni da želite izbrisati ovog korisnika?')) this.deleteUser() }} />}
           </div>
           <div className="container-custom-second">
             {user.scores && (user.scores.length > 0 &&
