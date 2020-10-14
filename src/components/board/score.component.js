@@ -66,7 +66,9 @@ export default class Score extends Component {
             <strong>Datum: </strong>
             {score.date && dateFormatLong.format(DateUtil.getDateFromLocalDateTime(score.date))}
           </p>
-          <button className="delete-button" onClick={() => { if (window.confirm('Jeste li sigurni da izbrisati ovaj rezultat?')) this.deleteScore() }} />
+          {currentUser && currentUser.roles.includes("ADMIN") &&
+            <button className="delete-button" 
+            onClick={() => { if (window.confirm('Jeste li sigurni da želite izbrisati ovaj rezultat?')) this.deleteScore() }} />}
         </div>
           {currentUser && currentUser.roles.includes("ADMIN") && <div className="container-button">
           </div>}
