@@ -33,6 +33,7 @@ export default class UserList extends Component {
         console.log(error.response && error.response.data);
       }
     );
+    document.getElementById("current-page").label = 1;
   }
 
   render() {
@@ -53,11 +54,13 @@ export default class UserList extends Component {
                 <tr key={user.id} id={user.id} onClick={() => { this.props.history.push("/users/" + user.id) }}>
                   <td>{user.username}</td>
                   <td>{user.scores.length === 0 ? "-----" : dateFormatShort.format(DateUtil.getLastScoreDate(user.scores))}</td>
-                  <td>{/*ScoreUtil.getTotalScore(user.scores)*/user.scores.length}</td>
+                  <td>{user.scores.length}</td>
                 </tr>)}
             </tbody>
           </table>
-          <div className="pagination" id="pagination" />
+          <div className="container-pagination">
+            <div id="pagination" />
+          </div>
           <div id="current-page" />
         </div>
       </div>
