@@ -20,11 +20,11 @@ export default class RulesButton extends Component {
       "Rezultat se može, ali ne mora upisati u četvrti stupac nakon prvog bacanja.\n\n" + 
       "BONUSI:\n" + 
       "- BROJEVI (Ako je ukupan zbroj u stupcu od 1 do 6 veći ili jednak 60) +30\n" + 
-      "- TRIS +10\n" + 
-      "- SKALA (mala) 35\n" + 
-      "- SKALA (velika) 45\n" + 
-      "- FULL +30\n" + 
-      "- POKER +40\n" + 
-      "- JAMB +50\n");
+      "- TRIS (3 jednake kockice) +10\n" + 
+      "- SKALA (1, 2, 3, 4, 5) 35\n" + 
+      "- SKALA (2, 3, 4, 5, 6) 45\n" + 
+      "- FULL (2 + 3 jednake kockice) +30\n" + 
+      "- POKER (4 jednake kockice) +40\n" + 
+      "- JAMB (5 jednakih kockica) +50\n");
   }
 }
