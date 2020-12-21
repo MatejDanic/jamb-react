@@ -8,6 +8,7 @@ import Scoreboard from "../scoreboard/scoreboard.component";
 import RollDiceButton from "../button/roll-dice-button.component";
 import RestartButton from "../button/restart-button.component";
 import RulesButton from "../button/rules-button.component";
+import Popup from "../../popup/popup.component";
 // services
 import AuthService from "../../../services/auth.service";
 import FormService from "../../../services/form.service";
@@ -35,6 +36,7 @@ export default class Form extends Component {
             rollDisabled: false,
             diceDisabled: true,
             currentWeekLeader: "",
+            showPopup: false
         }
         this.initializeForm = this.initializeForm.bind(this);
         this.handleBoxClick = this.handleBoxClick.bind(this);
@@ -42,6 +44,7 @@ export default class Form extends Component {
         this.handleRollDice = this.handleRollDice.bind(this);
         this.handleToggleDice = this.handleToggleDice.bind(this);
         this.startRollAnimation = this.startRollAnimation.bind(this);
+        this.togglePopup = this.togglePopup.bind(this);
     }
 
     setMounted(mounted) {
@@ -67,12 +70,19 @@ export default class Form extends Component {
         } else {
             this.initializeForm(null);
         }
-        
     }
 
     componentWillUnmount() {
         this.setMounted(false);
     }
+
+    togglePopup() {  
+        this.setState({  
+             showPopup: !this.state.showPopup  
+        }, () => {
+            if (!this.state.showPopup) window.location.reload();
+        });  
+    }  
 
     initializeSums(form) {
         let sums = {};
@@ -465,15 +475,13 @@ export default class Form extends Component {
                         </div>
                     </ div>
                 </div>}
+                {this.state.showPopup && <Popup text={"Čestitamo, vaš ukupni rezultat je " + this.state.sums["finalSum"]} closePopup={this.togglePopup} /> } 
             </div>
         )
     }
 
     endGame() {
-        this.setState({ rollDisabled: true }, () => {
-            alert("Čestitamo, vaš ukupni rezultat je " + this.state.sums["finalSum"]);
-            window.location.reload();
-        })
+        this.togglePopup();
     }
 
     getCurrentWeekLeader() {
