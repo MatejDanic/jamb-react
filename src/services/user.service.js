@@ -2,17 +2,17 @@ import axios from "axios";
 import { authHeader } from "./auth.service";
 import BASE_URL from "../constants/api-url";
 
-const baseURL = BASE_URL + "/users";
+const url = BASE_URL + "/users";
 
 class UserService {
   getUsers() {
-    return axios.get(baseURL, { headers: authHeader() })
+    return axios.get(url, { headers: authHeader() })
   }
   getUser(userId) {
-    return axios.get(baseURL + "/" + userId, { headers: authHeader() });
+    return axios.get(url + "/" + userId, { headers: authHeader() });
   }
   deleteUser(userId) {
-    return axios.delete(baseURL + "/" + userId, { headers: authHeader() });
+    return axios.delete(url + "/" + userId, { headers: authHeader() });
   }
 }
 
