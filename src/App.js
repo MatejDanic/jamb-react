@@ -22,6 +22,7 @@ import "./components/navigation/navigation.css";
 import "./constants/colors.css";
 import "./App.css";
 import { smallWindowThreshold } from "./constants/screen-constants";
+import Chat from "./components/chat/chat.component";
 
 class App extends Component {
 
@@ -47,7 +48,7 @@ class App extends Component {
     if (currentUser) this.setState({ currentUser });
     this.updateDimensions();
     window.addEventListener("resize", this.updateDimensions);
-    window.addEventListener("keypress", (e) => this.handleKeyPress(e, this._form.current));
+    // window.addEventListener("keypress", (e) => this.handleKeyPress(e, this._form.current));
   }
 
   updateDimensions() {
@@ -59,11 +60,11 @@ class App extends Component {
     }
   }
 
-  handleKeyPress(e, formComponent) {
-    if (e.code === "Space") {
-      formComponent.handleRollDice();
-    }
-  }
+  // handleKeyPress(e, formComponent) {
+  //   if (e.code === "Space") {
+  //     formComponent.handleRollDice();
+  //   }
+  // }
 
   componentWillUnmount() {
     window.removeEventListener("resize", this.updateDimensions);
@@ -92,22 +93,24 @@ class App extends Component {
     let showMenu = this.state.showMenu;
     let gameMounted = this.state.gameMounted;
     return (
-        <Router history={history}>
-          <title>Jamb</title>
-          {smallWindow ? <Menu onLogout={this.logout} history={history} showMenu={showMenu} gameMounted={gameMounted} onToggleMenu={this.toggleMenu} /> :
-            <Bar onLogout={this.logout} history={history} />}
-          <Switch>
-            <Route exact path="/" render={() => <Form ref={this._form} history={history} onGameMounted={(mounted) => this.handleGameMounted(mounted)} smallWindow={smallWindow} onToggleMenu={this.toggleMenu} />} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/register" component={Register} />
-            <Route exact path="/admin" component={Admin} />
-            <Route exact path="/users" component={UserList} />
-            <Route exact path="/users/:userId" component={User} />
-            <Route exact path="/profile" component={() => <Profile  history={this.props.history} smallWindow={smallWindow} />} />
-            <Route exact path="/scores" component={ScoreList} />
-            <Route exact path="/scores/:scoreId" component={Score} />
-          </Switch>
-        </Router>
+      <Router history={history}>
+        <title>Jamb</title>
+        {smallWindow ? <Menu onLogout={this.logout} history={history} showMenu={showMenu} gameMounted={gameMounted} onToggleMenu={this.toggleMenu} /> :
+          <Bar onLogout={this.logout} history={history} />}
+        <Switch>
+          <Route exact path="/" render={() => <Form ref={this._form} history={history} onGameMounted={(mounted) => this.handleGameMounted(mounted)} smallWindow={smallWindow} onToggleMenu={this.toggleMenu} />} />
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/register" component={Register} />
+          <Route exact path="/admin" component={Admin} />
+          <Route exact path="/users" component={UserList} />
+          <Route exact path="/users/:userId" component={User} />
+          <Route exact path="/profile" component={() => <Profile history={this.props.history} smallWindow={smallWindow} />} />
+          <Route exact path="/scores" component={ScoreList} />
+          <Route exact path="/scores/:scoreId" component={Score} />
+          <Route exact path="/chat" component={Chat} />
+          <Route exact path="/chat/:conversationId" component={Chat} />
+        </Switch>
+      </Router>
     );
   }
 }
