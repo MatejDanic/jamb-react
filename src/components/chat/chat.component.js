@@ -5,7 +5,7 @@ import { hourFormat } from "../../constants/date-format";
 import "./chat.css";
 import BASE_URL from "../../constants/api-url";
 
-const baseURL = BASE_URL + "/websocket-chat";
+const url = BASE_URL + "/websocket-chat";
 
 export default class Chat extends Component {
 
@@ -55,7 +55,7 @@ export default class Chat extends Component {
                                 </div>)
                         })}
                     </div>
-                    <SockJsClient url={baseURL}
+                    <SockJsClient url={url}
                         topics={["/topic/user"]}
                         onMessage={(msg) => {
                             let messages = this.state.messages;

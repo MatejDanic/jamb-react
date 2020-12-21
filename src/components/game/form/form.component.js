@@ -60,6 +60,7 @@ export default class Form extends Component {
                     this.initializeForm(form);
                 },
                 error => {
+                    this.props.onLogout();
                     console.log(error.response && error.response.data);
                 }
             );

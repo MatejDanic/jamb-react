@@ -2,24 +2,24 @@ import axios from "axios";
 import { authHeader } from "./auth.service";
 import BASE_URL from "../constants/api-url";
 
-const baseURL = BASE_URL + "/scores";
+const url = BASE_URL + "/scores";
 
 class ScoreService {
   
   getScores() {
-    return axios.get(baseURL, { headers: authHeader() });
+    return axios.get(url, { headers: authHeader() });
   }
   getScore(scoreId) {
-    return axios.get(baseURL + "/" + scoreId, { headers: authHeader() });
+    return axios.get(url + "/" + scoreId, { headers: authHeader() });
   }
   deleteScore(scoreId) {
-    return axios.delete(baseURL + "/" + scoreId, { headers: authHeader() });
+    return axios.delete(url + "/" + scoreId, { headers: authHeader() });
   }
   getScoreboard() {
-    return axios.get(baseURL + "/scoreboard", { headers: authHeader() });
+    return axios.get(url + "/scoreboard", { headers: authHeader() });
   }
   getCurrentWeekLeader() {
-    return axios.get(baseURL + "/leader", { headers: authHeader() });
+    return axios.get(url + "/leader", { headers: authHeader() });
   }
 }
 

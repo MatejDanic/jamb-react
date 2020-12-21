@@ -1,12 +1,12 @@
 import axios from "axios";
 import BASE_URL from "../constants/api-url";
 
-const baseURL = BASE_URL + "/auth";
+const url = BASE_URL + "/auth";
 
 class AuthService {
   login(username, password) {
     return axios
-      .post(baseURL + "/login", {
+      .post(url + "/login", {
         username,
         password
       })
@@ -24,7 +24,7 @@ class AuthService {
   }
 
   register(username, password) {
-    return axios.post(baseURL + "/register", {
+    return axios.post(url + "/register", {
       username,
       password
     });

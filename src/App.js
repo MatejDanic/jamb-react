@@ -45,7 +45,7 @@ class App extends Component {
 	}
 
 	componentDidMount() {
-		console.log(process.env.BASE_URL)
+		console.log(BASE_URL)
 		let currentUser = AuthService.getCurrentUser();
 		if (currentUser) this.setState({ currentUser });
 		this.updateDimensions();
@@ -100,7 +100,7 @@ class App extends Component {
 				{smallWindow ? <Menu onLogout={this.logout} history={history} showMenu={showMenu} gameMounted={gameMounted} onToggleMenu={this.toggleMenu} /> :
 					<Bar onLogout={this.logout} history={history} />}
 				<Switch>
-					<Route exact path="/" render={() => <Form ref={this._form} history={history} onGameMounted={(mounted) => this.handleGameMounted(mounted)} smallWindow={smallWindow} onToggleMenu={this.toggleMenu} />} />
+					<Route exact path="/" render={() => <Form onLogout={this.logout} ref={this._form} history={history} onGameMounted={(mounted) => this.handleGameMounted(mounted)} smallWindow={smallWindow} onToggleMenu={this.toggleMenu} />} />
 					<Route exact path="/login" component={Login} />
 					<Route exact path="/register" component={Register} />
 					<Route exact path="/admin" component={Admin} />
