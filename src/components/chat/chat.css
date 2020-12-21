@@ -6,7 +6,7 @@
     margin: 3vw;
     padding: 5vw;
     border-radius: 16px;
-    height: 65vh;
+    height: 50vh;
     border: 4px solid lightskyblue;
     overflow: scroll;
 }
@@ -28,6 +28,7 @@
 
 .button-user {
     font-weight: bold;
+    font-size: medium;
     color: darkslategray;
     background-color: transparent;
     border: 0px;
