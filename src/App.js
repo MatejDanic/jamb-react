@@ -23,6 +23,7 @@ import "./constants/colors.css";
 import "./App.css";
 import { smallWindowThreshold } from "./constants/screen-constants";
 import Chat from "./components/chat/chat.component";
+import BASE_URL from "./constants/api-url";
 
 class App extends Component {
 
@@ -44,8 +45,7 @@ class App extends Component {
 	}
 
 	componentDidMount() {
-		console.log(process.env.APIURL);
-
+		console.log(process.env.BASE_URL)
 		let currentUser = AuthService.getCurrentUser();
 		if (currentUser) this.setState({ currentUser });
 		this.updateDimensions();

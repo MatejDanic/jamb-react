@@ -3,9 +3,9 @@ import SockJsClient from "react-stomp";
 import AuthService from "../../services/auth.service";
 import { hourFormat } from "../../constants/date-format";
 import "./chat.css";
-import API_URL from "../../constants/api-url";
+import BASE_URL from "../../constants/api-url";
 
-const apiURL = API_URL + "/websocket-chat";
+const baseURL = BASE_URL + "/websocket-chat";
 
 export default class Chat extends Component {
 
@@ -55,7 +55,7 @@ export default class Chat extends Component {
                                 </div>)
                         })}
                     </div>
-                    <SockJsClient url={apiURL}
+                    <SockJsClient url={baseURL}
                         topics={["/topic/user"]}
                         onMessage={(msg) => {
                             let messages = this.state.messages;
