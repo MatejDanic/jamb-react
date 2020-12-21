@@ -26,93 +26,95 @@ import Chat from "./components/chat/chat.component";
 
 class App extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentUser: undefined,
-      windowWidth: 0,
-      windowHeight: 0,
-      smallWindow: false,
-      showMenu: window.location.pathname !== "/",
-      gameMounted: window.location.pathname === "/"
-    };
-    this.updateDimensions = this.updateDimensions.bind(this);
-    this.toggleMenu = this.toggleMenu.bind(this);
-    this.logout = this.logout.bind(this);
+	constructor(props) {
+		super(props);
+		this.state = {
+			currentUser: undefined,
+			windowWidth: 0,
+			windowHeight: 0,
+			smallWindow: false,
+			showMenu: window.location.pathname !== "/",
+			gameMounted: window.location.pathname === "/"
+		};
+		this.updateDimensions = this.updateDimensions.bind(this);
+		this.toggleMenu = this.toggleMenu.bind(this);
+		this.logout = this.logout.bind(this);
 
-    this._form = React.createRef();
-  }
+		this._form = React.createRef();
+	}
 
-  componentDidMount() {
-    let currentUser = AuthService.getCurrentUser();
-    if (currentUser) this.setState({ currentUser });
-    this.updateDimensions();
-    window.addEventListener("resize", this.updateDimensions);
-    // window.addEventListener("keypress", (e) => this.handleKeyPress(e, this._form.current));
-  }
+	componentDidMount() {
+		console.log(process.env.APIURL);
 
-  updateDimensions() {
-    let windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
-    let windowHeight = typeof window !== "undefined" ? window.innerHeight : 0;
-    let smallWindow = windowWidth <= smallWindowThreshold && this.state.smallWindow === false;
-    if ((windowWidth > smallWindowThreshold && this.state.smallWindow === true) || (windowWidth <= smallWindowThreshold && this.state.smallWindow === false)) {
-      this.setState({ windowWidth, windowHeight, smallWindow });
-    }
-  }
+		let currentUser = AuthService.getCurrentUser();
+		if (currentUser) this.setState({ currentUser });
+		this.updateDimensions();
+		window.addEventListener("resize", this.updateDimensions);
+		// window.addEventListener("keypress", (e) => this.handleKeyPress(e, this._form.current));
+	}
 
-  // handleKeyPress(e, formComponent) {
-  //   if (e.code === "Space") {
-  //     formComponent.handleRollDice();
-  //   }
-  // }
+	updateDimensions() {
+		let windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
+		let windowHeight = typeof window !== "undefined" ? window.innerHeight : 0;
+		let smallWindow = windowWidth <= smallWindowThreshold && this.state.smallWindow === false;
+		if ((windowWidth > smallWindowThreshold && this.state.smallWindow === true) || (windowWidth <= smallWindowThreshold && this.state.smallWindow === false)) {
+			this.setState({ windowWidth, windowHeight, smallWindow });
+		}
+	}
 
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.updateDimensions);
-  }
+	// handleKeyPress(e, formComponent) {
+	//   if (e.code === "Space") {
+	//     formComponent.handleRollDice();
+	//   }
+	// }
 
-  logout() {
-    AuthService.logout();
-    history.push("/login");
-    window.location.reload();
-  }
+	componentWillUnmount() {
+		window.removeEventListener("resize", this.updateDimensions);
+	}
 
-  handleGameMounted(mounted) {
-    if (!this.state.gameMounted && mounted && window.location.pathname === "/") {
-      this.setState({ gameMounted: mounted });
-    } else if (this.state.gameMounted && !mounted && window.location.pathname !== "/") {
-      this.setState({ gameMounted: mounted });
-    }
-  }
+	logout() {
+		AuthService.logout();
+		history.push("/login");
+		window.location.reload();
+	}
 
-  toggleMenu() {
-    this.setState({ showMenu: !this.state.showMenu });
-  }
+	handleGameMounted(mounted) {
+		if (!this.state.gameMounted && mounted && window.location.pathname === "/") {
+			this.setState({ gameMounted: mounted });
+		} else if (this.state.gameMounted && !mounted && window.location.pathname !== "/") {
+			this.setState({ gameMounted: mounted });
+		}
+	}
 
-  render() {
-    let smallWindow = this.state.smallWindow;
-    let showMenu = this.state.showMenu;
-    let gameMounted = this.state.gameMounted;
-    return (
-      <Router history={history}>
-        <title>Jamb</title>
-        {smallWindow ? <Menu onLogout={this.logout} history={history} showMenu={showMenu} gameMounted={gameMounted} onToggleMenu={this.toggleMenu} /> :
-          <Bar onLogout={this.logout} history={history} />}
-        <Switch>
-          <Route exact path="/" render={() => <Form ref={this._form} history={history} onGameMounted={(mounted) => this.handleGameMounted(mounted)} smallWindow={smallWindow} onToggleMenu={this.toggleMenu} />} />
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/register" component={Register} />
-          <Route exact path="/admin" component={Admin} />
-          <Route exact path="/users" component={UserList} />
-          <Route exact path="/users/:userId" component={User} />
-          <Route exact path="/profile" component={() => <Profile history={this.props.history} smallWindow={smallWindow} />} />
-          <Route exact path="/scores" component={ScoreList} />
-          <Route exact path="/scores/:scoreId" component={Score} />
-          <Route exact path="/chat" component={Chat} />
-          <Route exact path="/chat/:conversationId" component={Chat} />
-        </Switch>
-      </Router>
-    );
-  }
+	toggleMenu() {
+		this.setState({ showMenu: !this.state.showMenu });
+	}
+
+	render() {
+		let smallWindow = this.state.smallWindow;
+		let showMenu = this.state.showMenu;
+		let gameMounted = this.state.gameMounted;
+		return (
+			<Router history={history}>
+				<title>Jamb</title>
+				{smallWindow ? <Menu onLogout={this.logout} history={history} showMenu={showMenu} gameMounted={gameMounted} onToggleMenu={this.toggleMenu} /> :
+					<Bar onLogout={this.logout} history={history} />}
+				<Switch>
+					<Route exact path="/" render={() => <Form ref={this._form} history={history} onGameMounted={(mounted) => this.handleGameMounted(mounted)} smallWindow={smallWindow} onToggleMenu={this.toggleMenu} />} />
+					<Route exact path="/login" component={Login} />
+					<Route exact path="/register" component={Register} />
+					<Route exact path="/admin" component={Admin} />
+					<Route exact path="/users" component={UserList} />
+					<Route exact path="/users/:userId" component={User} />
+					<Route exact path="/profile" component={() => <Profile history={this.props.history} smallWindow={smallWindow} />} />
+					<Route exact path="/scores" component={ScoreList} />
+					<Route exact path="/scores/:scoreId" component={Score} />
+					<Route exact path="/chat" component={Chat} />
+					<Route exact path="/chat/:conversationId" component={Chat} />
+				</Switch>
+			</Router>
+		);
+	}
 }
 
 export default App;
