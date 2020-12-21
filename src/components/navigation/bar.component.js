@@ -26,22 +26,18 @@ export default class Bar extends Component {
             <div className="bar">
                 <div className="bar-left">
                     <button className="bar-element" onClick={() => history.push("/")}>Jamb</button>
-
                     <button className="bar-element" onClick={() => history.push("/users")}>Igrači</button>
-
                     <button className="bar-element" onClick={() => history.push("/scores")}>Rezultati</button>
-
+                    <button className="bar-element" onClick={() => history.push("/chat")}>Čavrljanje</button>
                 </div>
                 {currentUser ? (
                     <div className="bar-right">
                         <button className="bar-element" onClick={() => history.push("/profile")}>{currentUser.username}</button>
-
                         <button className="bar-element" onClick={this.props.onLogout}>Odjava</button>
                     </div>
                 ) : (
                     <div className="bar-right">
                         <button className="bar-element" onClick={() => history.push("/login")}>Prijava</button>
-
                         <button className="bar-element" onClick={() => history.push("/register")}>Registracija</button>
                     </div>)}
             </div>

@@ -1,0 +1,34 @@
+.chat {
+    position: relative;
+}
+
+.messages {
+    margin: 3vw;
+    padding: 5vw;
+    border-radius: 16px;
+    height: 72vh;
+    border: 4px solid lightskyblue;
+    overflow: scroll;
+}
+
+.input {
+    text-align: center;
+}
+
+.input-field {
+    border-radius: 5px;
+    height: 2em;
+    margin-right: 2vw;
+}
+
+.input-button {
+    background-color: lightpink;
+    margin-left: 2vw;
+}
+
+.button-user {
+    font-weight: bold;
+    color: darkslategray;
+    background-color: transparent;
+    border: 0px;
+}
