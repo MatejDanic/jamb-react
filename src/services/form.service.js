@@ -1,13 +1,13 @@
 import axios from "axios";
 import { authHeader } from "./auth.service";
-import API_URL from "../constants/api-url";
+import BASE_URL from "../constants/api-url";
 
-const apiURL = API_URL + "/forms";
+const baseURL = BASE_URL + "/forms";
 
 class FormService {
     
     initializeForm() {
-        return axios.put(apiURL,
+        return axios.put(baseURL,
             null, { headers: authHeader() });
     }
 
@@ -19,7 +19,7 @@ class FormService {
             diceToRoll += '",';
         }
         diceToRoll = diceToRoll.substring(0, diceToRoll.length - 1) + '}';
-        return axios.put(apiURL + "/" + formId + "/roll",
+        return axios.put(baseURL + "/" + formId + "/roll",
             diceToRoll, {
             headers: {
                 "Content-Type": "Application/json",
@@ -29,7 +29,7 @@ class FormService {
     }
 
     announce(formId, boxTypeId) {
-        return axios.put(apiURL + "/" + formId + "/announce",
+        return axios.put(baseURL + "/" + formId + "/announce",
             boxTypeId, {
             headers: {
                 "Content-Type": "Application/json",
@@ -39,19 +39,19 @@ class FormService {
     }
 
     fillBox(formId, columnTypeId, boxTypeId) {
-        return axios.put(apiURL + "/" + formId +
+        return axios.put(baseURL + "/" + formId +
             "/columns/" + columnTypeId +
             "/boxes/" + boxTypeId + "/fill", null, 
             { headers: authHeader() });
     }
 
     deleteForm(formId) {
-        return axios.delete(apiURL + "/" + formId,
+        return axios.delete(baseURL + "/" + formId,
             { headers: authHeader() });
     }
 
     restartForm(formId) {
-        return axios.put(apiURL + "/" + formId + "/restart", null, 
+        return axios.put(baseURL + "/" + formId + "/restart", null, 
             { headers: authHeader() });
     }
 }

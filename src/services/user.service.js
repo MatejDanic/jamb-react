@@ -1,18 +1,18 @@
 import axios from "axios";
 import { authHeader } from "./auth.service";
-import API_URL from "../constants/api-url";
+import BASE_URL from "../constants/api-url";
 
-const apiURL = API_URL + "/users";
+const baseURL = BASE_URL + "/users";
 
 class UserService {
   getUsers() {
-    return axios.get(apiURL, { headers: authHeader() })
+    return axios.get(baseURL, { headers: authHeader() })
   }
   getUser(userId) {
-    return axios.get(apiURL + "/" + userId, { headers: authHeader() });
+    return axios.get(baseURL + "/" + userId, { headers: authHeader() });
   }
   deleteUser(userId) {
-    return axios.delete(apiURL + "/" + userId, { headers: authHeader() });
+    return axios.delete(baseURL + "/" + userId, { headers: authHeader() });
   }
 }
 
