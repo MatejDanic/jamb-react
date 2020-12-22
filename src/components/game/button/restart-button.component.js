@@ -31,7 +31,7 @@ export default class RestartButton extends Component {
 	render() {
 		return (
 			<div className="button form-button bg-light-pink restart" style={{ backgroundImage: 'url(/images/misc/restart.png)' }} onClick={ this.togglePopup } >
-				{this.state.showPopup && <Popup text={"Jeste li sigurni da želite početi ispočetka?"} closePopup={this.restart} cancel={ this.togglePopup } />}
+				{this.state.showPopup && <Popup text={["Jeste li sigurni da želite početi ispočetka?"]} onClose={ this.togglePopup } onOk={ this.restart } />}
 			</div>
 		)
 	}

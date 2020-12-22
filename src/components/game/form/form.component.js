@@ -475,7 +475,7 @@ export default class Form extends Component {
                         </div>
                     </ div>
                 </div>}
-                {this.state.showPopup && <Popup text={"Čestitamo, vaš ukupni rezultat je " + this.state.sums["finalSum"]} closePopup={this.togglePopup} /> } 
+                {this.state.showPopup && <Popup text={["Čestitamo, vaš ukupni rezultat je ", this.state.sums["finalSum"]]} onOk={this.togglePopup} /> } 
             </div>
         )
     }
