@@ -11,7 +11,7 @@ export default class Scoreboard extends Component {
 		this.state = {
 			scores: [],
 			scoresToDisplay: [],
-			scoreboard: "",
+			scoreboard: [],
 			showPopup: false
 		}
 		this.togglePopup = this.togglePopup.bind(this);
@@ -25,7 +25,7 @@ export default class Scoreboard extends Component {
 				let i = 1;
 				for (let score in response.data) {
 					scoresToDisplay.push(i + ". " + response.data[score].username)
-					if (i === 3) break;
+					if (i === 5) break;
 					else i += 1;
 				}
 				this.setState({ scores, scoresToDisplay })
@@ -48,19 +48,20 @@ export default class Scoreboard extends Component {
 				<ul className="scoreboard">
 					{scores.length > 0 ? scores.map(score =>
 						<li key={score}>{score}</li>) :
-						<div className="scoreboard-empty">Lj<br />e<br />s<br />t<br />v<br />i<br />c<br />a</div>}
+						<div className="scoreboard-empty">---<br />---<br />---<br />---<br />---</div>}
 				</ul>
-				{this.state.showPopup && <Popup text={scoreboard} closePopup={this.togglePopup} />}
+				{this.state.showPopup && <Popup text={scoreboard} onOk={this.togglePopup} />}
 			</div>
 		)
 	}
 
 	handleClick() {
-		let scoreboard = "Najbolji rezultati ovaj tjedan:";
+		let scoreboard = [];
+		scoreboard.push("Najbolji rezultati ovaj tjedan:")
 		let scores = this.state.scores;
 		let i = 1;
 		for (let key in scores) {
-			scoreboard += "\n" + i + ". " + scores[key].username + ' - ' + scores[key].value;
+			scoreboard.push(i + ". " + scores[key].username + ' - ' + scores[key].value);
 			if (i === 10) break;
 			else i += 1;
 		}
