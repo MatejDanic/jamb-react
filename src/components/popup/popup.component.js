@@ -2,13 +2,6 @@ import React, { Component } from "react";
 import "./popup.css";
 
 export default class Popup extends Component {
-
-    componentDidMount() {
-        let trumpets = new Audio("/sounds/misc/trumpets.mp3");
-        trumpets.volume = 0.1
-        trumpets.play();
-    }
-
     render() {
         return (
             <div className="popup">

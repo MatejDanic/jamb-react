@@ -481,6 +481,9 @@ export default class Form extends Component {
     }
 
     endGame() {
+        let trumpets = new Audio("/sounds/misc/trumpets.mp3");
+        trumpets.volume = 0.1
+        trumpets.play();
         this.togglePopup();
     }
 

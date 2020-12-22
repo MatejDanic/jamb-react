@@ -25,6 +25,7 @@
 .scoreboard-button:hover {
     background-color: #ff8a9c;
     color: black;
+    cursor: pointer;
     border: 2px solid darkslategray;;
 }
 
