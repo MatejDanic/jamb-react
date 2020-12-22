@@ -25,7 +25,7 @@ export default class Scoreboard extends Component {
 				let i = 1;
 				for (let score in response.data) {
 					scoresToDisplay.push(i + ". " + response.data[score].username)
-					if (i === 5) break;
+					if (i === 3) break;
 					else i += 1;
 				}
 				this.setState({ scores, scoresToDisplay })
@@ -56,8 +56,7 @@ export default class Scoreboard extends Component {
 	}
 
 	handleClick() {
-		let scoreboard = [];
-		scoreboard.push("Najbolji rezultati ovaj tjedan:")
+		let scoreboard = ["Najbolji rezultati ovaj tjedan:"];
 		let scores = this.state.scores;
 		let i = 1;
 		for (let key in scores) {
