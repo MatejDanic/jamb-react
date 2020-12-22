@@ -22,7 +22,8 @@
 	left: 35%;
 }
 
-.button-ok {
+.popup-button {
+	margin: 2vw;
 	border-radius: 5px;
 	border: 1px solid darkslategray;
 	color: darkslategray;
@@ -46,9 +47,5 @@
 		height: auto;
 		left: 0;
 	}
-
-	.button-ok {
-		width: 15vw;
-		height: 15vw;
-	}
+	
 }
