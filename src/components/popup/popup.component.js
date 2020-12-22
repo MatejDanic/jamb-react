@@ -8,7 +8,7 @@ export default class Popup extends Component {
         return (
             <div className="popup">
                 <div className="popup-inner">
-                    <h1>{this.props.text}</h1>
+                    <h2>{this.props.text}</h2>
                     <button className="popup-button" onClick={this.props.closePopup}>Ok</button>
                     {cancel && <button className="popup-button" onClick={cancel}>Zatvori</button>}
                 </div>

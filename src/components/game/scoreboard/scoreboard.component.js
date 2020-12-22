@@ -48,7 +48,7 @@ export default class Scoreboard extends Component {
 				<ul className="scoreboard">
 					{scores.length > 0 ? scores.map(score =>
 						<li key={score}>{score}</li>) :
-						<div className="scoreboard-empty">-<br />-<br />-<br />-<br />-<br />-<br />-<br />-</div>}
+						<div className="scoreboard-empty">---<br />---<br />---<br />---<br />---</div>}
 				</ul>
 				{this.state.showPopup && <Popup text={scoreboard} closePopup={this.togglePopup} />}
 			</div>
@@ -64,6 +64,7 @@ export default class Scoreboard extends Component {
 			if (i === 10) break;
 			else i += 1;
 		}
+		
 		if (scores.length > 0) {
 			this.setState({ scoreboard });
 			this.togglePopup();
