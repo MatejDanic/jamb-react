@@ -17,7 +17,6 @@ import Bar from "./components/navigation/bar.component";
 // services
 import AuthService from "./services/auth.service";
 // styles
-import "bootstrap/dist/css/bootstrap.min.css";
 import "./components/navigation/navigation.css";
 import "./constants/colors.css";
 import "./App.css";

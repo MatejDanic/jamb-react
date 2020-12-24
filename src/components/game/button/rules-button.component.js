@@ -6,7 +6,7 @@ export default class RulesButton extends Component {
 
   render() {
     return (
-      <button className="button rules bg-light-pink" onClick={() => this.handleClick()} style={{ backgroundImage: 'url(../images/misc/info.png)' }}></button>
+      <button className="form-button rules bg-lightpink" onClick={() => this.handleClick()} style={{ backgroundImage: 'url(../images/misc/info.png)' }}></button>
     )
   }
 

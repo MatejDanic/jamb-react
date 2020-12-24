@@ -1,146 +1,109 @@
 import React, { Component } from "react";
-// validation
-import Form from "react-validation/build/form";
-import Input from "react-validation/build/input";
-import CheckButton from "react-validation/build/button";
+// components
+import Popup from "../popup/popup.component";
 // services
 import AuthService from "../../services/auth.service";
-
-const required = value => {
-  if (!value) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        Ovo polje je obavezno!
-      </div>
-    );
-  }
-};
+// styles
+import "./auth.css";
 
 export default class Login extends Component {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      username: "",
-      password: "",
-      loading: false,
-      message: ""
-    };
+	constructor(props) {
+		super(props);
+		this.state = {
+			username: "",
+			password: "",
+			messages: [],
+			showPopup: false
+		};
 
-    this.handleLogin = this.handleLogin.bind(this);
-    this.onChangeUsername = this.onChangeUsername.bind(this);
-    this.onChangePassword = this.onChangePassword.bind(this);
-  }
+		this.handleLogin = this.handleLogin.bind(this);
+		this.onChangeUsername = this.onChangeUsername.bind(this);
+		this.onChangePassword = this.onChangePassword.bind(this);
+		this.togglePopup = this.togglePopup.bind(this);
+		this.loginCallback = this.loginCallback.bind(this);
+	}
 
-  onChangeUsername(e) {
-    this.setState({
-      username: e.target.value
-    });
-  }
+	onChangeUsername(e) {
+		this.setState({ username: e.target.value });
+	}
 
-  onChangePassword(e) {
-    this.setState({
-      password: e.target.value
-    });
-  }
+	onChangePassword(e) {
+		this.setState({ password: e.target.value });
+	}
 
-  handleLogin(e) {
-    e.preventDefault();
+	togglePopup(messages) {
+		let username = "";
+		let password = "";
+		this.setState({ showPopup: !this.state.showPopup, messages, username, password });
+	}
 
-    this.setState({
-      message: "",
-      loading: true
-    });
+	loginCallback(status, response) {
+		let messages = [];
+		if (status == 200) {
+			localStorage.setItem("user", JSON.stringify(response));
+			this.props.history.push("/");
+		} else if (status == 401) {
+			messages.push("Neispravno korisničko ime ili lozinka.")
+		} else {
+			messages.push(response.message);
+		}
+		if (messages.length > 0) {
+			this.togglePopup(messages);
+		}
+	}
 
-    this.form.validateAll();
+	handleLogin() {
+		let username = this.state.username;
+		let password = this.state.password;
+		let messages = [];
+		if (!username) {
+			messages.push("Korisničko ime je obavezno!");
+		}
+		if (!password) {
+			messages.push("Lozinka je obavezna!");
+		}
+		if (messages.length == 0) {
+			let loginRequest = {}
+			loginRequest.username = this.state.username;
+			loginRequest.password = this.state.password;
+			AuthService.login(loginRequest, this.loginCallback);
+		} else {
+			this.togglePopup(messages);
+		}
+	}
 
-    if (this.checkBtn.context._errors.length === 0) {
-      AuthService.login(this.state.username, this.state.password).then(
-        () => {
-          this.props.history.push("/");
-          window.location.reload();
-        },
-        error => {
-          const resMessage =
-            (error.response &&
-              error.response && error.response.data &&
-              error.response && error.response.data.message) ||
-            error.message ||
-            error.toString();
-
-          this.setState({
-            loading: false,
-            message: resMessage
-          });
-        }
-      );
-    } else {
-      this.setState({
-        loading: false
-      });
-    }
-  }
-
-  render() {
-    return (
-      <div className="col-md-12">
-        <div className="card card-container">
-          <Form onSubmit={this.handleLogin} ref={c => {this.form = c; }}>
-            <div className="form-group">
-              <label htmlFor="username">Korisničko ime</label>
-              <Input
-                type="text"
-                className="form-control"
-                name="username"
-                value={this.state.username}
-                onChange={this.onChangeUsername}
-                validations={[required]}
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="password">Lozinka</label>
-              <Input
-                type="password"
-                className="form-control"
-                name="password"
-                value={this.state.password}
-                onChange={this.onChangePassword}
-                validations={[required]}
-              />
-            </div>
-
-            <div className="form-group">
-              <button
-                className="btn btn-primary btn-block"
-                disabled={this.state.loading}
-              >
-                {this.state.loading && (
-                  <span className="spinner-border spinner-border-sm"></span>
-                )}
-                <span>Prijava</span>
-              </button>
-            </div>
-
-            {this.state.message && (
-              <div className="form-group">
-                <div className="alert alert-danger" role="alert">
-                  {this.state.message}
-                </div>
-              </div>
-            )}
-            <CheckButton
-              style={{ display: "none" }}
-              ref={c => {
-                this.checkBtn = c;
-              }}
-            />
-          </Form>
-          Nemate račun?
-          <button className="btn btn-primary" onClick={() => this.props.history.push("/register")}>Registracija</button>
-        </div>
-        
-      </div>
-    );
-  }
+	render() {
+		let username = this.state.username;
+		let password = this.state.password;
+		let messages = this.state.messages;
+		return (
+			<div className="auth">
+				<div className="card">
+					<div className="card-top">
+						<form>
+							<div>
+								<label>Korisničko ime</label>
+								<input type="text" placeholder="Unesite korisničko ime" autoComplete="on" onChange={this.onChangeUsername} value={username}/>
+							</div>
+							<div>
+								<label>Lozinka</label>
+								<input type="password" placeholder="Unesite lozinku" autoComplete="on" onChange={this.onChangePassword} value={password} />
+							</div>
+						</form>
+						<button className="button button-login" onClick={this.handleLogin}>Prijava</button>
+					</div>
+					<div className="card-bottom">
+						<div>
+							Nemate račun?
+						</div>
+						<div>
+							<button className="button button-register" onClick={() => this.props.history.push("/register")}>Registracija</button>
+						</div>
+					</div>
+				</div>
+				{this.state.showPopup && <Popup text={messages} onOk={this.togglePopup} />}
+			</div>
+		);
+	}
 }

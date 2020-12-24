@@ -1,11 +1,12 @@
 import React, { Component } from "react";
+// components
+import Popup from "../../popup/popup.component";
 // services
 import AuthService from "../../../services/auth.service";
 import FormService from "../../../services/form.service";
 // styles
-import "./button.css";
 import "../../../constants/colors.css";
-import Popup from "../../popup/popup.component";
+import "./button.css";
 
 export default class RestartButton extends Component {
 
@@ -30,7 +31,7 @@ export default class RestartButton extends Component {
 
 	render() {
 		return (
-			<div className="button form-button bg-light-pink restart" style={{ backgroundImage: 'url(/images/misc/restart.png)' }} onClick={ this.togglePopup } >
+			<div className="form-button bg-lightpink restart" style={{ backgroundImage: 'url(/images/misc/restart.png)' }} onClick={ this.togglePopup } >
 				{this.state.showPopup && <Popup text={["Jeste li sigurni da želite početi ispočetka?"]} onClose={ this.togglePopup } onOk={ this.restart } />}
 			</div>
 		)

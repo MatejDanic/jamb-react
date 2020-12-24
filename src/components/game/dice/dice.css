@@ -1,4 +1,5 @@
 .dice-button {
+  cursor: pointer;
   border-radius: 16px;
   height: 64px;
   width: 64px;

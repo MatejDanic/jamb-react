@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 import SockJsClient from "react-stomp";
-import AuthService from "../../services/auth.service";
 import { hourFormat } from "../../constants/date-format";
-import "./chat.css";
+// services
+import AuthService from "../../services/auth.service";
+// constants
 import BASE_URL from "../../constants/api-url";
+// styles
+import "./chat.css";
 
 const url = BASE_URL + "/websocket-chat";
 
@@ -71,7 +74,7 @@ export default class Chat extends Component {
                 </div>
                 {this.state.currentUser && <div className="input">
                     <input className="input-field" id="message" onChange={(event) => { this.setState({ message: event.target.value }); }} />
-                    <button className="btn input-button" onClick={this.sendMessage}>Send</button>
+                    <button className="input-button" onClick={this.sendMessage}>Send</button>
                 </div>}
             </div>
         )

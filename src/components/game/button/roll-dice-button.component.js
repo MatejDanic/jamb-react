@@ -8,7 +8,7 @@ export default class RollDiceButton extends Component {
 		let rollCount = this.props.rollCount;
 		let btnClass = this.getBtnClass(rollCount);
 		return (
-			<button disabled={rollDisabled} className={"button roll-dice bg-light-pink " + btnClass} style={{ backgroundImage: "url(/images/misc/" + rollCount  + "_roll.png)" }} onClick={this.props.onRollDice}></button>
+			<button disabled={rollDisabled} className={"roll-dice bg-lightpink " + btnClass} style={{ backgroundImage: "url(/images/misc/" + rollCount  + "_roll.png)" }} onClick={this.props.onRollDice}></button>
 		)
 	}
 

@@ -36,15 +36,15 @@ export default class Scoreboard extends Component {
 		);
 	}
 
-	togglePopup() {
-		this.setState({ showPopup: !this.state.showPopup });
+	togglePopup(scoreboard) {
+		this.setState({ showPopup: !this.state.showPopup, scoreboard });
 	}
 
 	render() {
 		let scores = this.state.scoresToDisplay;
 		let scoreboard = this.state.scoreboard;
 		return (
-			<div className="scoreboard-button bg-light-pink" onClick={() => this.handleClick()} >
+			<div className="scoreboard-button bg-lightpink" onClick={() => this.handleClick()} >
 				<ul className="scoreboard">
 					{scores.length > 0 ? scores.map(score =>
 						<li key={score}>{score}</li>) :
@@ -56,17 +56,20 @@ export default class Scoreboard extends Component {
 	}
 
 	handleClick() {
-		let scoreboard = ["Najbolji rezultati ovaj tjedan:"];
+		let scoreboard = [];
 		let scores = this.state.scores;
-		let i = 1;
-		for (let key in scores) {
-			scoreboard.push(i + ". " + scores[key].username + ' - ' + scores[key].value);
-			if (i === 10) break;
-			else i += 1;
-		}
 		if (scores.length > 0) {
-			this.setState({ scoreboard });
-			this.togglePopup();
+			scoreboard.push("Najbolji rezultati ovaj tjedan:");
+			let i = 1;
+			for (let key in scores) {
+				scoreboard.push(i + ". " + scores[key].username + ' - ' + scores[key].value);
+				if (i === 10) break;
+				else i += 1;
+			}
+		} else {
+			scoreboard.push("Nema rezultata u ovom tjednu.");
 		}
+
+		this.togglePopup(scoreboard);
 	}
 }

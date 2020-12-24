@@ -1,4 +1,5 @@
 .box {
+	cursor: pointer;
 	border-radius: 5px;
 	border: 1px solid darkslategray;
 	font-size: 25px;
