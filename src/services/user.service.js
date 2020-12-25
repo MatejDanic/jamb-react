@@ -1,19 +1,21 @@
-import axios from "axios";
-import { authHeader } from "./auth.service";
+import { request } from "./xhr.service";
 import BASE_URL from "../constants/api-url";
 
 const url = BASE_URL + "/users";
 
 class UserService {
-  getUsers() {
-    return axios.get(url, { headers: authHeader() })
-  }
-  getUser(userId) {
-    return axios.get(url + "/" + userId, { headers: authHeader() });
-  }
-  deleteUser(userId) {
-    return axios.delete(url + "/" + userId, { headers: authHeader() });
-  }
+
+    getUsers() {
+        return request("GET", url, null);
+    }
+
+    getUser(userId) {
+        return request("GET", url + "/" + userId, null);
+    }
+
+    deleteUser(userId) {
+        return request("DELETE", url + "/" + userId, null);
+    }
 }
 
 export default new UserService();

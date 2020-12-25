@@ -66,20 +66,20 @@
 
 .bar {
     display: inline-flex;
-    align-items: center;
+    text-align: center;
+    width: 100%;
     height: 6vh;
-    width: 100vw;
     background-color: lightgray;
 }
 
 .bar-left {
+    width: 60%;
     text-align: left;
-    width: 60vw;
 }
 
 .bar-right {
+    width: 40%;
     text-align: right;
-    width: 40vw;
 }
 
 .bar-element {
@@ -88,7 +88,7 @@
     color: darkslategray;
     border: none;
     height: 6vh;
-    width: 15vw;
+    width: 14vw;
     font-weight: 400;
     font-size: 24px;
 }

@@ -8,7 +8,7 @@ import BASE_URL from "../../constants/api-url";
 // styles
 import "./chat.css";
 
-const url = BASE_URL + "/websocket-chat";
+const url = BASE_URL + "/socket";
 
 export default class Chat extends Component {
 
@@ -54,7 +54,7 @@ export default class Chat extends Component {
                         {this.state.messages.map(msg => {
                             return (
                                 <div key={msg.id}>
-                                    [{msg.time}] -<button className="button-user" onClick={() => { this.props.history.push("/users/" + msg.userId) }}>{msg.username}</button>: {msg.value}
+                                    [{msg.time}] - <button className="button-user" onClick={() => { this.props.history.push("/users/" + msg.userId) }}> {msg.username}</button>: {msg.value}
                                 </div>)
                         })}
                     </div>
@@ -64,9 +64,14 @@ export default class Chat extends Component {
                             let messages = this.state.messages;
                             msg.id = messages.length + 1;
                             msg.time = hourFormat.format(Date.now());
-
                             messages.push(msg);
                             this.setState({ messages });
+                        }}
+                        onOpen={() => {
+                            console.log("Connected")
+                        }}
+                        onClose={() => {
+                            console.log("Disconnected")
                         }}
                         ref={(client) => {
                             this.clientRef = client

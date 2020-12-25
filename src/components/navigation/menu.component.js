@@ -20,7 +20,6 @@ export default class Menu extends Component {
 
     componentDidUpdate() {
         let currentUser = AuthService.getCurrentUser();
-        // XOR :D
         if (!this.state.currentUser && AuthService.getCurrentUser() || this.state.currentUser && !AuthService.getCurrentUser()) this.setState({ currentUser });
     }
 

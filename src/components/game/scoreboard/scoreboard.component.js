@@ -20,18 +20,17 @@ export default class Scoreboard extends Component {
 	componentDidMount() {
 		ScoreService.getScoreboard().then(
 			response => {
-				let scores = response.data;
+				let scores = response;
 				let scoresToDisplay = [];
 				let i = 1;
-				for (let score in response.data) {
-					scoresToDisplay.push(i + ". " + response.data[score].username)
+				for (let key in scores) {
+					scoresToDisplay.push(i + ". " + scores[key].username)
 					if (i === 3) break;
 					else i += 1;
 				}
 				this.setState({ scores, scoresToDisplay })
-			},
-			error => {
-				console.log(error.response && error.response.data);
+			}).catch(response => {
+				console.log(response);
 			}
 		);
 	}
