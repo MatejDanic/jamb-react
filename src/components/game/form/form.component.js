@@ -7,7 +7,7 @@ import MenuButton from "../button/menu-button.component";
 import Scoreboard from "../scoreboard/scoreboard.component";
 import RollDiceButton from "../button/roll-dice-button.component";
 import RestartButton from "../button/restart-button.component";
-import RulesButton from "../button/rules-button.component";
+import InfoButton from "../button/info-button.component";
 import Popup from "../../popup/popup.component";
 // services
 import AuthService from "../../../services/auth.service";
@@ -36,7 +36,8 @@ export default class Form extends Component {
             rollDisabled: false,
             diceDisabled: true,
             currentWeekLeader: "",
-            showPopup: false
+            showPopup: false,
+            messages: []
         }
         this.initializeForm = this.initializeForm.bind(this);
         this.handleBoxClick = this.handleBoxClick.bind(this);
@@ -56,17 +57,18 @@ export default class Form extends Component {
         this.setMounted(true);
         let currentUser = AuthService.getCurrentUser();
         if (currentUser) {
-            FormService.initializeForm().then(
-                response => {
-                    let form = response.data;
+            FormService.initializeForm()
+                .then(response => {
+                    let form = response;
                     console.log(form)
                     this.initializeForm(form);
-                },
-                error => {
-                    this.props.onLogout();
-                    console.log(error.response && error.response.data);
-                }
-            );
+                })
+                .catch(response => {
+                    let messages = [];
+                    if (response.status && response.error) messages.push(response.status + " " + response.error);
+                    if (response.message) messages.push(response.message);
+                    this.togglePopup(messages);
+                });
         } else {
             this.initializeForm(null);
         }
@@ -76,13 +78,9 @@ export default class Form extends Component {
         this.setMounted(false);
     }
 
-    togglePopup() {  
-        this.setState({  
-             showPopup: !this.state.showPopup  
-        }, () => {
-            if (!this.state.showPopup) window.location.reload();
-        });  
-    }  
+    togglePopup(messages) {
+        this.setState({ showPopup: !this.state.showPopup, messages });
+    }
 
     initializeSums(form) {
         let sums = {};
@@ -154,23 +152,33 @@ export default class Form extends Component {
                 form.id = null;
                 let sums = this.initializeSums(form);
                 let filledBoxCount = 0;
-                this.setState({ form, sums, filledBoxCount, currentWeekLeader, sounds  });
+                this.setState({ form, sums, filledBoxCount, currentWeekLeader, sounds });
             }
         }
     }
 
     handleRollDice() {
         let form = this.state.form
+        let diceToRoll = '{';
+        for (let key in form.dice) {
+            diceToRoll += '"' + form.dice[key].ordinalNumber + '" : "';
+            diceToRoll += !form.dice[key].hold;
+            diceToRoll += '",';
+        }
+        diceToRoll = diceToRoll.substring(0, diceToRoll.length - 1) + '}';
         if (form.id != null) {
-            FormService.rollDice(form.id, form.dice).then(
-                response => {
-                    let dice = response.data
+            FormService.rollDice(form.id, diceToRoll)
+                .then(response => {
+                    let dice = response;
                     this.updateDice(form, dice);
-                },
-                error => {
-                    console.log(error.response && error.response.data);
+                })
+                .catch(response => {
+                    let messages = [];
+                    if (response.status && response.error) messages.push(response.status + " " + response.error);
+                    if (response.message) messages.push(response.message);
+                    this.togglePopup(messages);
                 }
-            );
+                );
         } else {
             let dice = form.dice;
             for (let key in dice) {
@@ -249,7 +257,7 @@ export default class Form extends Component {
                         diceElement.classList.remove('clockwise');
                         diceElement.classList.remove('counterclockwise');
                     }, time);
-                }) (key);
+                })(key);
             }
         }
     }
@@ -282,17 +290,20 @@ export default class Form extends Component {
     announce(boxType) {
         let form = this.state.form;
         if (form.id != null) {
-            FormService.announce(form.id, boxType).then(
-                response => {
-                    form.announcement = response.data;
+            FormService.announce(form.id, boxType)
+                .then(response => {
+                    form.announcement = response;
                     let boxesDisabled = true;
                     let rollDisabled = false;
                     this.setState({ form, boxesDisabled, rollDisabled });
-                },
-                error => {
-                    console.log(error.response && error.response.data);
+                })
+                .catch(response => {
+                    let messages = [];
+                    if (response.status && response.error) messages.push(response.status + " " + response.error);
+                    if (response.message) messages.push(response.message);
+                    this.togglePopup(messages);
                 }
-            );
+                );
         } else {
             form.announcement = boxType;
             let boxesDisabled = true;
@@ -304,15 +315,18 @@ export default class Form extends Component {
     fillBox(columnType, boxType) {
         let form = this.state.form;
         if (form.id != null) {
-            FormService.fillBox(form.id, columnType.id, boxType.id).then(
-                response => {
-                    let score = response.data;
+            FormService.fillBox(form.id, columnType.id, boxType.id)
+                .then(response => {
+                    let score = response;
                     this.fill(form, columnType, boxType, score);
-                },
-                error => {
-                    console.log(error.response && error.response.data);
+                })
+                .catch(response => {
+                    let messages = [];
+                    if (response.status && response.error) messages.push(response.status + " " + response.error);
+                    if (response.message) messages.push(response.message);
+                    this.togglePopup(messages);
                 }
-            );
+                );
         } else {
             let dice = this.state.form.dice;
             let score = ScoreUtil.calculateScore(dice, boxType);
@@ -426,18 +440,20 @@ export default class Form extends Component {
         let boxesDisabled = this.state.boxesDisabled;
         let sums = this.state.sums;
         let gameInfo = { announcement, boxesDisabled, rollCount, sums };
+        let messages = this.state.messages;
+
         return (
             <div className="center">
 
                 {form && form.dice && <div className="dice-rack-container">
                     <DiceRack rollDisabled={rollDisabled} rollCount={form.rollCount} dice={form.dice}
-                    diceDisabled={diceDisabled} onToggleDice={this.handleToggleDice} />
+                        diceDisabled={diceDisabled} onToggleDice={this.handleToggleDice} />
                 </div>}
 
                 {form && form.columns && <div className="form-container">
                     <div className="form">
                         <div className="game-column">
-                            <RulesButton />
+                            <InfoButton />
                             <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/1.png"} />
                             <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/2.png"} />
                             <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/3.png"} />
@@ -475,7 +491,7 @@ export default class Form extends Component {
                         </div>
                     </ div>
                 </div>}
-                {this.state.showPopup && <Popup text={["Čestitamo, vaš ukupni rezultat je ", this.state.sums["finalSum"]]} onOk={this.togglePopup} /> } 
+                {this.state.showPopup && <Popup text={messages} onOk={this.togglePopup} />}
             </div>
         )
     }
@@ -484,18 +500,22 @@ export default class Form extends Component {
         let trumpets = new Audio("/sounds/misc/trumpets.mp3");
         trumpets.volume = 0.1
         trumpets.play();
-        this.togglePopup();
+        this.togglePopup(["Čestitamo, vaš ukupni rezultat je ", this.state.sums["finalSum"]]);
     }
 
     getCurrentWeekLeader() {
-        ScoreService.getCurrentWeekLeader().then(
-            response => {
-                return response.data;
-            },
-            error => {
-                console.log(error.response && error.response.data);
+        ScoreService.getCurrentWeekLeader()
+            .then(
+                response => {
+                    return response;
+                })
+            .catch(response => {
+                let messages = [];
+                if (response.status && response.error) messages.push(response.status + " " + response.error);
+                if (response.message) messages.push(response.message);
+                this.togglePopup(messages);
             }
-        );
+            );
         return "";
     }
 }

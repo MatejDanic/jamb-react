@@ -20,8 +20,6 @@ export default class Register extends Component {
 		this.onChangeUsername = this.onChangeUsername.bind(this);
 		this.onChangePassword = this.onChangePassword.bind(this);
 		this.togglePopup = this.togglePopup.bind(this);
-		this.registerCallback = this.registerCallback.bind(this);
-		this.redirectToLogin = this.redirectToLogin.bind(this);
 	}
 
 	onChangeUsername(e) {
@@ -44,26 +42,8 @@ export default class Register extends Component {
 
 	redirectToLogin() {
 		this.props.history.push("/login")
-	}
-
-	registerCallback(status, response) {
-		console.log(response);
-		let messages = [];
-		if (status == 200) {
-			messages.push("Korisnik " + this.state.username + " uspješno registriran.");
-			setTimeout(this.redirectToLogin, 1000);
-		} else {
-			if (response.errors) {
-				for (let i in response.errors) {
-					messages.push(response.errors[i].defaultMessage);
-				}
-			} else if (response.message) {
-				messages.push(response.message);
-			}
-		}
-		this.togglePopup(messages);
-	}
-
+    }
+    
 	handleRegister() {
 		let username = this.state.username;
 		let password = this.state.password;
@@ -75,16 +55,35 @@ export default class Register extends Component {
 			messages.push("Lozinka je obavezna!");
 		}
 		if (messages.length == 0) {
-			let registerRequest = {}
-			registerRequest.username = this.state.username;
-			registerRequest.password = this.state.password;
-			AuthService.register(registerRequest, this.registerCallback);
+			let credentials = {}
+			credentials.username = this.state.username;
+            credentials.password = this.state.password;
+            AuthService.register(JSON.stringify(credentials))
+                .then(response => {
+                    let messages = [];
+                    messages.push(response.message);
+                    this.togglePopup(messages);
+                    setTimeout(() => {this.props.history.push("/login")}, 1000);
+                })
+                .catch(response => {
+                    let messages = [];
+                    if (response.status && response.error) messages.push(response.status + " " + response.error);
+                    if (response.message) messages.push(response.message);
+                    if (response.errors) {
+                        for (let i in response.errors) {
+                            messages.push(response.errors[i].defaultMessage);
+                        }
+                    }
+                    this.togglePopup(messages);
+                });
 		} else {
 			this.togglePopup(messages);
 		}
 	}
 
 	render() {
+        let username = this.state.username;
+        let password = this.state.password;
 		let messages = this.state.messages;
 		return (
 			<div className="auth">
@@ -93,11 +92,11 @@ export default class Register extends Component {
 						<form>
 							<div>
 								<label>Korisničko ime</label>
-								<input type="text" placeholder="Unesite korisničko ime" autoComplete="on" onChange={this.onChangeUsername} />
+								<input type="text" placeholder="Unesite korisničko ime" autoComplete="on" onChange={this.onChangeUsername} value={username} />
 							</div>
 							<div>
 								<label>Lozinka</label>
-								<input type="password" placeholder="Unesite lozinku" autoComplete="on" onChange={this.onChangePassword} />
+								<input type="password" placeholder="Unesite lozinku" autoComplete="on" onChange={this.onChangePassword} value={password}/>
 							</div>
 						</form>
 						<button className="button button-register" onClick={this.handleRegister}>Registracija</button>
