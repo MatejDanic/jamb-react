@@ -36,7 +36,7 @@ export default class Form extends Component {
             rollDisabled: false,
             diceDisabled: true,
             showPopup: false,
-            messages: []
+            messages: [],
         }
         this.initializeForm = this.initializeForm.bind(this);
         this.handleBoxClick = this.handleBoxClick.bind(this);
@@ -240,7 +240,7 @@ export default class Form extends Component {
         for (let key in dice) {
             if (!dice[key].hold) {
                 let sound = sounds.pop();
-                sound.volume = 0.4;
+                sound.volume = this.props.preference.volume / 3;
                 (function (local_i) {
                     let time = Math.round(800 + Math.random() * 1000);
                     let diceElement = document.getElementById('dice' + local_i);
@@ -248,9 +248,8 @@ export default class Form extends Component {
                         diceElement.style.animationDuration = time + "ms";
                         diceElement.style.animationIterationCount = Math.round(1 + Math.random() * 3);
                         diceElement.classList.add("roll");
-                        sound.play();
+                        if (sound.volume > 0) sound.play();
                         Math.random() > 0.5 ? diceElement.classList.add("clockwise") : diceElement.classList.add("counterclockwise");
-                        // diceElement.classList.add('roll');
                     }, 0);
                     setTimeout(function () {
                         diceElement.classList.remove('roll');
@@ -342,8 +341,8 @@ export default class Form extends Component {
                     let box = column.boxes[j];
                     if (box.boxType.id === boxType.id) {
                         let sound = this.state.sounds.box;
-                        sound.volume = 0.4;
-                        sound.play();
+                        sound.volume = this.props.preference.volume / 3;
+                        if (sound.volume > 0) sound.play();
                         box.value = score;
                         box.available = false;
                         box.filled = true;
@@ -498,8 +497,8 @@ export default class Form extends Component {
 
     endGame() {
         let trumpets = new Audio("/sounds/misc/trumpets.mp3");
-        trumpets.volume = 0.1
-        trumpets.play();
+        trumpets.volume = this.props.preference.volume / 3;
+        if (trumpets.volume > 0) trumpets.play();
         this.togglePopup(["Čestitamo, vaš ukupni rezultat je ", this.state.sums["finalSum"]]);
     }
 

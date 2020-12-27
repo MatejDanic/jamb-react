@@ -1,6 +1,8 @@
 
 
 import React, { Component } from "react";
+// components
+import Popup from "../popup/popup.component";
 // services
 import ScoreService from "../../services/score.service";
 // utils

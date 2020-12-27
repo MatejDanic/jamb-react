@@ -16,6 +16,14 @@ class UserService {
     deleteUser(userId) {
         return request("DELETE", url + "/" + userId, null);
     }
+
+    getUserPreference(userId) {
+        return request("GET", url + "/" + userId + "/preferences", null);
+    }
+
+    updateUserPreference(userId, preference) {
+        return request("PATCH", url + "/" + userId + "/preferences", preference);
+    }
 }
 
 export default new UserService();

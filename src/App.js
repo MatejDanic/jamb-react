@@ -16,6 +16,7 @@ import Menu from "./components/navigation/menu.component";
 import Bar from "./components/navigation/bar.component";
 // services
 import AuthService from "./services/auth.service";
+import UserService from "./services/user.service";
 // styles
 import "./components/navigation/navigation.css";
 import "./constants/colors.css";
@@ -23,6 +24,7 @@ import "./App.css";
 import { smallWindowThreshold } from "./constants/screen-constants";
 import Chat from "./components/chat/chat.component";
 import BASE_URL from "./constants/api-url";
+import Popup from "./components/popup/popup.component";
 
 class App extends Component {
 
@@ -34,22 +36,45 @@ class App extends Component {
 			windowHeight: 0,
 			smallWindow: false,
 			showMenu: window.location.pathname !== "/",
-			gameMounted: window.location.pathname === "/"
+			gameMounted: window.location.pathname === "/",
+			showPopup: false,
+			messages: [],
+			preference: []
 		};
 		this.updateDimensions = this.updateDimensions.bind(this);
 		this.toggleMenu = this.toggleMenu.bind(this);
 		this.logout = this.logout.bind(this);
-
+		this.togglePopup = this.togglePopup.bind(this);
+		this.changeVolume = this.changeVolume.bind(this);
 		this._form = React.createRef();
 	}
 
 	componentDidMount() {
 		console.log(BASE_URL)
 		let currentUser = AuthService.getCurrentUser();
-		if (currentUser) this.setState({ currentUser });
+		if (currentUser) {
+			UserService.getUserPreference(currentUser.id)
+				.then(response => {
+					let preference = response;
+					this.setState({ currentUser, preference });
+				})
+				.catch(response => {
+					let messages = [];
+					if (response.status && response.error) messages.push(response.status + " " + response.error);
+					if (response.message) messages.push(response.message);
+					this.togglePopup(messages);
+				});
+		} else {
+			let preference = {}
+			preference.volume = 1;
+			this.setState({ preference })
+		}
 		this.updateDimensions();
 		window.addEventListener("resize", this.updateDimensions);
-		// window.addEventListener("keypress", (e) => this.handleKeyPress(e, this._form.current));
+	}
+
+	togglePopup(messages) {
+		this.setState({ showPopup: !this.state.showPopup, messages });
 	}
 
 	updateDimensions() {
@@ -60,12 +85,6 @@ class App extends Component {
 			this.setState({ windowWidth, windowHeight, smallWindow });
 		}
 	}
-
-	// handleKeyPress(e, formComponent) {
-	//   if (e.code === "Space") {
-	//     formComponent.handleRollDice();
-	//   }
-	// }
 
 	componentWillUnmount() {
 		window.removeEventListener("resize", this.updateDimensions);
@@ -89,17 +108,45 @@ class App extends Component {
 		this.setState({ showMenu: !this.state.showMenu });
 	}
 
+	changeVolume() {
+		let preference = {}
+		if (this.state.preference.volume < 3) {
+			preference.volume = this.state.preference.volume + 1;
+		} else {
+			preference.volume = 0;
+		}
+		let currentUser = AuthService.getCurrentUser();
+		if (currentUser) {
+			UserService.updateUserPreference(currentUser.id, JSON.stringify(preference))
+				.then(response => {
+					let preference = response;
+					this.setState({ preference });
+				})
+				.catch(response => {
+					let messages = [];
+					if (response.status && response.error) messages.push(response.status + " " + response.error);
+					if (response.message) messages.push(response.message);
+					this.togglePopup(messages);
+				});
+		} else {
+			this.setState({ preference })
+		}
+	}
+
 	render() {
 		let smallWindow = this.state.smallWindow;
 		let showMenu = this.state.showMenu;
 		let gameMounted = this.state.gameMounted;
+		let messages = this.state.messages;
+		let preference = this.state.preference;
+
 		return (
 			<Router history={history}>
 				<title>Jamb</title>
-				{smallWindow ? <Menu onLogout={this.logout} history={history} showMenu={showMenu} gameMounted={gameMounted} onToggleMenu={this.toggleMenu} /> :
+				{smallWindow ? <Menu onChangeVolume={this.changeVolume} preference={preference} onLogout={this.logout} history={history} showMenu={showMenu} gameMounted={gameMounted} onToggleMenu={this.toggleMenu} /> :
 					<Bar onLogout={this.logout} history={history} />}
 				<Switch>
-					<Route exact path="/" render={() => <Form onLogout={this.logout} ref={this._form} history={history} onGameMounted={(mounted) => this.handleGameMounted(mounted)} smallWindow={smallWindow} onToggleMenu={this.toggleMenu} />} />
+					<Route exact path="/" render={() => <Form preference={preference} onLogout={this.logout} ref={this._form} history={history} onGameMounted={(mounted) => this.handleGameMounted(mounted)} smallWindow={smallWindow} onToggleMenu={this.toggleMenu} />} />
 					<Route exact path="/login" component={Login} />
 					<Route exact path="/register" component={Register} />
 					<Route exact path="/admin" component={Admin} />
@@ -111,6 +158,7 @@ class App extends Component {
 					<Route exact path="/chat" component={Chat} />
 					<Route exact path="/chat/:conversationId" component={Chat} />
 				</Switch>
+				{this.state.showPopup && <Popup text={messages} onOk={this.togglePopup} />}
 			</Router>
 		);
 	}
