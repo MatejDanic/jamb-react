@@ -35,7 +35,6 @@ export default class Form extends Component {
             announcementRequired: false,
             rollDisabled: false,
             diceDisabled: true,
-            currentWeekLeader: "",
             showPopup: false,
             messages: []
         }
@@ -68,6 +67,7 @@ export default class Form extends Component {
                     if (response.status && response.error) messages.push(response.status + " " + response.error);
                     if (response.message) messages.push(response.message);
                     this.togglePopup(messages);
+                    setTimeout(() => {this.props.onLogout()}, 3000);
                 });
         } else {
             this.initializeForm(null);
@@ -97,7 +97,7 @@ export default class Form extends Component {
     }
 
     initializeForm(form) {
-        let currentWeekLeader = this.getCurrentWeekLeader();
+        // let currentWeekLeader = this.getCurrentWeekLeader();
         let sounds = {};
         sounds.dice = [];
         for (let i = 0; i <= 9; i++) {
@@ -112,7 +112,7 @@ export default class Form extends Component {
                 let filledBoxCount = this.getFilledBoxCount(form);
                 let sums = this.initializeSums(form);
                 sums = this.updateSums(form, sums);
-                this.setState({ form, sums, announcementRequired, rollDisabled, diceDisabled, filledBoxCount, currentWeekLeader, sounds });
+                this.setState({ form, sums, announcementRequired, rollDisabled, diceDisabled, filledBoxCount, sounds });
             } else {
                 let form = {};
                 form.columns = [];
@@ -152,7 +152,7 @@ export default class Form extends Component {
                 form.id = null;
                 let sums = this.initializeSums(form);
                 let filledBoxCount = 0;
-                this.setState({ form, sums, filledBoxCount, currentWeekLeader, sounds });
+                this.setState({ form, sums, filledBoxCount, sounds });
             }
         }
     }
@@ -505,8 +505,7 @@ export default class Form extends Component {
 
     getCurrentWeekLeader() {
         ScoreService.getCurrentWeekLeader()
-            .then(
-                response => {
+            .then(response => {
                     return response;
                 })
             .catch(response => {
@@ -514,8 +513,7 @@ export default class Form extends Component {
                 if (response.status && response.error) messages.push(response.status + " " + response.error);
                 if (response.message) messages.push(response.message);
                 this.togglePopup(messages);
-            }
-            );
+            });
         return "";
     }
 }

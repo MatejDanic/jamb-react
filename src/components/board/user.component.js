@@ -41,7 +41,6 @@ export default class User extends Component {
             .then(response => {
                 let user = response;
                 let userIsAdmin = false;
-                console.log(user);
                 if (user) {
                     for (let key in user.roles) {
                         if (user.roles[key].label === "ADMIN") {
