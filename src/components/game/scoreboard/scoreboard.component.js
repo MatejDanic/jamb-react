@@ -60,7 +60,7 @@ export default class Scoreboard extends Component {
 	handleClick() {
 		let scoreboard = [];
 		let scores = this.state.scores;
-		if (scores.length > 0) {
+		if (scores && scores.length > 0) {
 			scoreboard.push("Najbolji rezultati ovaj tjedan:");
 			let i = 1;
 			for (let key in scores) {
@@ -69,7 +69,7 @@ export default class Scoreboard extends Component {
 				else i += 1;
 			}
 		} else {
-			scoreboard.push("Nema rezultata u ovom tjednu.");
+			scoreboard.push("Nema postignutih rezultata u ovom tjednu");
 		}
 
 		this.togglePopup(scoreboard);

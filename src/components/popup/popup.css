@@ -54,10 +54,6 @@ ul {
 		height: 100vh;
 	}
 
-	.popup-text {
-		text-align: left;
-	}
-
 	.popup-button {
 		min-height: 10vw;
 		min-width: 10vw;

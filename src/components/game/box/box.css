@@ -19,10 +19,10 @@
 	}
 }
 
-
 .box:disabled {
 	background-color: whitesmoke;
 	color: darkslategray;
+	cursor: default;
 }
 
 .box-red-border {
