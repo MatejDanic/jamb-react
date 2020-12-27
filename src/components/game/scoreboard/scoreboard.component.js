@@ -18,9 +18,9 @@ export default class Scoreboard extends Component {
 	}
 
 	componentDidMount() {
-		ScoreService.getScoreboard().then(
-			response => {
-				let scores = response;
+		ScoreService.getScoreboard()
+			.then(response => {
+				let scores = response.scores;
 				let scoresToDisplay = [];
 				let i = 1;
 				for (let key in scores) {
@@ -30,9 +30,12 @@ export default class Scoreboard extends Component {
 				}
 				this.setState({ scores, scoresToDisplay })
 			}).catch(response => {
-				console.log(response);
+				let messages = [];
+				if (response.status && response.error) messages.push(response.status + " " + response.error);
+				if (response.message) messages.push(response.message);
+				this.togglePopup(messages);
 			}
-		);
+			);
 	}
 
 	togglePopup(scoreboard) {

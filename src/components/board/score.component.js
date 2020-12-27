@@ -56,7 +56,6 @@ export default class Score extends Component {
             })
             .catch(response => {
                 let messages = [];
-                console.log(response);
                 if (response.status && response.error) messages.push(response.status + " " + response.error);
                 if (response.message) messages.push(response.message);
                 this.togglePopup(messages);
@@ -80,7 +79,7 @@ export default class Score extends Component {
             <div className="container-custom">
                 <div className="container-custom-inner">
                     <p>
-                        {score.user && <button className="button-user" onClick={() => { this.props.history.push("/users/" + score.user.id) }}>{score.user.username}</button>}
+                        {score.user && <button className="button-profile" onClick={() => { this.props.history.push("/users/" + score.user.id) }}>{score.user.username}</button>}
                     </p>
                     <h3>
                         <strong>Vrijednost: </strong>

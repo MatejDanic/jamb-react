@@ -89,7 +89,7 @@ td {
 .button-pagination {
     cursor: pointer;
     background-color: lightpink;
-    width: 40px;
+    min-width: 60px;
     height: 40px;
     border-style: solid;
     border-radius: 4px;
@@ -115,11 +115,12 @@ td {
     color: black;
 }
 
-.button-user {
-    cursor: pointer;
-    margin: 0;
+.button-profile {
     padding: 0;
-    font-weight: bold;
+    margin: 0;
+    border: 0;
+    cursor: pointer;
+    font-weight: bolder;
     font-size: xx-large;
     color: darkslategray;
     background-color: transparent;
@@ -167,7 +168,6 @@ td {
     }
 
     .button-pagination {
-        width: 10vw;
-        height: 10vw;
+        min-width: 12vw;
     }
 }

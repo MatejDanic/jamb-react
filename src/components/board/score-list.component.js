@@ -17,8 +17,11 @@ export default class ScoreList extends Component {
         super(props);
 
         this.state = {
-            scores: []
+            scores: [],
+            showPopup: false,
+            messages: []
         };
+        this.togglePopup = this.togglePopup.bind(this);
     }
 
     componentDidMount() {
@@ -38,8 +41,7 @@ export default class ScoreList extends Component {
                     let messages = [];
                     if (response.status && response.error) messages.push(response.status + " " + response.error);
                     if (response.message) messages.push(response.message);
-                    console.log(messages);
-                    // this.togglePopup(messages);
+                    this.togglePopup(messages);
                 });
         } else {
             let scores = [];
@@ -54,9 +56,14 @@ export default class ScoreList extends Component {
         document.getElementById("current-page").label = 1;
     }
 
+    togglePopup(messages) {
+        this.setState({ showPopup: !this.state.showPopup, messages });
+    }
+
     render() {
         let username = this.props.username;
         let scores = this.state.scores;
+        let messages = this.state.messages;
         return (
             <div className="container-custom">
                 <div className="container-custom-table">
@@ -82,6 +89,7 @@ export default class ScoreList extends Component {
                     </div>
                     <div id="current-page" />
                 </div>
+                {this.state.showPopup && <Popup text={messages} onOk={this.togglePopup} />}
             </div>
         );
     }

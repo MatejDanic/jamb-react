@@ -9,6 +9,7 @@
 }
 
 .scoreboard-button {
+    font-family: Arial, Helvetica, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center; 
