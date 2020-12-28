@@ -63,6 +63,7 @@ class App extends Component {
 			UserService.getUserPreference(currentUser.id)
 				.then(response => {
 					let preference = response;
+					if ((preference.volume == null || preference.volume == undefined) && preference.volume != 0) preference.volume = 1;
 					this.setState({ currentUser, preference });
 				})
 				.catch(response => {
@@ -189,8 +190,8 @@ class App extends Component {
 					<Bar onLogout={this.logout} history={history} />}
 				<Switch>
 					<Route exact path="/" render={() => <Form preference={preference} onLogout={this.logout} ref={this._form} history={history} onGameMounted={(mounted) => this.handleGameMounted(mounted)} smallWindow={smallWindow} onToggleMenu={this.toggleMenu} />} />
-					<Route exact path="/login" component={() => <Login onLogin={this.login} />} />
-					<Route exact path="/register" component={Register} />
+					<Route exact path="/login" component={() => <Login onLogin={this.login} history={history}/>} />
+					<Route exact path="/register" component={() => <Register history={history} />} />
 					<Route exact path="/admin" component={Admin} />
 					<Route exact path="/users" component={UserList} />
 					<Route exact path="/users/:userId" component={User} />
