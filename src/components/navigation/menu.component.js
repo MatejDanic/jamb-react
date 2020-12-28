@@ -40,6 +40,7 @@ export default class Menu extends Component {
                     <div className="front">
                         {gameMounted && <div className="mask" onClick={this.props.onToggleMenu} />}
                         {gameMounted && <div className="button-preference" onClick={this.props.onChangeVolume} style={{ backgroundImage: "url(/images/misc/volume_" + volume + ".png)" }} />}
+                        {gameMounted && <div className="button-chat" onClick={() => history.push("/chat")} style={{ backgroundImage: "url(/images/misc/chat.png)" }} />}
                         <div className={"menu " + menuClass}>
                             <div className="menu-element" onClick={() => history.push("/")} style={{ backgroundImage: 'url(/images/misc/dice.png)' }}><div className="menu-element-text">Jamb</div></div>
                             <div className="menu-element" onClick={() => history.push("/users")} style={{ backgroundImage: 'url(/images/misc/users.png)' }}><div className="menu-element-text">Igrači</div></div>

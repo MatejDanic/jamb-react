@@ -72,8 +72,19 @@
     background-position: center center;
     background-repeat: no-repeat;
     position: absolute;
-    bottom: 25vh;
-    right: 0;
+    bottom: 20vh;
+    left: 0;
+}
+
+.button-chat {
+    height: 20vw;
+    width: 20vw;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    position: absolute;
+    bottom: 20vh;
+    right: 5vw;
 }
 
 .bar {

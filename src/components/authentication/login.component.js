@@ -57,8 +57,8 @@ export default class Login extends Component {
             credentials.password = this.state.password;
             AuthService.login(JSON.stringify(credentials))
                 .then(response => {
-                    localStorage.setItem("user", JSON.stringify(response));
-                    this.props.history.push("/");
+                    let user = JSON.stringify(response);
+                    this.props.onLogin(user);
                 })
                 .catch(response => {
                     let messages = [];
