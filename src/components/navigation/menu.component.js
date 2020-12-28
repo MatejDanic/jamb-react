@@ -32,7 +32,6 @@ export default class Menu extends Component {
         let history = this.props.history;
         let gameMounted = this.props.gameMounted;
         let menuClass = gameMounted ? "menu-relative" : "menu-fixed";
-        let volume = this.props.preference.volume;
 
         return (
             <div>
