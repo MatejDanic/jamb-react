@@ -132,7 +132,7 @@ class App extends Component {
 			UserService.updateUserPreference(currentUser.id, JSON.stringify(preference))
 				.then(response => {
 					let preference = response;
-					if (!preference.volume) preference.volume = 1;
+					if ((preference.volume == null || preference.volume == undefined) && preference.volume != 0) preference.volume = 1;
 					this.setState({ preference });
 				})
 				.catch(response => {

@@ -13,7 +13,6 @@ export function request(method, url, body) {
 
         xhr.onload = function () {
             if (this.status >= 200 && this.status < 300) {
-                if (method == "PATCH") console.log(xhr.response);
                 resolve(xhr.response ? JSON.parse(xhr.response) : {});
             } else {
                 reject(xhr.response ? JSON.parse(xhr.response) : {});
