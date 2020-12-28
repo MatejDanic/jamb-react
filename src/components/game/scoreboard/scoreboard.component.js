@@ -20,7 +20,7 @@ export default class Scoreboard extends Component {
 	componentDidMount() {
 		ScoreService.getScoreboard()
 			.then(response => {
-				let scores = response.scores;
+				let scores = response;
 				let scoresToDisplay = [];
 				let i = 1;
 				for (let key in scores) {
