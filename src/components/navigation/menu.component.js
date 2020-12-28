@@ -24,14 +24,13 @@ export default class Menu extends Component {
         if (!this.state.currentUser && AuthService.getCurrentUser() || this.state.currentUser && !AuthService.getCurrentUser()) this.setState({ currentUser });
     }
 
-    changeVolume
-
     render() {
         let currentUser = this.state.currentUser;
         let showMenu = this.props.showMenu;
         let history = this.props.history;
         let gameMounted = this.props.gameMounted;
         let menuClass = gameMounted ? "menu-relative" : "menu-fixed";
+        let volume = this.props.preference.volume;
 
         return (
             <div>
