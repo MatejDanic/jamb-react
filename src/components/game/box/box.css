@@ -1,4 +1,5 @@
 .box {
+	cursor: pointer;
 	border-radius: 5px;
 	border: 1px solid darkslategray;
 	font-size: 25px;
@@ -18,10 +19,10 @@
 	}
 }
 
-
 .box:disabled {
 	background-color: whitesmoke;
 	color: darkslategray;
+	cursor: default;
 }
 
 .box-red-border {

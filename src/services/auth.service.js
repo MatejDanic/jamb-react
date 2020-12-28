@@ -1,48 +1,43 @@
-import axios from "axios";
+import { request } from "./xhr.service";
 import BASE_URL from "../constants/api-url";
 
 const url = BASE_URL + "/auth";
 
 class AuthService {
-  login(username, password) {
-    return axios
-      .post(url + "/login", {
-        username,
-        password
-      })
-      .then(response => {
-        if (response.data.accessToken) {
-          localStorage.setItem("user", JSON.stringify(response.data));
-        }
 
-        return response.data;
-      });
-  }
+    login(credentials) {
+        return request("POST", url + "/login", credentials);
+    }
 
-  logout() {
-    localStorage.removeItem("user");
-  }
+    logout() {
+        localStorage.removeItem("user");
+    }
 
-  register(username, password) {
-    return axios.post(url + "/register", {
-      username,
-      password
-    });
-  }
+    register(credentials) {
+        return request("POST", url + "/register", credentials);
+    }
 
-  getCurrentUser() {
-    return JSON.parse(localStorage.getItem('user'));;
-  }
+    getCurrentUser() {
+        return JSON.parse(localStorage.getItem("user"));;
+    }
 }
 
 export default new AuthService();
 
 export function authHeader() {
-  const user = JSON.parse(localStorage.getItem('user'));
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.accessToken) {
+        return { Authorization: "Bearer " + user.accessToken };
+    } else {
+        return {};
+    }
+}
 
-  if (user && user.accessToken) {
-    return { Authorization: 'Bearer ' + user.accessToken };
-  } else {
-    return {};
-  }
+export function getToken() {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.accessToken) {
+        return user.accessToken;
+    } else {
+        return  null;
+    }
 }

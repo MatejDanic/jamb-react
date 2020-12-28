@@ -1,180 +1,117 @@
 import React, { Component } from "react";
-// validation
-import Form from "react-validation/build/form";
-import Input from "react-validation/build/input";
-import CheckButton from "react-validation/build/button";
 // services
 import AuthService from "../../services/auth.service";
-
-const required = value => {
-  if (!value) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        Ovo polje je obavezno!
-      </div>
-    );
-  }
-};
-
-const vusername = value => {
-  if (value.length < 3 || value.length > 15) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        Korisničko ime mora biti između 3 i 15 slova/znamenki.
-      </div>
-    );
-  }
-};
-
-const vpassword = value => {
-  if (value.length < 3 || value.length > 15) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        Lozinka mora biti između 3 i 15 slova/znamenki.
-      </div>
-    );
-  }
-};
+import Popup from "../popup/popup.component";
+// styles
+import "./auth.css";
 
 export default class Register extends Component {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      username: "",
-      password: "",
-      successful: false,
-      message: ""
-    };
-    
-    this.handleRegister = this.handleRegister.bind(this);
-    this.onChangeUsername = this.onChangeUsername.bind(this);
-    this.onChangePassword = this.onChangePassword.bind(this);
-  }
+	constructor(props) {
+		super(props);
+		this.state = {
+			username: "",
+			password: "",
+			successful: false,
+			messages: []
+		};
 
-  onChangeUsername(e) {
-    this.setState({
-      username: e.target.value
-    });
-  }
+		this.handleRegister = this.handleRegister.bind(this);
+		this.onChangeUsername = this.onChangeUsername.bind(this);
+		this.onChangePassword = this.onChangePassword.bind(this);
+		this.togglePopup = this.togglePopup.bind(this);
+	}
 
-  onChangePassword(e) {
-    this.setState({
-      password: e.target.value
-    });
-  }
+	onChangeUsername(e) {
+		this.setState({
+			username: e.target.value
+		});
+	}
 
-  handleRegister(e) {
-    e.preventDefault();
+	onChangePassword(e) {
+		this.setState({
+			password: e.target.value
+		});
+	}
 
-    this.setState({
-      message: "",
-      successful: false
-    });
+	togglePopup(messages) {
+		let username = "";
+		let password = "";
+		this.setState({ showPopup: !this.state.showPopup, messages, username, password });
+	}
 
-    this.form.validateAll();
-
-    if (this.checkBtn.context._errors.length === 0) {
-      AuthService.register(
-        this.state.username,
-        this.state.password
-      ).then(
-        response => {
-          this.setState({
-            message: response.data.message,
-            successful: true
-          });
-          setTimeout(
-            () => {
-              this.props.history.push("/login");
-              window.location.reload();
-            }, 1000
-          );
-        },
-        error => {
-          const resMessage =
-            (error.response &&
-              error.response && error.response.data &&
-              error.response && error.response.data.message) ||
-            error.message ||
-            error.toString();
-
-          this.setState({
-            successful: false,
-            message: resMessage
-          });
-        }
-      );
+	redirectToLogin() {
+		this.props.history.push("/login")
     }
-  }
+    
+	handleRegister() {
+		let username = this.state.username;
+		let password = this.state.password;
+		let messages = [];
+		if (!username) {
+			messages.push("Korisničko ime je obavezno!");
+		}
+		if (!password) {
+			messages.push("Lozinka je obavezna!");
+		}
+		if (messages.length == 0) {
+			let credentials = {}
+			credentials.username = this.state.username;
+            credentials.password = this.state.password;
+            AuthService.register(JSON.stringify(credentials))
+                .then(response => {
+                    let messages = [];
+                    messages.push(response.message);
+                    this.togglePopup(messages);
+                    setTimeout(() => {this.props.history.push("/login")}, 1000);
+                })
+                .catch(response => {
+                    let messages = [];
+                    if (response.status && response.error) messages.push(response.status + " " + response.error);
+                    if (response.message) messages.push(response.message);
+                    if (response.errors) {
+                        for (let i in response.errors) {
+                            messages.push(response.errors[i].defaultMessage);
+                        }
+                    }
+                    this.togglePopup(messages);
+                });
+		} else {
+			this.togglePopup(messages);
+		}
+	}
 
-  render() {
-    return (
-      <div className="col-md-12">
-        <div className="card card-container">
-          <Form
-            onSubmit={this.handleRegister}
-            ref={c => {
-              this.form = c;
-            }}
-          >
-            {!this.state.successful && (
-              <div>
-                <div className="form-group">
-                  <label htmlFor="username">Korisničko ime</label>
-                  <Input
-                    type="text"
-                    className="form-control"
-                    name="username"
-                    value={this.state.username}
-                    onChange={this.onChangeUsername}
-                    validations={[required, vusername]}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="password">Lozinka</label>
-                  <Input
-                    type="password"
-                    className="form-control"
-                    name="password"
-                    value={this.state.password}
-                    onChange={this.onChangePassword}
-                    validations={[required, vpassword]}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <button className="btn btn-primary btn-block">Registracija</button>
-                </div>
-              </div>
-            )}
-
-            {this.state.message && (
-              <div className="form-group">
-                <div
-                  className={
-                    this.state.successful
-                      ? "alert alert-success"
-                      : "alert alert-danger"
-                  }
-                  role="alert"
-                >
-                  {this.state.message}
-                </div>
-              </div>
-            )}
-            <CheckButton
-              style={{ display: "none" }}
-              ref={c => {
-                this.checkBtn = c;
-              }}
-            />
-          </Form>
-          Imate račun?
-          <button className="btn btn-primary" onClick={() => this.props.history.push("/login")}>Prijava</button>
-        </div>
-      </div>
-    );
-  }
+	render() {
+        let username = this.state.username;
+        let password = this.state.password;
+		let messages = this.state.messages;
+		return (
+			<div className="auth">
+				<div className="card">
+					<div className="card-top">
+						<form>
+							<div>
+								<label>Korisničko ime</label>
+								<input type="text" placeholder="Unesite korisničko ime" autoComplete="on" onChange={this.onChangeUsername} value={username} />
+							</div>
+							<div>
+								<label>Lozinka</label>
+								<input type="password" placeholder="Unesite lozinku" autoComplete="on" onChange={this.onChangePassword} value={password}/>
+							</div>
+						</form>
+						<button className="button button-register" onClick={this.handleRegister}>Registracija</button>
+					</div>
+					<div className="card-bottom">
+						<div>
+							Imate račun?
+						</div>
+						<div>
+							<button className="button button-login" onClick={() => this.props.history.push("/login")}>Prijava</button>
+						</div>
+					</div>
+					{this.state.showPopup && <Popup text={messages} onOk={this.togglePopup} />}
+				</div>
+			</div>
+		);
+	}
 }

@@ -7,7 +7,7 @@ import MenuButton from "../button/menu-button.component";
 import Scoreboard from "../scoreboard/scoreboard.component";
 import RollDiceButton from "../button/roll-dice-button.component";
 import RestartButton from "../button/restart-button.component";
-import RulesButton from "../button/rules-button.component";
+import InfoButton from "../button/info-button.component";
 import Popup from "../../popup/popup.component";
 // services
 import AuthService from "../../../services/auth.service";
@@ -35,8 +35,8 @@ export default class Form extends Component {
             announcementRequired: false,
             rollDisabled: false,
             diceDisabled: true,
-            currentWeekLeader: "",
-            showPopup: false
+            showPopup: false,
+            messages: [],
         }
         this.initializeForm = this.initializeForm.bind(this);
         this.handleBoxClick = this.handleBoxClick.bind(this);
@@ -56,17 +56,19 @@ export default class Form extends Component {
         this.setMounted(true);
         let currentUser = AuthService.getCurrentUser();
         if (currentUser) {
-            FormService.initializeForm().then(
-                response => {
-                    let form = response.data;
+            FormService.initializeForm()
+                .then(response => {
+                    let form = response;
                     console.log(form)
                     this.initializeForm(form);
-                },
-                error => {
-                    this.props.onLogout();
-                    console.log(error.response && error.response.data);
-                }
-            );
+                })
+                .catch(response => {
+                    let messages = [];
+                    if (response.status && response.error) messages.push(response.status + " " + response.error);
+                    if (response.message) messages.push(response.message);
+                    this.togglePopup(messages);
+                    setTimeout(() => {this.props.onLogout()}, 3000);
+                });
         } else {
             this.initializeForm(null);
         }
@@ -76,13 +78,9 @@ export default class Form extends Component {
         this.setMounted(false);
     }
 
-    togglePopup() {  
-        this.setState({  
-             showPopup: !this.state.showPopup  
-        }, () => {
-            if (!this.state.showPopup) window.location.reload();
-        });  
-    }  
+    togglePopup(messages) {
+        this.setState({ showPopup: !this.state.showPopup, messages });
+    }
 
     initializeSums(form) {
         let sums = {};
@@ -99,7 +97,7 @@ export default class Form extends Component {
     }
 
     initializeForm(form) {
-        let currentWeekLeader = this.getCurrentWeekLeader();
+        // let currentWeekLeader = this.getCurrentWeekLeader();
         let sounds = {};
         sounds.dice = [];
         for (let i = 0; i <= 9; i++) {
@@ -114,7 +112,7 @@ export default class Form extends Component {
                 let filledBoxCount = this.getFilledBoxCount(form);
                 let sums = this.initializeSums(form);
                 sums = this.updateSums(form, sums);
-                this.setState({ form, sums, announcementRequired, rollDisabled, diceDisabled, filledBoxCount, currentWeekLeader, sounds });
+                this.setState({ form, sums, announcementRequired, rollDisabled, diceDisabled, filledBoxCount, sounds });
             } else {
                 let form = {};
                 form.columns = [];
@@ -154,23 +152,33 @@ export default class Form extends Component {
                 form.id = null;
                 let sums = this.initializeSums(form);
                 let filledBoxCount = 0;
-                this.setState({ form, sums, filledBoxCount, currentWeekLeader, sounds  });
+                this.setState({ form, sums, filledBoxCount, sounds });
             }
         }
     }
 
     handleRollDice() {
         let form = this.state.form
+        let diceToRoll = '{';
+        for (let key in form.dice) {
+            diceToRoll += '"' + form.dice[key].ordinalNumber + '" : "';
+            diceToRoll += !form.dice[key].hold;
+            diceToRoll += '",';
+        }
+        diceToRoll = diceToRoll.substring(0, diceToRoll.length - 1) + '}';
         if (form.id != null) {
-            FormService.rollDice(form.id, form.dice).then(
-                response => {
-                    let dice = response.data
+            FormService.rollDice(form.id, diceToRoll)
+                .then(response => {
+                    let dice = response;
                     this.updateDice(form, dice);
-                },
-                error => {
-                    console.log(error.response && error.response.data);
+                })
+                .catch(response => {
+                    let messages = [];
+                    if (response.status && response.error) messages.push(response.status + " " + response.error);
+                    if (response.message) messages.push(response.message);
+                    this.togglePopup(messages);
                 }
-            );
+                );
         } else {
             let dice = form.dice;
             for (let key in dice) {
@@ -232,7 +240,7 @@ export default class Form extends Component {
         for (let key in dice) {
             if (!dice[key].hold) {
                 let sound = sounds.pop();
-                sound.volume = 0.4;
+                sound.volume = this.props.preference.volume / 3;
                 (function (local_i) {
                     let time = Math.round(800 + Math.random() * 1000);
                     let diceElement = document.getElementById('dice' + local_i);
@@ -240,16 +248,15 @@ export default class Form extends Component {
                         diceElement.style.animationDuration = time + "ms";
                         diceElement.style.animationIterationCount = Math.round(1 + Math.random() * 3);
                         diceElement.classList.add("roll");
-                        sound.play();
+                        if (sound.volume > 0) sound.play();
                         Math.random() > 0.5 ? diceElement.classList.add("clockwise") : diceElement.classList.add("counterclockwise");
-                        // diceElement.classList.add('roll');
                     }, 0);
                     setTimeout(function () {
                         diceElement.classList.remove('roll');
                         diceElement.classList.remove('clockwise');
                         diceElement.classList.remove('counterclockwise');
                     }, time);
-                }) (key);
+                })(key);
             }
         }
     }
@@ -282,17 +289,20 @@ export default class Form extends Component {
     announce(boxType) {
         let form = this.state.form;
         if (form.id != null) {
-            FormService.announce(form.id, boxType).then(
-                response => {
-                    form.announcement = response.data;
+            FormService.announce(form.id, boxType)
+                .then(response => {
+                    form.announcement = response;
                     let boxesDisabled = true;
                     let rollDisabled = false;
                     this.setState({ form, boxesDisabled, rollDisabled });
-                },
-                error => {
-                    console.log(error.response && error.response.data);
+                })
+                .catch(response => {
+                    let messages = [];
+                    if (response.status && response.error) messages.push(response.status + " " + response.error);
+                    if (response.message) messages.push(response.message);
+                    this.togglePopup(messages);
                 }
-            );
+                );
         } else {
             form.announcement = boxType;
             let boxesDisabled = true;
@@ -304,15 +314,18 @@ export default class Form extends Component {
     fillBox(columnType, boxType) {
         let form = this.state.form;
         if (form.id != null) {
-            FormService.fillBox(form.id, columnType.id, boxType.id).then(
-                response => {
-                    let score = response.data;
+            FormService.fillBox(form.id, columnType.id, boxType.id)
+                .then(response => {
+                    let score = response;
                     this.fill(form, columnType, boxType, score);
-                },
-                error => {
-                    console.log(error.response && error.response.data);
+                })
+                .catch(response => {
+                    let messages = [];
+                    if (response.status && response.error) messages.push(response.status + " " + response.error);
+                    if (response.message) messages.push(response.message);
+                    this.togglePopup(messages);
                 }
-            );
+                );
         } else {
             let dice = this.state.form.dice;
             let score = ScoreUtil.calculateScore(dice, boxType);
@@ -328,8 +341,8 @@ export default class Form extends Component {
                     let box = column.boxes[j];
                     if (box.boxType.id === boxType.id) {
                         let sound = this.state.sounds.box;
-                        sound.volume = 0.4;
-                        sound.play();
+                        sound.volume = this.props.preference.volume / 3;
+                        if (sound.volume > 0) sound.play();
                         box.value = score;
                         box.available = false;
                         box.filled = true;
@@ -426,18 +439,20 @@ export default class Form extends Component {
         let boxesDisabled = this.state.boxesDisabled;
         let sums = this.state.sums;
         let gameInfo = { announcement, boxesDisabled, rollCount, sums };
+        let messages = this.state.messages;
+
         return (
             <div className="center">
 
                 {form && form.dice && <div className="dice-rack-container">
                     <DiceRack rollDisabled={rollDisabled} rollCount={form.rollCount} dice={form.dice}
-                    diceDisabled={diceDisabled} onToggleDice={this.handleToggleDice} />
+                        diceDisabled={diceDisabled} onToggleDice={this.handleToggleDice} />
                 </div>}
 
                 {form && form.columns && <div className="form-container">
                     <div className="form">
                         <div className="game-column">
-                            <RulesButton />
+                            <InfoButton />
                             <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/1.png"} />
                             <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/2.png"} />
                             <Label labelClass={"label label-image bg-white"} imgUrl={"../images/dice/3.png"} />
@@ -475,27 +490,29 @@ export default class Form extends Component {
                         </div>
                     </ div>
                 </div>}
-                {this.state.showPopup && <Popup text={["Čestitamo, vaš ukupni rezultat je ", this.state.sums["finalSum"]]} onOk={this.togglePopup} /> } 
+                {this.state.showPopup && <Popup text={messages} onOk={this.togglePopup} />}
             </div>
         )
     }
 
     endGame() {
         let trumpets = new Audio("/sounds/misc/trumpets.mp3");
-        trumpets.volume = 0.1
-        trumpets.play();
-        this.togglePopup();
+        trumpets.volume = this.props.preference.volume / 3;
+        if (trumpets.volume > 0) trumpets.play();
+        this.togglePopup(["Čestitamo, vaš ukupni rezultat je ", this.state.sums["finalSum"]]);
     }
 
     getCurrentWeekLeader() {
-        ScoreService.getCurrentWeekLeader().then(
-            response => {
-                return response.data;
-            },
-            error => {
-                console.log(error.response && error.response.data);
-            }
-        );
+        ScoreService.getCurrentWeekLeader()
+            .then(response => {
+                    return response;
+                })
+            .catch(response => {
+                let messages = [];
+                if (response.status && response.error) messages.push(response.status + " " + response.error);
+                if (response.message) messages.push(response.message);
+                this.togglePopup(messages);
+            });
         return "";
     }
 }

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./popup.css";
 
-export default class Popup extends Component {
+export default class PopupConfirm extends Component {
 
     render() {
         let text = this.props.text;
@@ -14,7 +14,9 @@ export default class Popup extends Component {
                                 {text.map(line => <li key={line}>{line}</li>)}
                             </ul>
                         </div>
+
                         <button className="popup-button" onClick={this.props.onOk}>OK</button>
+                        <button className="popup-button" onClick={this.props.onClose}>Zatvori</button>
                     </div>
                 </div>
             </div>

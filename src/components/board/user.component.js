@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 // components
 import ScoreList from "./score-list.component";
+import Popup from "../popup/popup.component";
+import PopupConfirm from "../popup/popup-confirm.component";
 // services
 import AuthService from "../../services/auth.service";
 import UserService from "../../services/user.service";
@@ -11,97 +13,123 @@ import ScoreUtil from "../../utils/score.util";
 import { dateFormatLong } from "../../constants/date-format";
 
 export default class User extends Component {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      currentUser: undefined,
-      userIsAdmin: true,
-      user: "",
-      totalScore: 0,
-      highScore: 0
-    };
-  }
+    constructor(props) {
+        super(props);
 
-  componentDidMount() {
-    let currentUser = AuthService.getCurrentUser();
-    this.setState({ currentUser });
+        this.state = {
+            currentUser: undefined,
+            userIsAdmin: true,
+            user: "",
+            totalScore: 0,
+            highScore: 0,
+            showPopup: false,
+            showPopupConfirm: false,
+            messages: []
+        };
+        this.togglePopup = this.togglePopup.bind(this);
+        this.togglePopupConfirm = this.togglePopupConfirm.bind(this);
+        this.deleteUser = this.deleteUser.bind(this);
+    }
 
-    let userId = this.props.userId ? this.props.userId : this.props.match.params.userId;
-      UserService.getUser(userId).then(
-        response => {
-          let user = response.data;
-          let userIsAdmin = false;
-          if (user) {
-            for (let key in user.roles) {
-              if (user.roles[key].label === "ADMIN"){
-                userIsAdmin = true;
-                break;
-              }
-            }
-          }
-          let totalScore = ScoreUtil.getTotalScore(user.scores);
-          let highScore = ScoreUtil.getHighScore(user.scores);
-          this.setState({ user, totalScore, highScore, userIsAdmin });
-        },
-        error => {
-          console.log(error.response && error.response.data);
-        }
-      );
-  }
+    componentDidMount() {
+        let currentUser = AuthService.getCurrentUser();
+        this.setState({ currentUser });
 
-  deleteUser() {
-    UserService.deleteUser(this.props.match.params.userId).then(
-      response => {
-        this.props.history.push("/users");
-      },
-      error => {
-        console.log(error.response && error.response.data);
-      }
-    );
-  }
+        let userId = this.props.userId ? this.props.userId : this.props.match.params.userId;
+        UserService.getUser(userId)
+            .then(response => {
+                let user = response;
+                let userIsAdmin = false;
+                if (user) {
+                    for (let key in user.roles) {
+                        if (user.roles[key].label === "ADMIN") {
+                            userIsAdmin = true;
+                            break;
+                        }
+                    }
+                }
+                let totalScore = ScoreUtil.getTotalScore(user.scores);
+                let highScore = ScoreUtil.getHighScore(user.scores);
+                this.setState({ user, totalScore, highScore, userIsAdmin });
+            })
+            .catch(response => {
+                let messages = [];
+                if (response.status && response.error) messages.push(response.status + " " + response.error);
+                if (response.message) messages.push(response.message);
+                this.togglePopup(messages);
+            });
+    }
 
-  render() {
-    let history = this.props.history;
-    let currentUser = this.state.currentUser;
-    let user = this.state.user;
-    let totalScore = this.state.totalScore;
-    let highScore = this.state.highScore;
-    let scores = user.scores;
-    let userIsAdmin = this.state.userIsAdmin;
+    deleteUser() {
+        this.togglePopupConfirm();
+        UserService.deleteUser(this.props.match.params.userId)
+            .then(response => {
+                let messages = [];
+                messages.push(response.message);
+                this.togglePopup(messages);
+                setTimeout(() => { this.props.history.push("/users") }, 1000);
+            })
+            .catch(response => {
+                let messages = [];
+                if (response.status && response.error) messages.push(response.status + " " + response.error);
+                if (response.message) messages.push(response.message);
+                this.togglePopup(messages);
+            });
+    }
 
-    return (
-      <div className="container-custom">
-          <div className="container-custom-inner">
-            <h3>
-              <strong>{user.username}</strong>
-            </h3>
-            <p>
-              <strong>ID: </strong>
-              {user.id}
-            </p>
-            <p><strong>Posljednja igra: </strong>{scores && scores.length === 0 ? "-----" : dateFormatLong.format(DateUtil.getLastScoreDate(scores))}</p>
-            <p><strong>Najveći rezultat: </strong>{highScore}</p>
-            <p>
-              <strong>Ukupni rezultat: </strong>{totalScore}
-            </p>
-            <p>
-              <strong>Broj igara: </strong>{scores && scores.length}
-            </p>
-            <p>
-              <strong>Prosjek: </strong>{scores && (scores.length === 0 ? "0" : Math.round(totalScore / scores.length * 100) / 100)}
-            </p>
-            {currentUser && currentUser.roles.includes("ADMIN") && !userIsAdmin &&
-              <button className="delete-button" 
-              onClick={() => { if (window.confirm('Jeste li sigurni da želite izbrisati ovog korisnika?')) this.deleteUser() }} />}
-          </div>
-          <div className="container-custom-second">
-            {user.scores && (user.scores.length > 0 &&
-              <div>
-                <ScoreList username={user.username} scores={user.scores} history={history}></ScoreList>
-              </div>)}
+    togglePopup(messages) {
+        this.setState({ showPopup: !this.state.showPopup, messages });
+    }
+
+    togglePopupConfirm() {
+        this.setState({ showPopupConfirm: !this.state.showPopupConfirm });
+    }
+
+    render() {
+        let history = this.props.history;
+        let currentUser = this.state.currentUser;
+        let user = this.state.user;
+        let totalScore = this.state.totalScore;
+        let highScore = this.state.highScore;
+        let scores = user.scores;
+        let userIsAdmin = this.state.userIsAdmin;
+        let messages = this.state.messages;
+
+        return (
+            <div className="container-custom">
+                <div className="container-custom-inner">
+                    <h3>
+                        <strong>{user.username}</strong>
+                    </h3>
+                    <p>
+                        <strong>ID: </strong>
+                        {user.id}
+                    </p>
+                    <p><strong>Posljednja igra: </strong>{scores && scores.length === 0 ? "-----" : dateFormatLong.format(DateUtil.getLastScoreDate(scores))}</p>
+                    <p><strong>Najveći rezultat: </strong>{highScore}</p>
+                    <p>
+                        <strong>Ukupni rezultat: </strong>{totalScore}
+                    </p>
+                    <p>
+                        <strong>Broj igara: </strong>{scores && scores.length}
+                    </p>
+                    <p>
+                        <strong>Prosjek: </strong>{scores && (scores.length === 0 ? "0" : Math.round(totalScore / scores.length * 100) / 100)}
+                    </p>
+                    {currentUser && currentUser.roles && currentUser.roles.includes("ADMIN") && !userIsAdmin &&
+                        <button className="delete-button" style={{ backgroundImage: "url(/images/misc/trash_open.png)" }}
+                            onClick={this.togglePopupConfirm} />}
+                </div>
+                <div className="container-custom-second">
+                    {user.scores && (user.scores.length > 0 &&
+                        <div>
+                            <ScoreList username={user.username} scores={user.scores} history={history}></ScoreList>
+                        </div>)}
+                </div>
+                {this.state.showPopup && <Popup text={messages} onOk={this.togglePopup} />}
+                {this.state.showPopupConfirm && <PopupConfirm text={["Jeste li sigurni da želite izbrisati ovog korisnika?"]} onOk={this.deleteUser} onClose={this.togglePopupConfirm} />}
             </div>
-      </div>
-    );
-  }
+        );
+    }
 }

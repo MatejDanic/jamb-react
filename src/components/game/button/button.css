@@ -1,4 +1,5 @@
 .form-button {
+  cursor: pointer;
   border-radius: 5px;
   border: 1px solid darkslategray;
   display: flex;
@@ -7,10 +8,6 @@
   font-size: 16px;
   font-family: Arial, Helvetica, sans-serif;
   color: darkslategray;
-}
-
-.button:focus {
-  outline: none;
 }
 
 .menu-button {
@@ -33,7 +30,7 @@
   text-decoration: none;
 }
 
-.rules { 
+.info { 
   color: darkslategray;
   border-radius: 5px;
   border: 1px solid darkslategray;
@@ -42,7 +39,7 @@
   background-repeat: no-repeat;
 }
 
-.rules:hover {
+.info:hover {
   background-color: #ff8a9c;
   border: 2px solid darkslategray;
   color: black;
@@ -63,28 +60,33 @@
   border: 2px solid darkslategray;
 }
 
-.profile {
-  border: 1px solid darkslategray;
-  border-radius: 5px;
-  width: 100%;
-  height: 100%;
-  font-weight: 500;
-  font-size: 20px;
-  background-color: white;  
-  color: darkslategray;
-}
 
-.profile:not([button]) {
-  color: black;
-}
+.profile-button {
+    background-size: 8vw;
+    background-position: center center;
+    background-repeat: no-repeat;
+    border: 1px solid darkslategray;
+    border-radius: 5px;
+    color: darkslategray;
+    font-style: normal;
+    font-size: 20px;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .profile-button:hover {
+    border: 2px solid darkslategray;
+    color: black;
+    background-color: silver;
+    text-decoration: none;
+  }
 
-.profile:hover button {
-  color: black;
-  background-color: silver;
-  border: 2px solid darkslategray;
+.project-button {
+	height: 100%;
 }
 
 .roll-dice {
+	cursor: pointer;
   color: black;
   background-position: center center;
   background-size: cover;
@@ -110,18 +112,18 @@
 
 .two-rolls {
   background-image: linear-gradient(rgba(255, 255, 255, 1) 66.6%,
-      rgba(255, 255, 255, 0) 66.6%,
-      rgba(255, 255, 255, 0) 0%);
+	  rgba(255, 255, 255, 0) 66.6%,
+	  rgba(255, 255, 255, 0) 0%);
 }
 
 .one-roll {
   background-image: linear-gradient(rgba(255, 255, 255, 1) 33.3%,
-      rgba(255, 255, 255, 0) 33.3%,
-      rgba(255, 255, 255, 0) 0%);
+	  rgba(255, 255, 255, 0) 33.3%,
+	  rgba(255, 255, 255, 0) 0%);
 }
 
 .three-rolls {
   background-image: linear-gradient(rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 1) 0%);
+	  rgba(255, 255, 255, 0) 0%,
+	  rgba(255, 255, 255, 1) 0%);
 }
