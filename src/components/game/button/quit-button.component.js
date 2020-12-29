@@ -8,7 +8,7 @@ import FormService from "../../../services/form.service";
 import "../../../constants/colors.css";
 import "./button.css";
 
-export default class RestartButton extends Component {
+export default class QuitButton extends Component {
 
     constructor() {
         super();
@@ -17,7 +17,7 @@ export default class RestartButton extends Component {
             showPopupConfirm: false
         }
         this.togglePopupConfirm = this.togglePopupConfirm.bind(this);
-        this.restart = this.restart.bind(this);
+        this.quit = this.quit.bind(this);
     }
 
     componentDidMount() {
@@ -31,24 +31,16 @@ export default class RestartButton extends Component {
 
     render() {
         return (
-            <div className="form-button bg-lightpink restart" style={{ backgroundImage: 'url(/images/misc/restart.png)' }} onClick={this.togglePopupConfirm} >
-                {this.state.showPopupConfirm && <PopupConfirm text={["Jeste li sigurni da želite početi ispočetka?"]} onClose={this.togglePopupConfirm} onOk={this.restart} />}
+            <div className="form-button bg-lightpink restart" style={{ backgroundImage: 'url(/images/misc/logout.png)' }} onClick={this.togglePopupConfirm} >
+                {this.state.showPopupConfirm && <PopupConfirm text={["Jeste li sigurni da želite odustati od izazova?"]} onClose={this.togglePopupConfirm} onOk={this.quit} />}
             </div>
         )
     }
 
-    restart() {
-        let currentUser = AuthService.getCurrentUser();
+    quit() {
+        let currentUser = this.state.currentUser;
         if (currentUser) {
-            FormService.restartForm(this.props.formId)
-                .then(() => {
-                    window.location.reload();
-                })
-                .catch(response => {
-                    let messages = [];
-                    if (response.status && response.error) messages.push(response.status + " " + response.error);
-                    if (response.message) messages.push(response.message);
-                });
+            this.props.onQuit();
         } else {
             window.location.reload();
         }

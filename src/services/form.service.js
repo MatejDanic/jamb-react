@@ -9,12 +9,20 @@ class FormService {
         return request("PUT", url, null);
     }
 
+    newForm() {
+        return request("POST", url, null);
+    }
+
+    getForm(formId) {
+        return request("Get", url + "/" + formId, null);
+    }
+
     rollDice(formId, diceToRoll) {
         return request("PUT", url + "/" + formId + "/roll", diceToRoll);
     }
 
-    announce(formId, boxTypeId) {
-        return request("PUT", url + "/" + formId + "/announce", boxTypeId);
+    announce(formId, boxType) {
+        return request("PUT", url + "/" + formId + "/announce", boxType);
     }
 
     fillBox(formId, columnTypeId, boxTypeId) {

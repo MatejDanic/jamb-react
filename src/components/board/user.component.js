@@ -11,8 +11,11 @@ import DateUtil from "../../utils/date.util";
 import ScoreUtil from "../../utils/score.util";
 // constants
 import { dateFormatLong } from "../../constants/date-format";
+// styles
+import "./board.css";
 
 export default class User extends Component {
+    _isMounted = false;
 
     constructor(props) {
         super(props);
@@ -32,10 +35,14 @@ export default class User extends Component {
         this.deleteUser = this.deleteUser.bind(this);
     }
 
+    setMounted(mounted) {
+        this._isMounted = mounted;
+    }
+
     componentDidMount() {
+        this.setMounted(true);
         let currentUser = AuthService.getCurrentUser();
         this.setState({ currentUser });
-
         let userId = this.props.userId ? this.props.userId : this.props.match.params.userId;
         UserService.getUser(userId)
             .then(response => {
@@ -51,7 +58,7 @@ export default class User extends Component {
                 }
                 let totalScore = ScoreUtil.getTotalScore(user.scores);
                 let highScore = ScoreUtil.getHighScore(user.scores);
-                this.setState({ user, totalScore, highScore, userIsAdmin });
+                if (this._isMounted) this.setState({ user, totalScore, highScore, userIsAdmin });
             })
             .catch(response => {
                 let messages = [];
@@ -59,6 +66,10 @@ export default class User extends Component {
                 if (response.message) messages.push(response.message);
                 this.togglePopup(messages);
             });
+    }
+
+    componentWillUnmount() {
+        this.setMounted(false);
     }
 
     deleteUser() {
@@ -118,8 +129,11 @@ export default class User extends Component {
                         <strong>Prosjek: </strong>{scores && (scores.length === 0 ? "0" : Math.round(totalScore / scores.length * 100) / 100)}
                     </p>
                     {currentUser && currentUser.roles && currentUser.roles.includes("ADMIN") && !userIsAdmin &&
-                        <button className="delete-button" style={{ backgroundImage: "url(/images/misc/trash_open.png)" }}
+                        <button className="button-delete" style={{ backgroundImage: "url(/images/misc/trash_open.png)" }}
                             onClick={this.togglePopupConfirm} />}
+                    {user && currentUser && currentUser.id != user.id &&
+                        <button className="button-challenge" style={{ backgroundImage: "url(/images/misc/challenge.png)" }}
+                            onClick={() => { this.props.onChallenge(user.username) }} />}
                 </div>
                 <div className="container-custom-second">
                     {user.scores && (user.scores.length > 0 &&

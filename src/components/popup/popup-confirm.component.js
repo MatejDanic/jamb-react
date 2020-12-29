@@ -11,12 +11,12 @@ export default class PopupConfirm extends Component {
                     <div className="popup-inner">
                         <div className="popup-text">
                             <ul >
-                                {text.map(line => <li key={line}>{line}</li>)}
+                            {text && text.map(line => <li key={line}>{line}</li>)}
                             </ul>
                         </div>
 
-                        <button className="popup-button" onClick={this.props.onOk}>OK</button>
-                        <button className="popup-button" onClick={this.props.onClose}>Zatvori</button>
+                        <button className="popup-button" onClick={this.props.onOk} style={{ backgroundImage: 'url(/images/misc/yes.png)' }}/>
+                        <button className="popup-button" onClick={this.props.onClose} style={{ backgroundImage: 'url(/images/misc/no.png)' }}/>
                     </div>
                 </div>
             </div>

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 // services
 import AuthService from "../../services/auth.service";
-import UserService from "../../services/user.service";
 // styles
 import "./navigation.css";
 
@@ -31,10 +30,10 @@ export default class Menu extends Component {
         let gameMounted = this.props.gameMounted;
         let menuClass = gameMounted ? "menu-relative" : "menu-fixed";
         let volume = this.props.preference.volume;
-
         return (
             <div>
-                {(!gameMounted || showMenu) &&
+                {window.location.pathname === "/challenge" ? <div /> :
+                ((!gameMounted || showMenu) &&
                     <div className="front">
                         {gameMounted && <div className="mask" onClick={this.props.onToggleMenu} />}
                         {gameMounted && <div className="button-preference" onClick={this.props.onChangeVolume} style={{ backgroundImage: "url(/images/misc/volume_" + volume + ".png)" }} />}
@@ -47,7 +46,7 @@ export default class Menu extends Component {
                                 (<div className="menu-element" onClick={this.props.onLogout} href="/login" style={{ backgroundImage: 'url(/images/misc/logout.png)' }}><div className="menu-element-text">Odjava</div></div>) :
                                 (<div className="menu-element" onClick={() => history.push("/login")} style={{ backgroundImage: 'url(/images/misc/login.png)' }}><div className="menu-element-text">Prijava</div></div>)}
                         </div>
-                    </div>}
+                    </div>)}
             </div>
         );
     }

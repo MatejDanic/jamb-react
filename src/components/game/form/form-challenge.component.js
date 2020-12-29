@@ -3,10 +3,9 @@ import React, { Component } from "react";
 import DiceRack from "../dice/dice-rack.component";
 import Column from "../column/column.component";
 import Label from "../label/label.component";
-import MenuButton from "../button/menu-button.component";
 import Scoreboard from "../scoreboard/scoreboard.component";
 import RollDiceButton from "../button/roll-dice-button.component";
-import RestartButton from "../button/restart-button.component";
+import QuitButton from "../button/quit-button.component";
 import InfoButton from "../button/info-button.component";
 import Popup from "../../popup/popup.component";
 // services
@@ -19,15 +18,13 @@ import ScoreUtil from "../../../utils/score.util";
 import { NUMBERSUM_BONUS, NUMBERSUM_BONUS_THRESHOLD } from "../../../constants/game-constants";
 // styles
 import "./form.css";
-import ProfileButton from "../button/profile-button.component";
 
-export default class Form extends Component {
+export default class FormChallenge extends Component {
     _isMounted = false;
 
     constructor() {
         super();
         this.state = {
-            currentUser: undefined,
             sounds: {},
             form: {},
             sums: {},
@@ -53,28 +50,21 @@ export default class Form extends Component {
     }
 
     componentDidMount() {
+        if (Object.keys(this.props.challengeData).length === 0) {
+            this.props.history.push("/");
+        }
         this.setMounted(true);
         let currentUser = AuthService.getCurrentUser();
-        if (currentUser) { 
-            FormService.initializeForm()
-            .then(response => {
-                let form = response;
-                // console.log(form)
-                this.initializeForm(form);
-            })
-            .catch(response => {
-                let messages = [];
-                if (response.status && response.error) messages.push(response.status + " " + response.error);
-                if (response.message) messages.push(response.message);
-                this.togglePopup(messages);
-                setTimeout(() => {this.props.onLogout()}, 3000);
-            });
+        if (currentUser) {
+            this.initializeForm(this.props.challengeData.form);
         } else {
-            this.initializeForm(null);
+            this.props.history.push("/");
         }
     }
 
+
     componentWillUnmount() {
+        this.props.onResetChallengeStatus();
         this.setMounted(false);
     }
 
@@ -169,7 +159,9 @@ export default class Form extends Component {
             FormService.rollDice(form.id, diceToRoll)
                 .then(response => {
                     let dice = response;
+                    form.rollCount++;
                     this.updateDice(form, dice);
+                    this.props.onSendMessage("Dice", form);
                 })
                 .catch(response => {
                     let messages = [];
@@ -185,12 +177,12 @@ export default class Form extends Component {
                     dice[key].value = Math.round(1 + Math.random() * 5);
                 }
             }
+            form.rollCount++;
             this.updateDice(form, dice);
         }
     }
 
     updateDice(form, dice) {
-        form.rollCount++;
         for (let key in form.dice) {
             if (!form.dice[key].hold) {
                 form.dice[key].value = dice[key].value;
@@ -212,7 +204,7 @@ export default class Form extends Component {
                 for (let j in column.boxes) {
                     let box = column.boxes[j];
                     if (!box.filled) {
-                        announcementRequired = false
+                        announcementRequired = false;
                         break;
                     }
                 }
@@ -261,6 +253,16 @@ export default class Form extends Component {
         }
     }
 
+    setAnnouncement(boxType) {
+        let form = this.props.challengeData.form;
+        form.announcement = boxType;
+        this.setState({ form });
+    }
+
+    setForm(form) {
+        this.initializeForm(form);
+    }
+
     handleToggleDice(ordinalNumber) {
         let form = this.state.form;
         for (let key in form.dice) {
@@ -289,12 +291,13 @@ export default class Form extends Component {
     announce(boxType) {
         let form = this.state.form;
         if (form.id != null) {
-            FormService.announce(form.id, boxType)
+            FormService.announce(form.id, JSON.stringify(boxType))
                 .then(response => {
                     form.announcement = response;
                     let boxesDisabled = true;
                     let rollDisabled = false;
                     this.setState({ form, boxesDisabled, rollDisabled });
+                    this.props.onSendMessage("Announcement", form);
                 })
                 .catch(response => {
                     let messages = [];
@@ -318,6 +321,13 @@ export default class Form extends Component {
                 .then(response => {
                     let score = response;
                     this.fill(form, columnType, boxType, score);
+                    this.props.onSendMessage("Box", form);
+                    this.props.onEndTurn();
+                    setTimeout(
+                        () => {
+                            this.props.onSendMessage("Turn", null);
+                        }, 2000
+                    );
                 })
                 .catch(response => {
                     let messages = [];
@@ -430,12 +440,14 @@ export default class Form extends Component {
     }
 
     render() {
+        let challengeData = this.props.challengeData;
+        let allButtonsDisabled = challengeData.me != challengeData.turn;
         let form = this.state.form;
         let rollCount = form ? form.rollCount : null;
         let announcement = form ? form.announcement : null;
-        let diceDisabled = this.state.diceDisabled;
-        let rollDisabled = this.state.rollDisabled;
-        let boxesDisabled = this.state.boxesDisabled;
+        let diceDisabled = this.state.diceDisabled || allButtonsDisabled;
+        let rollDisabled = this.state.rollDisabled || allButtonsDisabled;
+        let boxesDisabled = this.state.boxesDisabled || allButtonsDisabled;
         let sums = this.state.sums;
         let gameInfo = { announcement, boxesDisabled, rollCount, sums };
         let messages = this.state.messages;
@@ -476,17 +488,20 @@ export default class Form extends Component {
                         <div className="game-column">
                             <RollDiceButton rollCount={form.rollCount} rollDisabled={rollDisabled} onRollDice={this.handleRollDice} />
                             <Label labelClass={"label number bg-lightskyblue row-start-8"} number={gameInfo.sums["numberSum"]} id="numberSum" />
-                            <RestartButton formId={form.id} />
+                            <QuitButton onQuit={this.props.onQuit} formId={form.id} />
                             <Label labelClass={"label number bg-lightskyblue row-start-11"} number={gameInfo.sums["diffSum"]} id="diffSum" />
                             <Scoreboard />
                             <Label labelClass={"label number bg-lightskyblue row-start-17"} number={gameInfo.sums["labelSum"]} id="labelSum" />
                         </div>
-                        <div />
-                        <div className="bottom-row">
-                            <MenuButton onToggleMenu={this.props.onToggleMenu} history={this.props.history} smallWindow={this.props.smallWindow} />
-                            <ProfileButton history={this.props.history} />
+                        {challengeData.me == challengeData.turn ? (<div className="bottom-row">
+                            <Label labelClass={"label bg-lightpink"} value={challengeData.me} />
+                            <Label labelClass={"label bg-lightskyblue"} value={challengeData.opponent} />
                             <Label labelClass={"label number final-sum bg-lightskyblue"} number={gameInfo.sums["finalSum"]} id="labelSum" />
-                        </div>
+                        </div>) : (<div className="bottom-row">
+                            <Label labelClass={"label bg-lightskyblue"} value={challengeData.me} />
+                            <Label labelClass={"label bg-lightpink"} value={challengeData.opponent} />
+                            <Label labelClass={"label number final-sum bg-lightskyblue"} number={gameInfo.sums["finalSum"]} id="labelSum" />
+                        </div>)}
                     </ div>
                 </div>}
                 {this.state.showPopup && <Popup text={messages} onOk={this.togglePopup} />}
@@ -499,13 +514,15 @@ export default class Form extends Component {
         trumpets.volume = this.props.preference.volume / 3;
         if (trumpets.volume > 0) trumpets.play();
         this.togglePopup(["Čestitamo, vaš ukupni rezultat je ", this.state.sums["finalSum"]]);
+        this.props.onSendMessage("Score", this.state.sums["finalSum"]);
+        this.props.onEndGame(this.state.sums["finalSum"]);
     }
 
     getCurrentWeekLeader() {
         ScoreService.getCurrentWeekLeader()
             .then(response => {
-                    return response;
-                })
+                return response;
+            })
             .catch(response => {
                 let messages = [];
                 if (response.status && response.error) messages.push(response.status + " " + response.error);

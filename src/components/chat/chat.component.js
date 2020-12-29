@@ -18,7 +18,7 @@ export default class Chat extends Component {
     sendMessage() {
         let message = this.state.message;
         if (message) {
-            this.props.onSendMessage("/text", message);
+            this.props.onSendMessage(message);
             message = "";
             this.setState({ message });
         }

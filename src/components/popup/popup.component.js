@@ -11,10 +11,10 @@ export default class Popup extends Component {
                     <div className="popup-inner">
                         <div className="popup-text">
                             <ul >
-                                {text.map(line => <li key={line}>{line}</li>)}
+                                {text && text.map(line => <li key={line}>{line}</li>)}
                             </ul>
                         </div>
-                        <button className="popup-button" onClick={this.props.onOk}>OK</button>
+                        <button className="popup-button" onClick={this.props.onOk} style={{ backgroundImage: 'url(/images/misc/yes.png)' }}/>
                     </div>
                 </div>
             </div>
