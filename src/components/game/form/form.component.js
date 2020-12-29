@@ -289,7 +289,7 @@ export default class Form extends Component {
     announce(boxType) {
         let form = this.state.form;
         if (form.id != null) {
-            FormService.announce(form.id, boxType)
+            FormService.announce(form.id, JSON.stringify(boxType))
                 .then(response => {
                     form.announcement = response;
                     let boxesDisabled = true;

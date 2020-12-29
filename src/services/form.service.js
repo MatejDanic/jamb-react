@@ -13,8 +13,8 @@ class FormService {
         return request("PUT", url + "/" + formId + "/roll", diceToRoll);
     }
 
-    announce(formId, boxTypeId) {
-        return request("PUT", url + "/" + formId + "/announce", boxTypeId);
+    announce(formId, boxType) {
+        return request("PUT", url + "/" + formId + "/announce", boxType);
     }
 
     fillBox(formId, columnTypeId, boxTypeId) {
