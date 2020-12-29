@@ -81,6 +81,8 @@ export default class Label extends Component {
                 message = "Razlika MAX - MIN pomnožen s brojme jedinica između MAX i MIN pomnožena s brojem jedinica";
             } else if (display.includes("(tris")) {
                 message = "TRIS + SKALA + FULL + POKER + JAMB";
+            } else {
+                message = display;
             }
         }
         return message;

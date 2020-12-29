@@ -8,7 +8,7 @@
 
 .card {
 	padding: 5%;
-	width: 50%;
+	width: 25%;
 	background-color: lightgray;
 	border-radius: 16px;
 	border: 1px solid darkslategray;
@@ -42,6 +42,7 @@ input {
 	border-radius: 5px;
 	margin-top: 4%;
 	margin-bottom: 4%;
+	min-width: 150px;
 	width: 30%;
 	border: 1px solid darkslategray;
 }

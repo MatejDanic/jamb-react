@@ -34,10 +34,8 @@ export default class Box extends Component {
         let gameInfo = this.props.gameInfo;
         let box = this.props.box;     
         let annCol = this.props.annCol;
-        if (gameInfo.announcement != null && gameInfo.announcement.id === box.boxType.id && annCol) {
-            btnClass = "box-red-border";
-        }
         if (disabled || !box.available || box.filled) btnClass = "box-gray-border";
+        if (annCol && gameInfo.announcement != null && gameInfo.announcement.id === box.boxType.id) btnClass = "box-red-border";
         return btnClass;
     }
 }

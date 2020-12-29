@@ -9,6 +9,10 @@ class UserService {
         return request("GET", url, null);
     }
 
+    getUserForm(userId) {
+        return request("GET", url + "/" + userId + "/form", null);
+    }
+
     getUser(userId) {
         return request("GET", url + "/" + userId, null);
     }

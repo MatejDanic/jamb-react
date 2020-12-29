@@ -25,13 +25,13 @@ export default class Column extends Component {
                     onBoxClick={(boxType) => this.props.onBoxClick(column.columnType, boxType)} />
                 <Box gameInfo={gameInfo} annCol={annCol} box={column.boxes[5]}
                     onBoxClick={(boxType) => this.props.onBoxClick(column.columnType, boxType)} />
-                <Label labelClass={"label number bg-light-sky-blue"} number={sums[column.columnType.label + "-numberSum"]}
+                <Label labelClass={"label number bg-lightskyblue"} number={sums[column.columnType.label + "-numberSum"]}
                     id={column.columnType.label + "-numberSum"} />
                 <Box gameInfo={gameInfo} annCol={annCol} box={column.boxes[6]}
                     onBoxClick={(boxType) => this.props.onBoxClick(column.columnType, boxType)} />
                 <Box gameInfo={gameInfo} annCol={annCol} box={column.boxes[7]}
                     onBoxClick={(boxType) => this.props.onBoxClick(column.columnType, boxType)} />
-                <Label labelClass={"label number bg-light-sky-blue"} number={sums[column.columnType.label + "-diffSum"]}
+                <Label labelClass={"label number bg-lightskyblue"} number={sums[column.columnType.label + "-diffSum"]}
                     id={column.columnType.label + "-diffSum"} />
                 <Box gameInfo={gameInfo} annCol={annCol} box={column.boxes[8]}
                     onBoxClick={(boxType) => this.props.onBoxClick(column.columnType, boxType)} />
@@ -43,7 +43,7 @@ export default class Column extends Component {
                     onBoxClick={(boxType) => this.props.onBoxClick(column.columnType, boxType)} />
                 <Box gameInfo={gameInfo} annCol={annCol} box={column.boxes[12]}
                     onBoxClick={(boxType) => this.props.onBoxClick(column.columnType, boxType)} />
-                <Label labelClass={"label number bg-light-sky-blue"} number={sums[column.columnType.label + "-labelSum"]}
+                <Label labelClass={"label number bg-lightskyblue"} number={sums[column.columnType.label + "-labelSum"]}
                     id={column.columnType.label + "-labelSum"} />
             </div>
         )

@@ -9,6 +9,14 @@ class FormService {
         return request("PUT", url, null);
     }
 
+    newForm() {
+        return request("POST", url, null);
+    }
+
+    getForm(formId) {
+        return request("Get", url + "/" + formId, null);
+    }
+
     rollDice(formId, diceToRoll) {
         return request("PUT", url + "/" + formId + "/roll", diceToRoll);
     }
