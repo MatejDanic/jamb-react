@@ -1,7 +1,7 @@
 import { request } from "./xhr.service";
-import BASE_URL from "../constants/api-url";
+import API_URL from "../constants/api-url";
 
-const url = BASE_URL + "/auth";
+const url = API_URL + "/auth";
 
 class AuthService {
 

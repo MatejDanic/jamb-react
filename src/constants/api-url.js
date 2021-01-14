@@ -1,4 +1,4 @@
 require('dotenv').config()
 
-const BASE_URL = process.env.REACT_APP_BASE_URL ? process.env.REACT_APP_BASE_URL: "http://localhost:8080";
-export default BASE_URL;
+const API_URL = process.env.REACT_APP_API_URL ?? "http://localhost:8080/api";
+export default API_URL;
