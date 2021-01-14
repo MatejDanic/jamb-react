@@ -30,7 +30,7 @@ import "./App.css";
 // constants
 import { hourFormat } from "./constants/date-format";
 import { smallWindowThreshold } from "./constants/screen-constants";
-import BASE_URL from "./constants/api-url";
+import API_URL from "./constants/api-url";
 
 class App extends Component {
 
@@ -71,7 +71,7 @@ class App extends Component {
 	}
 
 	componentDidMount() {
-		console.log(BASE_URL);
+		console.log(API_URL);
 		let currentUser = AuthService.getCurrentUser();
 		if (currentUser) {
 			UserService.getUserPreference(currentUser.id)
@@ -433,7 +433,7 @@ class App extends Component {
 				</Switch>
 				{this.state.showPopup && <Popup text={messages} onOk={this.togglePopup} />}
 				{this.state.showPopupConfirm && <PopupConfirm text={messages} onOk={this.challengeAccept} onClose={this.challengeDeny} />}
-				<SockJsClient url={BASE_URL + "/socket"}
+				<SockJsClient url={API_URL + "/socket"}
 					topics={this.getTopics()}
 					onMessage={response => {
 						this.handleSocketMessage(response);
