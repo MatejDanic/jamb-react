@@ -78,7 +78,7 @@ export default class Label extends Component {
             } else if (display.includes("(1-6)")) {
                 message = "JEDINICE + DVICE + TRICE + ČETVRTICE + PETICE + ŠESTICE, ako je jednak ili veći od 60, dodaje se 30";
             } else if (display.includes("max-min")) {
-                message = "Razlika MAX - MIN pomnožen s brojme jedinica između MAX i MIN pomnožena s brojem jedinica";
+                message = "Razlika između MAX i MIN pomnožena s brojem jedinica";
             } else if (display.includes("(tris")) {
                 message = "TRIS + SKALA + FULL + POKER + JAMB";
             } else {
